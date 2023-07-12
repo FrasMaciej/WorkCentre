@@ -65,5 +65,5 @@ jobs:
         with:
           app-name: 'your-webapp-name'
           slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AF626C4276BD455C8F25525CE8BFF53B }}
           package: ${{ github.workspace }}/work-centre-api
