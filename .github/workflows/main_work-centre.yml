@@ -51,6 +51,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: app-artifact
+          
+      - name: Check az CLI version
+        run: az --version
 
       - name: Azure Login
         uses: azure/login@v1
