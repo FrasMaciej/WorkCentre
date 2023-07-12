@@ -1,4 +1,3 @@
-
 name: Build and deploy Angular + Node.js app to Azure Web App
 
 on:
@@ -52,6 +51,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: app-artifact
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
