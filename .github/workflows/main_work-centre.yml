@@ -37,7 +37,7 @@ jobs:
           name: app-artifact
           path: |
             ./work-centre-api
-            ./work-centre-ui/work-centre/dist
+            ./work-centre-ui/work-centre/dist/work-centre
 
   deploy:
     runs-on: ubuntu-latest
