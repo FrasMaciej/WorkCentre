@@ -12,6 +12,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Show contents of directories
+        run: |
+          ls -R work-centre-api
+          ls -R work-centre-ui/work-centre/dist
 
       - name: Set up Node.js version
         uses: actions/setup-node@v2
