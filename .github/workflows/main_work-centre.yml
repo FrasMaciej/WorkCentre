@@ -36,6 +36,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+    - name: Clean npm cache and node_modules for Backend
+      run: |
+        cd work-centre-api  
+        npm cache clean --force
+        rm -rf node_modules
     - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v1
       with:
