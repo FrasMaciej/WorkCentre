@@ -20,6 +20,7 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
     - name: npm install and build
       run: |
+        cd work-centre-ui  # navigate to the Angular project folder
         npm install
         npm run build -- --prod
     - name: 'Deploy to Azure WebApp'
