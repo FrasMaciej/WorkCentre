@@ -1,17 +1,22 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const api_1 = __importDefault(require("./api/routes/api"));
-const projectConfigurationConstants_1 = require("./projectConfigurationConstants");
-const app = (0, express_1.default)();
-app.get('/', (req, res) => {
-    res.send('Hello World!');
+// const app = express();
+// app.get('/', (req, res) => {
+//     res.send('Hello World!');
+// });
+// app.listen(constants.server_port, () => {
+//     return console.log(`Express is listening on port ${constants.server_port}`);
+// });
+// app.use('/api', apiRouter);
+const http = require('http');
+const hostname = '127.0.0.1';
+const port = 3000;
+const server = http.createServer((req, res) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('Hello World');
 });
-app.listen(projectConfigurationConstants_1.constants.server_port, () => {
-    return console.log(`Express is listening on port ${projectConfigurationConstants_1.constants.server_port}`);
+server.listen(port, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
 });
-app.use('/api', api_1.default);
 //# sourceMappingURL=app.js.map
