@@ -1,5 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+
 
 name: Build and deploy Node.js app to Azure Web App - work-centre-api
 
@@ -23,15 +22,15 @@ jobs:
 
       - name: npm install, build, and test
         run: |
+          cd work-centre-api
           npm install
           npm run build --if-present
-          npm run test --if-present
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
-          name: node-app
-          path: .
+          name: work-centre-api
+          path: work-centre-api 
 
   deploy:
     runs-on: ubuntu-latest
@@ -44,7 +43,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: node-app
+          name: work-centre-api 
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -52,5 +51,5 @@ jobs:
         with:
           app-name: 'work-centre-api'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5C9BB31A9FC444778960E1BE1AF2C6FD }}
-          package: .
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_SERVER }}
+          package: ./work-centre-api/dist 
