@@ -1,16 +1,16 @@
-name: Deploy Node.js to Azure Web App
-
 on:
   [push]
 
 env:
-  AZURE_WEBAPP_NAME: work-centre    # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: './work-centre-ui/dist/work-centre-ui'      # set this to the path to your web app project
-  NODE_VERSION: '18.12.0'                # set this to the node version to use
+  AZURE_WEBAPP_NAME: work-centre    
+  AZURE_WEBAPP_NAME_SERVER: work-centre-api
+  AZURE_WEBAPP_PACKAGE_PATH_FRONTEND: './work-centre-ui/dist/work-centre-ui'  
+  AZURE_WEBAPP_PACKAGE_PATH_BACKEND: './work-centre-api/dist' 
+  NODE_VERSION: '18.12.0'  # set this to the node version to use
 
 jobs:
-  build-and-deploy:
-    name: Build and Deploy
+  build-and-deploy-frontend:
+    name: Build and Deploy Frontend
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -18,14 +18,34 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ env.NODE_VERSION }}
-    - name: npm install and build
+    - name: npm install and build frontend
       run: |
-        cd work-centre-ui  # navigate to the Angular project folder
+        cd work-centre-ui 
         npm install
         npm run build
-    - name: 'Deploy to Azure WebApp'
+    - name: 'Deploy frontend to Azure WebApp'
       uses: azure/webapps-deploy@v1
       with: 
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH_FRONTEND }}
+
+  build-and-deploy-backend:
+    name: Build and Deploy Backend
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - name: npm install backend dependencies
+      run: |
+        cd work-centre-api  
+        npm install
+    - name: 'Deploy backend to Azure WebApp'
+      uses: azure/webapps-deploy@v1
+      with: 
+        app-name: ${{ env.AZURE_WEBAPP_NAME_SERVER }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_SERVER }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH_BACKEND }}
