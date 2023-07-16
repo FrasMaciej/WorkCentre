@@ -44,7 +44,7 @@ jobs:
       run: |
         cd work-centre-api  
         npm install
-        npm run build --if-present
+        npm run start
     - name: 'Deploy backend to Azure WebApp'
       id: deploy-to-webapp
       uses: azure/webapps-deploy@85270a1854658d167ab239bce43949edb336fa7c
