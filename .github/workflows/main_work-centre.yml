@@ -55,11 +55,6 @@ jobs:
       - name: Check az CLI version
         run: az --version
 
-#       - name: Azure Login
-#         uses: azure/login@v1
-#         with:
-#           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         with:
