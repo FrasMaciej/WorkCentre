@@ -55,5 +55,5 @@ jobs:
         with:
           app-name: 'work-centre-api'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_SERVER }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_SERVER }}
           package: ./work-centre-api/dist 
