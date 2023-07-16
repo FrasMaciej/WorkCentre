@@ -22,7 +22,7 @@ jobs:
       run: |
         cd work-centre-ui  # navigate to the Angular project folder
         npm install
-        ng build
+        npm run build
     - name: 'Deploy to Azure WebApp'
       uses: azure/webapps-deploy@v1
       with: 
