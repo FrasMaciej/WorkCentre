@@ -45,6 +45,13 @@ jobs:
         cd work-centre-api  
         npm install
         npm run build
+    - name: Create backend zip artifact
+      run: zip -r backend.zip ./work-centre-api
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v2
+      with:
+        name: backend-artifact
+        path: backend.zip
     - name: 'Deploy backend to Azure WebApp'
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v1
@@ -52,4 +59,3 @@ jobs:
         app-name: ${{ env.AZURE_WEBAPP_NAME_SERVER }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_SERVER }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH_BACKEND }}
-        
