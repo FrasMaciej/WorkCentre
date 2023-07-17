@@ -6,12 +6,17 @@ on:
       - main
 
 env:
+  # Define your environment variables here
   WEB_APP_NAME: 'work-centre-api'
   VM_IMAGE_NAME: 'ubuntu-18.04'
 
 jobs:
   build:
-    runs-on: ${{ env.VM_IMAGE_NAME }}
+    strategy:
+      matrix:
+        os: [${{ env.VM_IMAGE_NAME }}]
+
+    runs-on: ${{ matrix.os }}
     steps:
       - name: 'Checkout code'
         uses: actions/checkout@v2
@@ -33,7 +38,11 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: ${{ env.VM_IMAGE_NAME }}
+    strategy:
+      matrix:
+        os: [${{ env.VM_IMAGE_NAME }}]
+
+    runs-on: ${{ matrix.os }}
     steps:
       - name: 'Download artifact'
         uses: actions/download-artifact@v2
@@ -49,7 +58,8 @@ jobs:
         uses: azure/webapps-settings@v1
         with:
           app-name: ${{ env.WEB_APP_NAME }}
-          node-version: '18.x' 
+          node-version: '18.x' # Lub inna preferowana wersja Node.js
+          # Inne ustawienia dla aplikacji można dodać tutaj, jeśli są wymagane
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
