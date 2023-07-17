@@ -1,56 +1,50 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy Node.js app to Azure Web App - work-centre-api
+name: Deploy to Azure
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: work-centre-api
+  AZURE_WEBAPP_PACKAGE_PATH: work-centre-api/dist
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v1
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
           node-version: '18.x'
 
-      - name: npm install, build, and test
-        run: |
-          cd work-centre-api
-          npm install
-          npm run build --if-present
+      - name: Install dependencies
+        run: npm install --prefix work-centre-api
 
-      - name: Upload artifact for deployment job
+      - name: Build
+        run: npm run build --prefix work-centre-api
+
+      - name: Archive files
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: work-centre-api/dist
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      # Add "workdir" to set the directory for the deployment
+      - name: Set workdir for deployment
+        run: cd work-centre-api
 
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: node-app
-
-      - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'work-centre-api'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3530C63E8C1D42AEB89565360541AF51 }}
-          package: work-centre-api/dist
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
