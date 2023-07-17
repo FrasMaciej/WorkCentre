@@ -1,54 +1,38 @@
 on:
-  push:
-    branches:
-      - main
+  [push]
 
 env:
-  AZURE_WEBAPP_NAME: 'work-centre-api'
-  AZURE_WEBAPP_PACKAGE_PATH: './work-centre-api/dist'     
-  NODE_VERSION: '18.x'              
+  AZURE_WEBAPP_NAME_SERVER: work-centre-api
+  NODE_VERSION: '18.x'
 
 jobs:
-  build:
+  build-and-deploy-backend:
+    name: Build and Deploy Backend
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
+    - uses: actions/checkout@master
+    - name: Clean npm cache and node_modules for Backend
+      run: |
+        cd work-centre-api
+        npm cache clean --force
+        rm -rf node_modules
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
       with:
-        working-directory: './work-centre-api'
         node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-
-    - name: npm install, build, and test
+    - name: npm install backend dependencies
       run: |
         cd work-centre-api
         npm install
         npm run build --if-present
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v3
+    - name: Archive backend artifacts
+      uses: actions/upload-artifact@v2
       with:
-        name: work-centre-api
-        path: .
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v3
+        name: backend-artifacts
+        path: work-centre-api/dist
+    - name: 'Deploy backend to Azure WebApp'
+      uses: azure/webapps-deploy@v1
       with:
-        name: work-centre-api
-
-    - name: 'Deploy to Azure WebApp'
-      id: deploy-to-webapp 
-      uses: azure/webapps-deploy@85270a1854658d167ab239bce43949edb336fa7c
-      with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        app-name: ${{ env.AZURE_WEBAPP_NAME_SERVER }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_SERVER }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        package: ${{ env.AZURE_WEBAPP_NAME_SERVER }}/backend-artifacts  # Use the artifact path
