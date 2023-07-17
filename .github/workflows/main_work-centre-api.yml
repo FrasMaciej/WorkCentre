@@ -33,7 +33,7 @@ jobs:
     - name: Azure Configure
       uses: azure/configure@v1
       with:
-        azcliversion: 2.28.0
+        azcliversion: 2.29.2
 
     - name: Azure Web App Deploy
       uses: azure/webapps-deploy@v2
