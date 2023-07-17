@@ -58,3 +58,5 @@ jobs:
           app-name: ${{ env.WEB_APP_NAME }}
           package: drop/work-centre-api
           start-up-command: 'npm start'
+          
+          
