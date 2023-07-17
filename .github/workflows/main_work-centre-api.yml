@@ -17,6 +17,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
+        working-directory: './work-centre-api'
         node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
 
