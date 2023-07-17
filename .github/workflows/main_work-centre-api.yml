@@ -6,7 +6,7 @@ on:
 env:
   AZURE_WEBAPP_NAME: 'work-centre-api'
   AZURE_WEBAPP_PACKAGE_PATH: './work-centre-api/dist'     
-  NODE_VERSION: '14.x'              
+  NODE_VERSION: '18.x'              
 
 jobs:
   build:
@@ -22,12 +22,13 @@ jobs:
 
     - name: npm install, build, and test
       run: |
+        cd work-centre-api
         npm install
         npm run build --if-present
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v3
       with:
-        name: node-app
+        name: work-centre-api
         path: .
 
   deploy:
@@ -41,7 +42,7 @@ jobs:
     - name: Download artifact from build job
       uses: actions/download-artifact@v3
       with:
-        name: node-app
+        name: work-centre-api
 
     - name: 'Deploy to Azure WebApp'
       id: deploy-to-webapp 
