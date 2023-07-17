@@ -39,6 +39,14 @@ jobs:
           name: node-app
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
+      # Add "workdir" to set the directory for the deployment
+      - name: Set workdir for deployment
+        run: cd work-centre-api
+
+      # Run "npm install" again inside the correct directory
+      - name: Install dependencies for deployment
+        run: npm install
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
