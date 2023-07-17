@@ -1,39 +1,46 @@
+name: Deploy to Azure
+
 on:
-  [push]
+  push:
+    branches:
+      - main
 
 env:
-  AZURE_WEBAPP_NAME_SERVER: work-centre-api
-  NODE_VERSION: '18.x'
+  AZURE_WEBAPP_NAME: work-centre-api
+  AZURE_WEBAPP_PACKAGE_PATH: work-centre-api/dist
 
 jobs:
-  build-and-deploy-backend:
-    name: Build and Deploy Backend
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Clean npm cache and node_modules for Backend
-      run: |
-        cd work-centre-api
-        npm cache clean --force
-        rm -rf node_modules
-    - name: Use Node.js ${{ env.NODE_VERSION }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-    - name: npm install backend dependencies
-      run: |
-        cd work-centre-api
-        npm install
-        npm run build --if-present
-    - name: Archive backend artifacts
-      id: backend-artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: backend-artifacts
-        path: ./work-centre-api/dist
-    - name: 'Deploy backend to Azure WebApp'
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME_SERVER }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_SERVER }}
-        package: ${{ needs.build-and-deploy-backend.outputs.backend-artifacts }}  # Corrected artifact reference
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build --prefix work-centre-api
+
+      - name: Archive files
+        uses: actions/upload-artifact@v2
+        with:
+          name: node-app
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
