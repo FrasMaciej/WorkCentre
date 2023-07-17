@@ -1,32 +1,60 @@
+name: Node.js Express Web App to Linux on Azure
+
 on:
-  [push]
+  push:
+    branches:
+      - main
 
 env:
-  AZURE_WEBAPP_NAME: work-centre    
-  AZURE_WEBAPP_NAME_SERVER: work-centre-api
-  AZURE_WEBAPP_PACKAGE_PATH_FRONTEND: './work-centre-ui/dist/work-centre-ui'  
-  AZURE_WEBAPP_PACKAGE_PATH_BACKEND: './work-centre-api/dist' 
-  SERVER_PORT: 3000
-  NODE_VERSION: '18.x'  # set this to the node version to use
+  WEB_APP_NAME: 'work-centre-api'
+  VM_IMAGE_NAME: 'ubuntu-latest'
 
 jobs:
-  build-and-deploy-frontend:
-    name: Build and Deploy Frontend
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ${{ env.VM_IMAGE_NAME }}
     steps:
-    - uses: actions/checkout@master
-    - name: Use Node.js ${{ env.NODE_VERSION }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-    - name: npm install and build frontend
-      run: |
-        cd work-centre-ui 
-        npm install
-        npm run build
-    - name: 'Deploy frontend to Azure WebApp'
-      uses: azure/webapps-deploy@v1
-      with: 
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH_FRONTEND }}
+      - name: 'Checkout code'
+        uses: actions/checkout@v2
+
+      - name: 'Install Node.js'
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+
+      - name: 'Install dependencies'
+        run: npm install
+        working-directory: ./work-centre-api
+
+      - name: 'Archive files'
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'drop'
+          path: ./work-centre-api
+
+  deploy:
+    needs: build
+    runs-on: ${{ env.VM_IMAGE_NAME }}
+    steps:
+      - name: 'Download artifact'
+        uses: actions/download-artifact@v2
+        with:
+          name: 'drop'
+
+      - name: 'Login to Azure'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: 'Set Azure Web App'
+        uses: azure/webapps-settings@v1
+        with:
+          app-name: ${{ env.WEB_APP_NAME }}
+          node-version: '18.x'
+
+
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.WEB_APP_NAME }}
+          package: drop/work-centre-api
+          start-up-command: 'npm start'
