@@ -10,14 +10,14 @@ jobs:
     name: Build and Deploy Backend
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
     - name: Clean npm cache and node_modules for Backend
       run: |
         cd work-centre-api
         npm cache clean --force
         rm -rf node_modules
     - name: Use Node.js ${{ env.NODE_VERSION }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: ${{ env.NODE_VERSION }}
     - name: npm install backend dependencies
@@ -32,8 +32,8 @@ jobs:
         name: backend-artifacts
         path: work-centre-api/dist
     - name: 'Deploy backend to Azure WebApp'
-      uses: azure/webapps-deploy@v1
+      uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME_SERVER }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_SERVER }}
-        package: ${{ needs.build-and-deploy-backend.outputs.backend-artifacts }}
+        package: ${{ needs.build-and-deploy-backend.outputs.backend-artifacts }}  # Corrected artifact reference
