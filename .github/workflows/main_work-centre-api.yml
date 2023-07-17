@@ -30,7 +30,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: backend-artifacts
-        path: work-centre-api/dist
+        path: ./work-centre-api/dist
     - name: 'Deploy backend to Azure WebApp'
       uses: azure/webapps-deploy@v2
       with:
