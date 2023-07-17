@@ -1,29 +1,42 @@
-on:
-  [push]
+name: Node.js CI with Azure Deploy
 
-env:
-  AZURE_WEBAPP_NAME: work-centre    
-  AZURE_WEBAPP_PACKAGE_PATH_FRONTEND: './work-centre-ui/dist/work-centre-ui'  
-  NODE_VERSION: '18.x'  
+on:
+  push:
+    branches:
+      - main 
 
 jobs:
-  build-and-deploy-frontend:
-    name: Build and Deploy Frontend
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@master
-    - name: Use Node.js ${{ env.NODE_VERSION }}
-      uses: actions/setup-node@v1
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
       with:
-        node-version: ${{ env.NODE_VERSION }}
-    - name: npm install and build frontend
-      run: |
-        cd work-centre-ui 
-        npm install
-        npm run build
-    - name: 'Deploy frontend to Azure WebApp'
-      uses: azure/webapps-deploy@v1
-      with: 
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH_FRONTEND }}
+        node-version: '18.x' 
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build
+      working-directory: ./work-centre-api 
+      run: npm run build
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Azure Configure
+      uses: azure/configure@v1
+      with:
+        azcliversion: 2.28.0
+
+    - name: Azure Web App Deploy
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'work-centre-api'
+        package: ./work-centre-api/dist 
