@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
   
 env:
-  AZURE_WEBAPP_NAME: work-centre-api
+  AZURE_WEBAPP_NAME: work-centre-server
   AZURE_WEBAPP_PACKAGE_PATH: work-centre-api/dist
 
 jobs:
@@ -55,6 +55,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          slot-name: 'Production'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_SERVER }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
