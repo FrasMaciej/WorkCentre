@@ -52,7 +52,3 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
           
-      - name: Run npm install after deployment
-        run: |
-          cd $DEPLOYMENT_TARGET
-          ./deploy.sh
