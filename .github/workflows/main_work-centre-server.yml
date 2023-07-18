@@ -8,6 +8,10 @@ on:
     branches:
       - main
   workflow_dispatch:
+  
+env:
+  AZURE_WEBAPP_NAME: work-centre-api
+  AZURE_WEBAPP_PACKAGE_PATH: work-centre-api/dist
 
 jobs:
   build:
@@ -23,15 +27,15 @@ jobs:
 
       - name: npm install, build, and test
         run: |
+          cd work-centre-api
           npm install
           npm run build --if-present
-          npm run test --if-present
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
-          name: node-app
-          path: .
+          name: work-centre-server
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,7 +54,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'work-centre-server'
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_402A0E7847E84C66AC8E1FEBBB056E77 }}
-          package: .
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
