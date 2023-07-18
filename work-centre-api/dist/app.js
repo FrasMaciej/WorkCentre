@@ -14,4 +14,3 @@ app.listen(projectConfigurationConstants_1.constants.server_port, () => {
     return console.log(`Express is listening on port ${projectConfigurationConstants_1.constants.server_port}`);
 });
 app.use('/api', api_1.default);
-//# sourceMappingURL=app.js.map
