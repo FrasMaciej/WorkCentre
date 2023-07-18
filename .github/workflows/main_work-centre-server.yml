@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: work-centre-server
-          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          path: ./work-centre-api/dist
 
   deploy:
     runs-on: ubuntu-latest
