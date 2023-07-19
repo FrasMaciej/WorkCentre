@@ -1,4 +1,4 @@
-name: Node.js Azure Deploy
+name: Server Azure Deploy
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build-and-deploy-backned:
     runs-on: ubuntu-latest
 
     steps:
