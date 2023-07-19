@@ -19,12 +19,12 @@ jobs:
         node-version: '14.x'
 
     - name: Install dependencies
-      run: 
+      run: |
         cd work-centre-api
         npm install
 
     - name: Build the app
-      run: 
+      run: |
         cd work-centre-api
         npm run build
 
