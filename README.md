@@ -11,13 +11,14 @@ Deployment: Azure:
 - Backend: App Service Resource
 
 # Goals
-Done:
+
+#### Done:
 - ...
 
-Mostly done:
+#### Mostly done:
 - Frontend and Backend configuration with github actions and deploy on Azure (mostly done, needs some CI/CD improvements)
 
-To-do:
+#### To-do:
 - Registration with Passport
 - Registration with OAuth
 - Endpoints protection
@@ -27,6 +28,6 @@ To-do:
 - Dockerizing
 - ...
 
-Additional concepts:
+#### Additional concepts:
 - Mobile Version (Flutter?)
 - Testing 
