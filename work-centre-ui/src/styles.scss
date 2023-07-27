@@ -5,3 +5,13 @@
 /* Importing Bootstrap SCSS file. */
 @import 'node_modules/bootstrap/scss/bootstrap';
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+:root {
+    --darkPurple: #2d006c;
+    --lightPurple: #42009f;
+    --dark: #180039;
+    --gold: #CBB26A;
+    --pastelYellow: #d8c690;
+    --darkerYellow: #be9e44;
+
+}
