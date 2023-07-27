@@ -4,6 +4,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './appRouting.module';
 import { AppComponent } from './app.component';
 import { WelcomeScreenModule } from './application/welcomeScreen/welcomeScreen.module';
+import { CommonControlsModule } from './library/commonControls.module';
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -12,7 +15,9 @@ import { WelcomeScreenModule } from './application/welcomeScreen/welcomeScreen.m
   imports: [
     BrowserModule,
     AppRoutingModule,
+    CommonControlsModule,
     WelcomeScreenModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

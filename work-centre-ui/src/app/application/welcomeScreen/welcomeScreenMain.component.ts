@@ -12,10 +12,7 @@ import { Component, OnInit } from '@angular/core';
         <mat-icon>share</mat-icon>
         </button>
     </mat-toolbar>
-    <div class="divens">
-        <svg-icon [path]="'./logoColorBackground.svg'"></svg-icon>
-    </div>
-
+    <svg-icon src="assets/logo/logoColor.svg" [svgStyle]="{ 'width.px':900 }"></svg-icon>
     `,
     styles: [`
         .spacer {
