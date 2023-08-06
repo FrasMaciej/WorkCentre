@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { WelcomeScreenModule } from './application/welcomeScreen/welcomeScreen.module';
 import { CommonControlsModule } from './library/commonControls.module';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     CommonControlsModule,
     WelcomeScreenModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

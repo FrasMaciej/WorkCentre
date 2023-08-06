@@ -15,5 +15,19 @@
     --darkerYellow: #be9e44;
 
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+body {
+    // background-color: var(--dark);
+    background-image: url("./assets/background.jpg");
+
+}
