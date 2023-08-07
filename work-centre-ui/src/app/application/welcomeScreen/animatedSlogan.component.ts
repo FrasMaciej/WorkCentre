@@ -1,48 +1,47 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2, Input } from '@angular/core';
-import { trigger, transition, style, animate } from '@angular/animations';
+import { trigger, transition, style, animate, keyframes } from '@angular/animations';
 
 @Component({
     selector: 'animated-slogan',
     template: `
     <div class="container">
-      <h3 class="an-1" #sloganRef [@textAnimation]="state">{{ currentSlogan }}</h3>
+      <h3 #sloganRef [@textAnimation]="state">{{ currentSlogan }}</h3>
     </div>
   `,
     styles: [`
-  p {
-      font-family: Lato;
-    }
-
     .container {
       width: 80vw;
-      height: 20vh; /* Dostosuj wysokość kontenera */
-      margin-left: auto;
-      margin-right: auto;
+      height: 20vh;
+      margin: 0 auto;
       display: grid;
-      align-content: center;
+      align-items: center;
       text-align: center;
-      color: var(--dark);
+      color: #ffffff;
     }
 
-    .an-1 {
+    h3 {
       font-weight: 900;
-      font-size: 4vw; /* Dostosuj rozmiar fontu */
-      line-height: 1.2em; /* Dostosuj line-height */
+      font-size: 2rem;
+      line-height: 1.4;
       overflow: hidden;
       white-space: nowrap;
       display: inline-block;
+      font-family: 'Arial', sans-serif;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
   `],
     animations: [
         trigger('textAnimation', [
             transition(':enter', [
                 style({ opacity: 0 }),
-                animate('2s', style({ opacity: 1 })),
-                animate('2s', style({ opacity: 1 })),
-                animate('2s', style({ opacity: 0 }))
+                animate('1s', keyframes([
+                    style({ opacity: 0, transform: 'scale(0.8)' }),
+                    style({ opacity: 1, transform: 'scale(1.1)' }),
+                    style({ opacity: 1, transform: 'scale(1)' })
+                ]))
             ]),
             transition(':leave', [
-                animate('0s', style({ opacity: 0 }))
+                animate('0.5s', style({ opacity: 0, transform: 'scale(0.8)' }))
             ])
         ])
     ]
@@ -87,8 +86,8 @@ export class AnimatedSloganComponent implements OnInit, OnDestroy {
                         this.currentSlogan = '';
                         this.state = 'in';
                         this.updateSlogan();
-                    }, 2000); // Delay before starting the next slogan
-                }, 2000); // The duration of the fadeInOut animation
+                    }, 500); // Delay before starting the next slogan
+                }, 500); // The duration of the fadeInOut animation
             }
         }, 100); // Delay between adding each letter
     }
