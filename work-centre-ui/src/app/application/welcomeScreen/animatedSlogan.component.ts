@@ -46,7 +46,7 @@ import { trigger, transition, style, animate, keyframes } from '@angular/animati
         ])
     ]
 })
-export class AnimatedSloganComponent implements OnInit, OnDestroy {
+export class AnimatedSloganComponent implements OnInit {
     @Input() slogans: string[] = ['Achieve your goals', 'Find matching job opportunity', 'Hire professionals'];
     currentSlogan: string = '';
     sloganIndex: number = 0;
@@ -61,16 +61,12 @@ export class AnimatedSloganComponent implements OnInit, OnDestroy {
         this.updateSlogan();
     }
 
-    ngOnDestroy(): void {
-        // Add any cleanup if needed
-    }
-
     updateSlogan(): void {
         const sloganElement: HTMLElement = this.sloganRef.nativeElement;
         const slogan = this.slogans[this.sloganIndex];
         const letters = slogan.split('');
 
-        this.letterIndex = 0; // Reset the letter index
+        this.letterIndex = 0;
         this.currentSlogan = '';
 
         const interval = setInterval(() => {
@@ -86,9 +82,9 @@ export class AnimatedSloganComponent implements OnInit, OnDestroy {
                         this.currentSlogan = '';
                         this.state = 'in';
                         this.updateSlogan();
-                    }, 500); // Delay before starting the next slogan
-                }, 500); // The duration of the fadeInOut animation
+                    }, 500);
+                }, 500);
             }
-        }, 100); // Delay between adding each letter
+        }, 100);
     }
 }
