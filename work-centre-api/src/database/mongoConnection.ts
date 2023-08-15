@@ -7,7 +7,7 @@ const client = new MongoClient(uri, {});
 async function connectToDatabase() {
     try {
         await client.connect();
-        console.log('Connected to Cosmos DB successfully!');
+        console.log('Connected to MongoDB successfully!');
     } catch (error) {
         console.error('Error connecting to the database:', error);
     }
