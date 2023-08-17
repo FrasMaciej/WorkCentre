@@ -31,12 +31,12 @@ jobs:
     - name: Archive production build
       uses: actions/upload-artifact@v2
       with:
-        name: work-centre-server
+        name: star-jobs-server
         path: work-centre-api/dist
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
-        app-name: work-centre-server 
+        app-name: star-jobs-server 
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_368C47B0FA8742678433A5BD453FCB24 }}
         package: work-centre-api/dist
