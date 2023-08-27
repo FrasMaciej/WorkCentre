@@ -33,7 +33,7 @@
     "emitDecoratorMetadata": true,
     "typeRoots": [
       "./types",
-      "./node_modules/@types"
+      "./node_modules/@types",
     ],
     "allowSyntheticDefaultImports": true,
     "lib": ["es5", "es6", "dom"],
