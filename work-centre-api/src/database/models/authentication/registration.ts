@@ -2,22 +2,23 @@ interface UserSchema {
     local: {
         email: string;
         password: string;
-        name: string;
-        surname: string;
+        firstName: string;
+        lastName: string;
+        salt: string;
     },
-    facebook: {
+    facebook?: {
         id: string;
         token: string;
         name: string;
         email: string;
     },
-    twitter: {
+    twitter?: {
         id: String,
         token: String,
         displayName: String,
         username: String
     },
-    google: {
+    google?: {
         id: String,
         token: String,
         email: String,
