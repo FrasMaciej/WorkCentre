@@ -1,12 +1,30 @@
 import { Request, Response } from 'express';
+import { collections } from "../../../database/mongoConnection"
+// import { collections } from '@app/database/mongoConnection';
 
 export async function register(req: Request, res: Response) {
     const { email, password, firstName, lastName } = req.body;
-    const newUser: UserDto = { email, firstName, lastName };
-    if (password.length < 8) {
-        return res.redirect("/api");
+
+    if (collections.users) {
+        const existingUser = await collections.users.findOne({ 'local.email': email });
+        if (existingUser) {
+            return res.status(400).json({ message: 'User with this email already exists.' });
+        } else {
+            const newUser: ExtendedUserDto = {
+                email,
+                password,
+                firstName,
+                lastName
+            };
+        }
     }
-    console.log(newUser);
+
+
+    // const newUser: UserDto = { email, firstName, lastName };
+    // if (password.length < 8) {
+    //     return res.redirect("/api");
+    // }
+    // console.log(newUser);
     // User.register(newUser, password, function (err: any, user: UserI) {
     //     if (err) { console.log(err); res.redirect("/api") }
     //     else {

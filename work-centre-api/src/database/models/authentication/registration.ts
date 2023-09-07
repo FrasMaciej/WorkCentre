@@ -1,10 +1,26 @@
-
-class User implements UserDto {
-    constructor(
-        public email: string,
-        public firstName: string,
-        public lastName: string,
-        public id?: string | undefined
-    ) { }
+interface UserSchema {
+    local: {
+        email: string;
+        password: string;
+        name: string;
+        surname: string;
+    },
+    facebook: {
+        id: string;
+        token: string;
+        name: string;
+        email: string;
+    },
+    twitter: {
+        id: String,
+        token: String,
+        displayName: String,
+        username: String
+    },
+    google: {
+        id: String,
+        token: String,
+        email: String,
+        name: String
+    }
 }
-

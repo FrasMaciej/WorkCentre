@@ -43,6 +43,9 @@
       "@app/*": [
         "*"
       ],
+      "@database/*": [
+        "*"
+      ],
       "@dtos/*": [
         "../shared/types/*"
       ]
