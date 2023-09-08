@@ -33,9 +33,9 @@ async function closeDatabaseConnection() {
 }
 
 async function loadCollections(database: Db) {
-    const usersCollection = database.collection<ExtendedUserDto>('users');
+    const usersCollection = await database.collection<UserSchema>('users');
     collections.users = usersCollection;
 }
 
 export { connectToDatabase, closeDatabaseConnection };
-export const collections: { users?: Collection<ExtendedUserDto> } = {};
+export const collections: { users?: Collection<UserSchema> } = {};
