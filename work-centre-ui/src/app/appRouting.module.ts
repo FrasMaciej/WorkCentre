@@ -5,12 +5,14 @@ import { RegistrationPageComponent } from './application/authorization/registrat
 import { LoginPageComponent } from './application/authorization/logging/loggingPage.component';
 import { AboutUsComponent } from './application/aboutUs/aboutUs.component';
 import { PanelComponent } from './application/panel/panel.component';
+import { RegistrationConfirmationPageComponent } from './application/authorization/registration/registrationConfirmationPage.component';
 
 
 const routes: Routes = [
   { path: '', component: WelcomeScreenMainComponent },
   { path: 'sign-in', component: LoginPageComponent },
   { path: 'sign-up', component: RegistrationPageComponent },
+  { path: 'sign-up-confirmation', component: RegistrationConfirmationPageComponent },
   { path: 'about-us', component: AboutUsComponent },
   { path: 'panel', component: PanelComponent }
 ];
