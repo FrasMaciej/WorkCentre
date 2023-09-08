@@ -4,15 +4,21 @@ import authApiRouter from './api/routes/authApi';
 import { constants } from './constants';
 import { connectToDatabase, closeDatabaseConnection } from './database/mongoConnection'
 import bodyParser from 'body-parser';
+var cors = require('cors')
+
 
 const app = express();
 const session = require('express-session')
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 
+app.use(cors())
+
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.use(express.json());
+
 app.use(session({
     secret: "secret",
     resave: false,
