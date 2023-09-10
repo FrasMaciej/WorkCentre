@@ -53,18 +53,14 @@ passport.use(new LocalStrategy(async (username, password, cb) => {
     try {
         const user = await collections.users?.findOne({ 'local.email': username });
         if (user) {
-            pbkdf2(password, user.local.salt, 310000, 32, 'sha256', function (err, hashedPassword) {
-                console.log(Buffer.from(password));
-                console.log(hashedPassword);
+            const salt = user.local.salt;
+            pbkdf2(password, salt, 310000, 32, 'sha256', function (err, hashedPassword) {
                 if (err) {
-                    console.log('1')
                     return cb(err);
                 }
-                if (!timingSafeEqual(Buffer.from(password), hashedPassword)) {
-                    console.log('2')
+                if (!timingSafeEqual(Buffer.from(user.local.password, 'hex'), hashedPassword)) {
                     return cb(null, false, { message: 'Incorrect username or password.' });
                 }
-                console.log('3')
                 return cb(null);
             });
         } else {
