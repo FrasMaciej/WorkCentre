@@ -11,4 +11,9 @@ declare global {
     interface ExtendedUserDto extends UserDto {
         password: string,
     }
+
+    interface LoginUserDto {
+        username: string;
+        password: string;
+    }
 }

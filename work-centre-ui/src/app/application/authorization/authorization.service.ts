@@ -11,4 +11,7 @@ export class AuthorizationService {
         return lastValueFrom(this.http.post(environment.apiURL + '/register', userData));
     }
 
+    async loginUser(userData: LoginUserDto): Promise<any> {
+        return lastValueFrom(this.http.post(environment.apiURL + '/login', userData));
+    }
 }

@@ -5,7 +5,8 @@ import { constants } from './constants';
 import { connectToDatabase, closeDatabaseConnection } from './database/mongoConnection'
 import bodyParser from 'body-parser';
 var cors = require('cors')
-
+import { pbkdf2, timingSafeEqual } from 'crypto';
+import { collections } from './database/mongoConnection';
 
 const app = express();
 const session = require('express-session')
@@ -47,6 +48,33 @@ passport.deserializeUser((id, done) => {
     console.log(id);
     done(null, { name: "Kyle", id: 123 });
 })
+
+passport.use(new LocalStrategy(async (username, password, cb) => {
+    try {
+        const user = await collections.users?.findOne({ 'local.email': username });
+        if (user) {
+            pbkdf2(password, user.local.salt, 310000, 32, 'sha256', function (err, hashedPassword) {
+                console.log(Buffer.from(password));
+                console.log(hashedPassword);
+                if (err) {
+                    console.log('1')
+                    return cb(err);
+                }
+                if (!timingSafeEqual(Buffer.from(password), hashedPassword)) {
+                    console.log('2')
+                    return cb(null, false, { message: 'Incorrect username or password.' });
+                }
+                console.log('3')
+                return cb(null);
+            });
+        } else {
+            return Error;
+        }
+    } catch (err) {
+        return err;
+    }
+
+}));
 
 app.get('/', (req, res) => {
     res.send('Welcome on Work-Centre Server ® HACKER');

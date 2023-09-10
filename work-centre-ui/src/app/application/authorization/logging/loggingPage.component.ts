@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'login-page',
   template: `
-    <form [formGroup]="loggingForm">
+    <form [formGroup]="loggingForm" (ngSubmit)="onSubmit()"> 
       <div class="flex justify-center items-center flex-col">
         <a href="/"> 
             <svg-icon src="assets/logo/logoBlack.svg" [svgStyle]="{ 'width.px':500, 'height.px': 200 }"></svg-icon> 
@@ -32,7 +32,7 @@ import { Router } from '@angular/router';
               Password is <strong>required</strong>
             </mat-error>
           </mat-form-field>
-          <button class="sign-in-btn" mat-fab extended color="accent">
+          <button class="sign-in-btn" mat-fab extended color="accent" [disabled]="signinButtonDisabled">
             Sign in
           </button>
           <span class="mt-4">Tou do not have an account? <b class="cursor-pointer" (click)="navigateToSignUp()">Sign up</b> </span>
@@ -81,9 +81,28 @@ export class LoginPageComponent implements OnInit {
     return password !== confirmPassword;
   }
 
+  signinButtonDisabled = false;
+
   constructor(private authorizationService: AuthorizationService, private router: Router) { }
 
   ngOnInit() { }
+
+  async onSubmit() {
+    this.signinButtonDisabled = true;
+    if (this.loggingForm.valid) {
+      try {
+        await this.authorizationService.loginUser({
+          password: this.loggingForm.value.password!,
+          username: this.loggingForm.value.email!,
+        });
+        this.router.navigate(['sign-up-confirmation']);
+      } catch (err) {
+        this.loggingForm.get('email')?.setValue('');
+        this.loggingForm.get('password')?.setValue('');
+      }
+    }
+    this.signinButtonDisabled = false;
+  }
 
   navigateToSignUp() {
     this.router.navigate(['sign-up']);
