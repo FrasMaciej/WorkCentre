@@ -38,15 +38,13 @@ const authUser = (user, password, done) => {
 passport.use(new LocalStrategy(authUser))
 
 passport.serializeUser((user, done) => {
-    console.log(`--------> Serialize User`);
-    console.log(user);
     done(null, user.id);
 })
 
-passport.deserializeUser((id, done) => {
-    console.log("---------> Deserialize Id");
-    console.log(id);
-    done(null, { name: "Kyle", id: 123 });
+passport.deserializeUser(async (id, done) => {
+    await collections.users?.findOne({ _id: id }).then((user) => {
+        done(user);
+    });
 })
 
 passport.use(new LocalStrategy(async (username, password, cb) => {
@@ -64,7 +62,7 @@ passport.use(new LocalStrategy(async (username, password, cb) => {
                 return cb(null, true);
             });
         } else {
-            return Error;
+            return cb(null, false, { message: 'Incorrect username or password.' });
         }
     } catch (err) {
         return err;
