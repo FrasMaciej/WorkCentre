@@ -61,7 +61,7 @@ passport.use(new LocalStrategy(async (username, password, cb) => {
                 if (!timingSafeEqual(Buffer.from(user.local.password, 'hex'), hashedPassword)) {
                     return cb(null, false, { message: 'Incorrect username or password.' });
                 }
-                return cb(null);
+                return cb(null, true);
             });
         } else {
             return Error;
@@ -69,7 +69,6 @@ passport.use(new LocalStrategy(async (username, password, cb) => {
     } catch (err) {
         return err;
     }
-
 }));
 
 app.get('/', (req, res) => {
