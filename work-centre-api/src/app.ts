@@ -12,6 +12,20 @@ const app = express();
 const session = require('express-session')
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
+const passportJWT = require("passport-jwt");
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
+const MongoDBStore = require('connect-mongodb-session')(session);
+
+const store = new MongoDBStore({
+    uri: constants.db_connection_string,
+    collection: 'sessions',
+    expires: 1000 * 60 * 60 * 24 * 7, // minuta
+});
+
+store.on('error', (error) => {
+    console.error('Error in session magazine:', error);
+});
 
 app.use(cors())
 
@@ -23,7 +37,8 @@ app.use(express.json());
 app.use(session({
     secret: "secret",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    cookie: { secure: false },
 }))
 app.use(passport.initialize())
 app.use(passport.session())
@@ -68,6 +83,21 @@ passport.use(new LocalStrategy(async (username, password, cb) => {
         return err;
     }
 }));
+
+passport.use(new JWTStrategy({
+    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    secretOrKey: 'your_jwt_secret'
+},
+    function (jwtPayload, cb) {
+        return collections.users?.findOne({ _id: jwtPayload._id })
+            .then(user => {
+                return cb(null, user);
+            })
+            .catch(err => {
+                return cb(err);
+            });
+    }
+));
 
 app.get('/', (req, res) => {
     res.send('Welcome on Work-Centre Server ® HACKER');
