@@ -20,7 +20,7 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const store = new MongoDBStore({
     uri: constants.db_connection_string,
     collection: 'sessions',
-    expires: 1000 * 60 * 60 * 24 * 7, // minuta
+    expires: 1000 * 60 , // one minute for test purpouse
 });
 
 store.on('error', (error) => {
@@ -35,10 +35,13 @@ app.use(bodyParser.urlencoded({
 app.use(express.json());
 
 app.use(session({
-    secret: "secret",
+    secret: "your_session_secret",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false },
+    store: store, 
+    cookie: {
+      maxAge: 1000 * 60
+    },
 }))
 app.use(passport.initialize())
 app.use(passport.session())

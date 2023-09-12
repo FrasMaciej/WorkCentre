@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 
 import { AboutUsModule } from './application/aboutUs/aboutUs.module';
 import { AuthorizationModule } from './application/authorization/authorization.module';
-import { PanelModule } from './application/panel/panel.module';
+import { DashboardModule } from './application/panel/dashboard.module';
 import { WelcomeScreenModule } from './application/welcomeScreen/welcomeScreen.module';
 
 
@@ -23,7 +23,7 @@ import { WelcomeScreenModule } from './application/welcomeScreen/welcomeScreen.m
     FormsModule,
     AboutUsModule,
     AuthorizationModule,
-    PanelModule,
+    DashboardModule,
     WelcomeScreenModule
   ],
   providers: [],

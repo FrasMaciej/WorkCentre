@@ -1,5 +1,6 @@
 {
     "css.lint.unknownAtRules": "ignore",
     "editor.formatOnSave": true,
-    "editor.fontLigatures": false
+    "editor.fontLigatures": false,
+    "editor.defaultFormatter": "vscode.typescript-language-features"
 }

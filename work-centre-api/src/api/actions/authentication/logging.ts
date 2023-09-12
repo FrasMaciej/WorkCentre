@@ -15,11 +15,11 @@ export async function login(req: Request, res: Response) {
     })(req, res);
 };
 
-// export async function logout(req, res: Response) {
-//     req.session.destroy((err) => {
-//         if (err) {
-//             return res.status(500).json({ error: 'Internal Server Error' });
-//         }
-//         return res.status(200).json({ message: 'Logged out successfully.' });
-//     });
-// };
+export async function logout(req, res: Response) {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+        return res.status(200).json({ message: 'Logged out successfully.' });
+    });
+};

@@ -4,8 +4,9 @@ import { WelcomeScreenMainComponent } from './application/welcomeScreen/welcomeS
 import { RegistrationPageComponent } from './application/authorization/registration/registrationPage.component';
 import { LoginPageComponent } from './application/authorization/logging/loggingPage.component';
 import { AboutUsComponent } from './application/aboutUs/aboutUs.component';
-import { PanelComponent } from './application/panel/panel.component';
+import { DashboardComponent } from './application/panel/dashboard.component';
 import { RegistrationConfirmationPageComponent } from './application/authorization/registration/registrationConfirmationPage.component';
+import { AuthGuardService } from './application/authorization/authGuard.service';
 
 
 const routes: Routes = [
@@ -14,7 +15,7 @@ const routes: Routes = [
   { path: 'sign-up', component: RegistrationPageComponent },
   { path: 'sign-up-confirmation', component: RegistrationConfirmationPageComponent },
   { path: 'about-us', component: AboutUsComponent },
-  { path: 'panel', component: PanelComponent }
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService] }
 ];
 
 @NgModule({

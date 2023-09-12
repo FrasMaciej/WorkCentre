@@ -15,6 +15,9 @@ import { Router } from '@angular/router';
           <span class="mb-4 text-xl text-center">
             Log in to your account
           </span>
+          <mat-error *ngIf="loggingForm.get('email')?.hasError('wrongPassword')" class="mb-2.5">
+            Wrong email or password credentials. Try again
+          </mat-error>
           <mat-form-field>
             <mat-label>Email</mat-label>
             <input type="email" matInput formControlName="email" placeholder="Ex. pat@example.com"/>
@@ -91,14 +94,18 @@ export class LoginPageComponent implements OnInit {
     this.signinButtonDisabled = true;
     if (this.loggingForm.valid) {
       try {
-        await this.authorizationService.loginUser({
+        const response = await this.authorizationService.loginUser({
           password: this.loggingForm.value.password!,
           username: this.loggingForm.value.email!,
         });
-        this.router.navigate(['sign-up-confirmation']);
+        localStorage.setItem('token', response.token);
+        this.router.navigate(['dashboard']);
       } catch (err) {
         this.loggingForm.get('email')?.setValue('');
         this.loggingForm.get('password')?.setValue('');
+        this.loggingForm.get('email')?.setValue('');
+        this.loggingForm.get('email')?.markAsTouched();
+        this.loggingForm.get('email')?.setErrors({ wrongPassword: true });
       }
     }
     this.signinButtonDisabled = false;
