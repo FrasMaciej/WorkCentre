@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+const jwt = require('jsonwebtoken');
 const passport = require('passport')
 
 export async function login(req: Request, res: Response) {
@@ -9,6 +10,7 @@ export async function login(req: Request, res: Response) {
         if (!user) {
             return res.status(401).json({ message: 'Incorrect username or password.' });
         }
-        return res.status(200).json({ message: 'Authentication successful', user });
+        const token = jwt.sign(user, 'your_jwt_secret');
+        return res.json({ user, token });
     })(req, res);
 };

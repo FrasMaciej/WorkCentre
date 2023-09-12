@@ -59,10 +59,10 @@ passport.use(new LocalStrategy(async (username, password, cb) => {
                 if (!timingSafeEqual(Buffer.from(user.local.password, 'hex'), hashedPassword)) {
                     return cb(null, false, { message: 'Incorrect username or password.' });
                 }
-                return cb(null, true);
+                return cb(null, user);
             });
         } else {
-            return cb(null, false, { message: 'Incorrect username or password.' });
+            return cb(null, false, { message: 'Error when logging.' });
         }
     } catch (err) {
         return err;
