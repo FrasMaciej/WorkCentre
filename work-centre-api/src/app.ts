@@ -1,50 +1,53 @@
 import express from 'express';
-import apiRouter from './api/routes/api';
-import authApiRouter from './api/routes/authApi';
 import { constants } from './constants';
 import { connectToDatabase, closeDatabaseConnection } from './database/mongoConnection'
+import apiRouter from './api/routes/api';
+import authApiRouter from './api/routes/authApi';
 import bodyParser from 'body-parser';
 var cors = require('cors')
 import { pbkdf2, timingSafeEqual } from 'crypto';
 import { collections } from './database/mongoConnection';
 
+
 const app = express();
-const session = require('express-session')
-const passport = require('passport')
-const LocalStrategy = require('passport-local').Strategy
-const passportJWT = require("passport-jwt");
-const JWTStrategy = passportJWT.Strategy;
-const ExtractJWT = passportJWT.ExtractJwt;
-const MongoDBStore = require('connect-mongodb-session')(session);
-
-const store = new MongoDBStore({
-    uri: constants.db_connection_string,
-    collection: 'sessions',
-    expires: 1000 * 60 , // one minute for test purpouse
-});
-
-store.on('error', (error) => {
-    console.error('Error in session magazine:', error);
-});
 
 app.use(cors())
-
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(express.json());
 
+const passport = require('passport')
+const session = require('express-session')
+
+const MongoDBStore = require('connect-mongodb-session')(session);
+const store = new MongoDBStore({
+    uri: constants.db_connection_string,
+    collection: 'sessions',
+    expires: 1000 * 60, // one minute for test purpouse
+});
+
+
 app.use(session({
     secret: "your_session_secret",
     resave: false,
     saveUninitialized: false,
-    store: store, 
+    store: store,
     cookie: {
-      maxAge: 1000 * 60
+        maxAge: 1000 * 60 * 60
     },
 }))
 app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.session());
+
+const LocalStrategy = require('passport-local').Strategy
+const passportJWT = require("passport-jwt");
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
+
+store.on('error', (error) => {
+    console.error('Error in session magazine:', error);
+});
 
 const authUser = (user, password, done) => {
     console.log(`Value of "User" in authUser function ----> ${user}`)
@@ -56,13 +59,12 @@ const authUser = (user, password, done) => {
 passport.use(new LocalStrategy(authUser))
 
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+    return done(null, user.id);
 })
 
 passport.deserializeUser(async (id, done) => {
-    await collections.users?.findOne({ _id: id }).then((user) => {
-        done(user);
-    });
+    const user = await collections.users?.findOne({ _id: id });
+    return done(null, user);
 })
 
 passport.use(new LocalStrategy(async (username, password, cb) => {
@@ -110,6 +112,7 @@ app.listen(constants.server_port, async () => {
     console.log(`Express is listening on port ${constants.server_port}`);
     await connectToDatabase();
 });
+
 
 app.use('/api', apiRouter, authApiRouter);
 

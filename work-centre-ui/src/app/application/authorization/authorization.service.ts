@@ -16,6 +16,10 @@ export class AuthorizationService {
         return lastValueFrom(this.http.post(environment.apiURL + '/login', userData));
     }
 
+    async authTest(): Promise<any> {
+        return lastValueFrom(this.http.get(environment.apiURL + '/test2'));
+    }
+
     public isAuthenticated(): boolean {
         const token = localStorage.getItem('token');
         return !this.jwtHelper.isTokenExpired(token);

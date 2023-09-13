@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthorizationService } from '../authorization/authorization.service';
 
 @Component({
     selector: 'dashboard',
@@ -16,9 +17,11 @@ import { Router } from '@angular/router';
 export class DashboardComponent implements OnInit {
     userData = {};
 
-    constructor(private router: Router) { }
+    constructor(private router: Router, private authorizationService: AuthorizationService) { }
 
-    ngOnInit() { }
+    async ngOnInit() {
+        this.userData = await this.authorizationService.authTest();
+    }
 
     logout() {
         this.router.navigate(['/']);
