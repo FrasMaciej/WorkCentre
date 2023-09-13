@@ -17,16 +17,19 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.json());
 
-const passport = require('passport')
 const session = require('express-session')
+const passport = require('passport')
 
 const MongoDBStore = require('connect-mongodb-session')(session);
 const store = new MongoDBStore({
     uri: constants.db_connection_string,
     collection: 'sessions',
-    expires: 1000 * 60, // one minute for test purpouse
+    expires: 1000 * 60 * 60,
 });
 
+store.on('error', (error) => {
+    console.error('Error in session magazine:', error);
+});
 
 app.use(session({
     secret: "your_session_secret",
@@ -34,9 +37,10 @@ app.use(session({
     saveUninitialized: false,
     store: store,
     cookie: {
-        maxAge: 1000 * 60 * 60
+        maxAge: 1000 * 60 * 60,
+        secure: false
     },
-}))
+}));
 app.use(passport.initialize())
 app.use(passport.session());
 
@@ -45,21 +49,9 @@ const passportJWT = require("passport-jwt");
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
-store.on('error', (error) => {
-    console.error('Error in session magazine:', error);
-});
-
-const authUser = (user, password, done) => {
-    console.log(`Value of "User" in authUser function ----> ${user}`)
-    console.log(`Value of "Password" in authUser function ----> ${password}`)
-    let authenticated_user = { id: 123, name: "Kyle" }
-    return done(null, authenticated_user)
-}
-
-passport.use(new LocalStrategy(authUser))
-
 passport.serializeUser((user, done) => {
-    return done(null, user.id);
+    console.log('Serializing')
+    return done(null, user);
 })
 
 passport.deserializeUser(async (id, done) => {
