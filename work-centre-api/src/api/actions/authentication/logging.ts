@@ -11,13 +11,12 @@ export async function login(req, res: Response, next) {
             return res.status(401).json({ message: 'Incorrect username or password.' });
         }
         req.login(user, function (error) {
-            if (error) return next(error);
-            console.log("Request Login supossedly successful.");
+            if (error) { return next(error); }
+            const token = jwt.sign({ user }, 'your_jwt_secret');
+            return res.json({ user, token });
         });
-        const token = jwt.sign(user, 'your_jwt_secret');
-        return res.json({ user, token });
     })(req, res);
-};
+}
 
 export async function logout(req, res: Response) {
     req.session.destroy((err) => {

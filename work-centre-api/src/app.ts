@@ -1,4 +1,6 @@
 import express from 'express';
+const app = express();
+app.use(express.json());
 import { constants } from './constants';
 import { connectToDatabase, closeDatabaseConnection } from './database/mongoConnection'
 import apiRouter from './api/routes/api';
@@ -8,14 +10,11 @@ var cors = require('cors')
 import { pbkdf2, timingSafeEqual } from 'crypto';
 import { collections } from './database/mongoConnection';
 
-
-const app = express();
-
 app.use(cors())
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-app.use(express.json());
+
 
 const session = require('express-session')
 const passport = require('passport')
@@ -33,8 +32,8 @@ store.on('error', (error) => {
 
 app.use(session({
     secret: "your_session_secret",
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
     store: store,
     cookie: {
         maxAge: 1000 * 60 * 60,
@@ -50,31 +49,31 @@ const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
 passport.serializeUser((user, done) => {
-    console.log('Serializing')
     return done(null, user);
 })
 
 passport.deserializeUser(async (id, done) => {
+    console.log('Deserializing')
     const user = await collections.users?.findOne({ _id: id });
     return done(null, user);
 })
 
-passport.use(new LocalStrategy(async (username, password, cb) => {
+passport.use(new LocalStrategy(async (username, password, done) => {
     try {
         const user = await collections.users?.findOne({ 'local.email': username });
         if (user) {
             const salt = user.local.salt;
             pbkdf2(password, salt, 310000, 32, 'sha256', function (err, hashedPassword) {
                 if (err) {
-                    return cb(err);
+                    return done(err);
                 }
                 if (!timingSafeEqual(Buffer.from(user.local.password, 'hex'), hashedPassword)) {
-                    return cb(null, false, { message: 'Incorrect username or password.' });
+                    return done(null, false);
                 }
-                return cb(null, user);
+                return done(null, user);
             });
         } else {
-            return cb(null, false, { message: 'Error when logging.' });
+            return done(null, false);
         }
     } catch (err) {
         return err;
