@@ -1,5 +1,6 @@
 import express from 'express';
 const app = express();
+
 app.use(express.json());
 import { constants } from './constants';
 import { connectToDatabase, closeDatabaseConnection } from './database/mongoConnection'
@@ -10,7 +11,12 @@ var cors = require('cors')
 import { pbkdf2, timingSafeEqual } from 'crypto';
 import { collections } from './database/mongoConnection';
 
-app.use(cors())
+app.use(cors(
+    {
+        origin: 'http://localhost:4200',
+        credentials: true,
+    }
+));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -49,13 +55,13 @@ const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
 passport.serializeUser((user, done) => {
-    return done(null, user);
+    done(null, user._id);
 })
 
 passport.deserializeUser(async (id, done) => {
     console.log('Deserializing')
     const user = await collections.users?.findOne({ _id: id });
-    return done(null, user);
+    done(null, user);
 })
 
 passport.use(new LocalStrategy(async (username, password, done) => {
