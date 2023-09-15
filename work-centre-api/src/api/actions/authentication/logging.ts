@@ -34,3 +34,7 @@ export function isLoggedIn(req, res, next) {
         res.json(false);
     }
 };
+
+export function isSessionActive(req, res, next) {
+    return res.json({ 'isAuthenticated': req.isAuthenticated() });
+};

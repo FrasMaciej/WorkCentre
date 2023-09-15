@@ -7,6 +7,7 @@ const authApiRouter = express.Router();
 
 authApiRouter.post('/register', registerActions.register);
 authApiRouter.post('/login', loggingActions.login);
+authApiRouter.get('/session', loggingActions.isSessionActive);
 
 
 export default authApiRouter;
