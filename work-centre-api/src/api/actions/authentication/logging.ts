@@ -26,3 +26,11 @@ export async function logout(req, res: Response) {
         return res.status(200).json({ message: 'Logged out successfully.' });
     });
 };
+
+export function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        res.json(false);
+    }
+};

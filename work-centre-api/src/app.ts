@@ -29,7 +29,7 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const store = new MongoDBStore({
     uri: constants.db_connection_string,
     collection: 'sessions',
-    expires: 1000 * 60 * 60,
+    expires: 1000 * 60,
 });
 
 store.on('error', (error) => {
@@ -42,7 +42,7 @@ app.use(session({
     saveUninitialized: true,
     store: store,
     cookie: {
-        maxAge: 1000 * 60 * 60,
+        maxAge: 1000 * 60,
         secure: false
     },
 }));
