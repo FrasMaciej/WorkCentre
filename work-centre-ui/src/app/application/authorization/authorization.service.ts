@@ -13,15 +13,25 @@ export class AuthorizationService {
     }
 
     async loginUser(userData: LoginUserDto): Promise<any> {
-        return lastValueFrom(this.http.post(environment.apiURL + '/login', userData));
+        return lastValueFrom(this.http.post(environment.apiURL + '/login', userData, { withCredentials: true }));
     }
 
     async authTest(): Promise<any> {
-        return lastValueFrom(this.http.get(environment.apiURL + '/test2'));
+        return lastValueFrom(this.http.get(environment.apiURL + '/test2', { withCredentials: true }));
     }
 
-    public isAuthenticated(): boolean {
-        const token = localStorage.getItem('token');
-        return !this.jwtHelper.isTokenExpired(token);
+    async isSessionActive(): Promise<any> {
+        return lastValueFrom(this.http.get(environment.apiURL + '/session', { withCredentials: true }));
+    }
+
+    public async isAuthenticated() {
+        const response = await this.isSessionActive();
+        console.log(response)
+        return response.isAuthenticated;
+        // if (response.isAuthenticated()) {
+        //     return true;
+        // } else {
+        //     return false
+        // }
     }
 }

@@ -98,7 +98,7 @@ export class LoginPageComponent implements OnInit {
           password: this.loggingForm.value.password!,
           username: this.loggingForm.value.email!,
         });
-        localStorage.setItem('token', response.token);
+        localStorage.setItem('userInfo', JSON.stringify(response.user));
         this.router.navigate(['dashboard']);
       } catch (err) {
         this.loggingForm.get('email')?.setValue('');
