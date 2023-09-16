@@ -13,7 +13,7 @@ import { collections } from './database/mongoConnection';
 
 app.use(cors(
     {
-        origin: ['http://localhost:4200', 'https://star-jobs.azurewebsites.net'],
+        origin: ['http://localhost:4200', 'http://star-jobs.azurewebsites.net'],
         credentials: true,
     }
 ));
