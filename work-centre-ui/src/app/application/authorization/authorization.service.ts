@@ -26,12 +26,6 @@ export class AuthorizationService {
 
     public async isAuthenticated() {
         const response = await this.isSessionActive();
-        console.log(response)
         return response.isAuthenticated;
-        // if (response.isAuthenticated()) {
-        //     return true;
-        // } else {
-        //     return false
-        // }
     }
 }

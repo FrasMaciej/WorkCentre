@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 const jwt = require('jsonwebtoken');
 const passport = require('passport')
 
@@ -6,15 +6,16 @@ export async function login(req, res: Response, next) {
     passport.authenticate('local', function (err, user, info) {
         if (err) {
             return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        if (!user) {
+        } else if (!user) {
             return res.status(401).json({ message: 'Incorrect username or password.' });
+        } else {
+            req.login(user, function (error) {
+                if (error) { return next(error); }
+                const token = jwt.sign({ user }, 'your_jwt_secret');
+                return res.json({ user, token });
+            });
         }
-        req.login(user, function (error) {
-            if (error) { return next(error); }
-            const token = jwt.sign({ user }, 'your_jwt_secret');
-            return res.json({ user, token });
-        });
+        return next;
     })(req, res);
 }
 

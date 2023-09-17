@@ -1,65 +1,61 @@
 import express from 'express';
-const app = express();
-
-app.use(express.json());
-import { constants } from './constants';
-import { connectToDatabase, closeDatabaseConnection } from './database/mongoConnection'
-import apiRouter from './api/routes/api';
+import apiRouter from './api/routes/defaultApi';
 import authApiRouter from './api/routes/authApi';
 import bodyParser from 'body-parser';
-var cors = require('cors')
+import cors from 'cors';
+import session from 'express-session';
+import passport from 'passport';
+import { constants } from './constants';
+import { connectToDatabase, closeDatabaseConnection } from './database/mongoConnection'
 import { pbkdf2, timingSafeEqual } from 'crypto';
 import { collections } from './database/mongoConnection';
+import MongoDBStore from 'connect-mongodb-session';
+import { Strategy as LocalStrategy } from 'passport-local';
+import passportJWT from "passport-jwt";
 
-app.use(cors(
-    {
-        origin: ['http://localhost:4200', 'http://star-jobs.azurewebsites.net'],
-        credentials: true,
-    }
-));
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
+const app = express();
 
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
 
-const session = require('express-session')
-const passport = require('passport')
-
-const MongoDBStore = require('connect-mongodb-session')(session);
-const store = new MongoDBStore({
+const store = new MongoDBStore(session)({
     uri: constants.db_connection_string,
     collection: 'sessions',
-    expires: 1000 * 60,
+    expires: 1000 * 60 * 60 * 24,
 });
 
 store.on('error', (error) => {
     console.error('Error in session magazine:', error);
 });
 
+app.use(express.json());
+app.use(cors(
+    {
+        origin: ['http://star-jobs.azurewebsites.net', 'http://localhost:4200',],
+        credentials: true,
+    }
+));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(session({
     secret: "your_session_secret",
     resave: true,
     saveUninitialized: true,
     store: store,
     cookie: {
-        maxAge: 1000 * 60,
+        maxAge: 1000 * 60 * 60 * 24,
         secure: false
     },
 }));
 app.use(passport.initialize())
 app.use(passport.session());
 
-const LocalStrategy = require('passport-local').Strategy
-const passportJWT = require("passport-jwt");
-const JWTStrategy = passportJWT.Strategy;
-const ExtractJWT = passportJWT.ExtractJwt;
-
 passport.serializeUser((user, done) => {
     done(null, user._id);
 })
 
 passport.deserializeUser(async (id, done) => {
-    console.log('Deserializing')
     const user = await collections.users?.findOne({ _id: id });
     done(null, user);
 })
@@ -102,7 +98,7 @@ passport.use(new JWTStrategy({
 ));
 
 app.get('/', (req, res) => {
-    res.send('Welcome on Work-Centre Server ® HACKER');
+    res.send('Welcome on Work-Centre Server ®');
 });
 
 app.listen(constants.server_port, async () => {
