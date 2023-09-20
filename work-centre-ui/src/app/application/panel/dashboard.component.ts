@@ -8,7 +8,7 @@ import { AuthorizationService } from '../authorization/authorization.service';
         <div class="custom-grid">
             <section class="color-dark" >
                 <div class="justify-center items-center flex h-full text-3xl">
-                    StarJobs
+                    <span class="font-color-red">Star</span>Jobs
                 </div>
             </section>
             <section class="color-gray with-border">
@@ -62,6 +62,12 @@ import { AuthorizationService } from '../authorization/authorization.service';
         .icon-display {
             transform: scale(1.3);
         }
+
+        .font-color-red {
+            color: red;
+        }
+
+        
     `]
 })
 
