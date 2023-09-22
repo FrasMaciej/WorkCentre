@@ -28,7 +28,11 @@ import { Component, OnInit } from '@angular/core';
     `,
     styles: [`
         .font-color-red {
-            color: red;
+            color: #e84758;
+        }
+
+        button:hover {
+            color: #e84758;
         }
     `]
 })
@@ -41,24 +45,6 @@ export class DashboardOptionsComponent implements OnInit {
     ngOnInit() { }
 
     changeSelected(option: string) {
-        switch (option) {
-            case 'home':
-                this.selectedOption = 'home';
-                break;
-            case 'explore':
-                this.selectedOption = 'explore';
-                break;
-            case 'notifications':
-                this.selectedOption = 'notifications';
-                break;
-            case 'conversation':
-                this.selectedOption = 'conversation';
-                break;
-            case 'profile':
-                this.selectedOption = 'profile';
-                break;
-            default:
-                this.selectedOption = 'home';
-        }
+        this.selectedOption = option;
     }
 }

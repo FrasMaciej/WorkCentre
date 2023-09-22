@@ -24,7 +24,8 @@ export async function logout(req, res: Response) {
         if (err) {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-        return res.status(200).json({ message: 'Logged out successfully.' });
+        res.clearCookie('connect.sid');
+        return res.json({});
     });
 };
 

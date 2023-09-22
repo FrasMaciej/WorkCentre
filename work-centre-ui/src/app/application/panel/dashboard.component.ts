@@ -23,6 +23,9 @@ import { AuthorizationService } from '../authorization/authorization.service';
             <section class="color-gray">
             </section>
             <section class="color-dark">
+                <div class="flex justify-center">
+                    <button class="flex gap-x-3 items-center font-color-red text-lg logout" (click)="logout()">Logout</button>
+                </div>
             </section>
             <section class="color-gray with-border">
             </section>
@@ -64,9 +67,12 @@ import { AuthorizationService } from '../authorization/authorization.service';
         }
 
         .font-color-red {
-            color: red;
+            color: #e84758;
         }
 
+        .logout:hover {
+            color: white;
+        }
         
     `]
 })
@@ -78,7 +84,13 @@ export class DashboardComponent implements OnInit {
     async ngOnInit() {
     }
 
-    logout() {
+    async logout() {
+        try {
+            await this.authorizationService.logout();
+            this.router.navigate(['sign-in']);
+        } catch (err) {
+            console.error(err);
+        }
     }
 
 }

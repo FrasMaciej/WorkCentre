@@ -41,7 +41,7 @@ app.use(bodyParser.urlencoded({
 app.use(session({
     secret: "your_session_secret",
     resave: true,
-    saveUninitialized: true,
+    saveUninitialized: false,
     store: store,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24,

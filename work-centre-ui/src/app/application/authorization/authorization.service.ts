@@ -16,12 +16,12 @@ export class AuthorizationService {
         return lastValueFrom(this.http.post(environment.apiURL + '/login', userData, { withCredentials: true }));
     }
 
-    async authTest(): Promise<any> {
-        return lastValueFrom(this.http.get(environment.apiURL + '/test2', { withCredentials: true }));
-    }
-
     async isSessionActive(): Promise<any> {
         return lastValueFrom(this.http.get(environment.apiURL + '/session', { withCredentials: true }));
+    }
+
+    async logout(): Promise<any> {
+        return lastValueFrom(this.http.post(environment.apiURL + '/logout', {}, { withCredentials: true }));
     }
 
     public async isAuthenticated() {
