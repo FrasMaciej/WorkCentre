@@ -22,6 +22,7 @@ const store = new MongoDBStore(session)({
     uri: constants.db_connection_string,
     collection: 'sessions',
     expires: 1000 * 60 * 60 * 24,
+    databaseName: 'star-jobs'
 });
 
 store.on('error', (error) => {
