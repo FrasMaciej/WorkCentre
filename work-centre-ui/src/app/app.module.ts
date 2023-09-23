@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 
 import { AboutUsModule } from './application/aboutUs/aboutUs.module';
 import { AuthorizationModule } from './application/authorization/authorization.module';
-import { DashboardModule } from './application/panel/dashboard.module';
+import { DashboardModule } from './application/dashboard/dashboard.module';
 import { WelcomeScreenModule } from './application/welcomeScreen/welcomeScreen.module';
 
 

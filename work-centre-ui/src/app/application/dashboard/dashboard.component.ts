@@ -87,7 +87,7 @@ export class DashboardComponent implements OnInit {
     async logout() {
         try {
             await this.authorizationService.logout();
-            this.router.navigate(['sign-in']);
+            this.router.navigate(['']);
         } catch (err) {
             console.error(err);
         }

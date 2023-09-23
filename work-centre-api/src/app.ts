@@ -31,7 +31,7 @@ store.on('error', (error) => {
 app.use(express.json());
 app.use(cors(
     {
-        origin: ['http://star-jobs.azurewebsites.net', 'http://localhost:4200',],
+        origin: ['http://star-jobs.azurewebsites.net', 'https://star-jobs.azurewebsites.net', 'http://localhost:4200',],
         credentials: true,
     }
 ));

@@ -4,7 +4,7 @@ import { WelcomeScreenMainComponent } from './application/welcomeScreen/welcomeS
 import { RegistrationPageComponent } from './application/authorization/registration/registrationPage.component';
 import { LoginPageComponent } from './application/authorization/logging/loggingPage.component';
 import { AboutUsComponent } from './application/aboutUs/aboutUs.component';
-import { DashboardComponent } from './application/panel/dashboard.component';
+import { DashboardComponent } from './application/dashboard/dashboard.component';
 import { RegistrationConfirmationPageComponent } from './application/authorization/registration/registrationConfirmationPage.component';
 import { AuthGuardService } from './application/authorization/authGuard.service';
 import { IsLoggedInService } from './application/authorization/isLoggedInGuard.service';
