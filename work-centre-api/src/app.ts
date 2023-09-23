@@ -12,6 +12,7 @@ import { collections } from './database/mongoConnection';
 import MongoDBStore from 'connect-mongodb-session';
 import { Strategy as LocalStrategy } from 'passport-local';
 import passportJWT from "passport-jwt";
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
@@ -32,23 +33,24 @@ store.on('error', (error) => {
 app.use(express.json());
 app.use(cors(
     {
-        origin: ['http://star-jobs.azurewebsites.net', 'https://star-jobs.azurewebsites.net', 'http://localhost:4200',],
+        origin: ['http://star-jobs.azurewebsites.net', 'https://star-jobs.azurewebsites.net', 'http://localhost:4200', 'https://localhost:4200'],
         credentials: true,
     }
 ));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.use(cookieParser());
 app.enable('trust proxy');
 app.use(session({
     secret: "your_session_secret",
     resave: true,
-    saveUninitialized: false,
+    saveUninitialized: true,
     store: store,
     proxy: true,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24,
-        secure: false
+        secure: true
     },
 }));
 app.use(passport.initialize())
