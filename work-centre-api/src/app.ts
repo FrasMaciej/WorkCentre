@@ -39,6 +39,7 @@ app.use(cors(
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.enable('trust proxy');
 app.use(session({
     secret: "your_session_secret",
     resave: true,
