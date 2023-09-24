@@ -18,8 +18,6 @@ const app = express();
 
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
-app.set('trust proxy', 1);
-app.enable('trust proxy')
 
 app.use(express.json());
 app.use(cors(
@@ -31,11 +29,11 @@ app.use(cors(
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-app.use(cookieParser());
+app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(session({
     secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
     store: new MongoDBStore(session)({
         uri: constants.db_connection_string,
         collection: 'sessions',
@@ -43,16 +41,20 @@ app.use(session({
         databaseName: 'star-jobs'
     }),
     proxy: true,
-    name: 'MyCoolWebAppCookieName!!!!',
+    name: 'WebAppCookies',
     cookie: {
         maxAge: 1000 * 60 * 60 * 24,
-        httpOnly: false,
-        sameSite: 'none',
+        httpOnly: true,
+        sameSite: "none",
         secure: true
     },
 }));
 app.use(passport.initialize())
 app.use(passport.session());
+app.use(function (req: any, res, next) {
+    res.locals.user = req.user || null
+    next();
+})
 
 passport.serializeUser((user, done) => {
     done(null, user._id);
