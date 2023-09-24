@@ -41,12 +41,12 @@ app.use(session({
         databaseName: 'star-jobs'
     }),
     proxy: true,
-    name: 'WebAppCookies',
+    name: 'MyCoolWebAppCookieName!!!!',
     cookie: {
         maxAge: 1000 * 60 * 60 * 24,
         httpOnly: true,
-        sameSite: "none",
-        secure: true
+        sameSite: false, // "none"/false
+        secure: false     // true/false
     },
 }));
 app.use(passport.initialize())

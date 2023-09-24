@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthorizationService } from '../authorization/authorization.service';
 
 @Component({
@@ -16,11 +16,12 @@ import { AuthorizationService } from '../authorization/authorization.service';
             <section class="color-gray">
             </section>
             <section class="color-dark font-medium">
-                <dashboard-options></dashboard-options>
+                <dashboard-options (dashboardOptionValueChanged)="getDashboardOption($event)"></dashboard-options>
             </section>
             <section class="color-gray with-border">
             </section>
             <section class="color-gray">
+                <router-outlet></router-outlet>
             </section>
             <section class="color-dark">
                 <div class="flex justify-center">
@@ -77,12 +78,10 @@ import { AuthorizationService } from '../authorization/authorization.service';
     `]
 })
 
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
+    dashboardOption = '';
 
-    constructor(private router: Router, private authorizationService: AuthorizationService) { }
-
-    async ngOnInit() {
-    }
+    constructor(private router: Router, private authorizationService: AuthorizationService, private route: ActivatedRoute) { }
 
     async logout() {
         try {
@@ -93,4 +92,7 @@ export class DashboardComponent implements OnInit {
         }
     }
 
+    getDashboardOption(option: string) {
+        this.dashboardOption = option;
+    }
 }

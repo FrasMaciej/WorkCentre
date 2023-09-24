@@ -16,7 +16,6 @@ const routes: Routes = [
   { path: 'sign-up', component: RegistrationPageComponent, canActivate: [IsLoggedInService] },
   { path: 'sign-up-confirmation', component: RegistrationConfirmationPageComponent, canActivate: [IsLoggedInService] },
   { path: 'about-us', component: AboutUsComponent, canActivate: [IsLoggedInService] },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuardService] }
 ];
 
 @NgModule({

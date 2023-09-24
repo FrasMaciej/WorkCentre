@@ -99,7 +99,7 @@ export class LoginPageComponent implements OnInit {
           username: this.loggingForm.value.email!,
         });
         localStorage.setItem('userInfo', JSON.stringify(response.user));
-        this.router.navigate(['dashboard']);
+        this.router.navigate(['dashboard', 'home']);
       } catch (err) {
         this.loggingForm.get('email')?.setValue('');
         this.loggingForm.get('password')?.setValue('');
