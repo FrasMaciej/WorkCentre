@@ -44,13 +44,15 @@ app.use(session({
     name: 'MyCoolWebAppCookieName!!!!',
     cookie: {
         maxAge: 1000 * 60 * 60 * 24,
-        httpOnly: true,
-        sameSite: false,
+        sameSite: "none",
         secure: true
     },
 }));
 app.use(passport.initialize())
 app.use(passport.session());
+app.use((req, res, next) => {
+    next();
+});
 app.use(function (req: any, res, next) {
     res.locals.user = req.user || null
     next();

@@ -13,7 +13,7 @@ export class AuthorizationService {
     }
 
     async loginUser(userData: LoginUserDto): Promise<any> {
-        return lastValueFrom(this.http.post(environment.apiURL + '/login', userData, { withCredentials: true }));
+        return lastValueFrom(this.http.post(environment.apiURL + '/login', userData, { withCredentials: true, observe: 'response' as 'response'}));
     }
 
     async isSessionActive(): Promise<any> {
