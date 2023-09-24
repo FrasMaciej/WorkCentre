@@ -19,17 +19,6 @@ const app = express();
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
-const store = new MongoDBStore(session)({
-    uri: constants.db_connection_string,
-    collection: 'sessions',
-    expires: 1000 * 60 * 60 * 24,
-    databaseName: 'star-jobs'
-});
-
-store.on('error', (error) => {
-    console.error('Error in session magazine:', error);
-});
-
 app.use(express.json());
 app.use(cors(
     {
@@ -40,21 +29,32 @@ app.use(cors(
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-app.use(cookieParser());
-app.enable('trust proxy');
+app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(session({
-    secret: "your_session_secret",
+    secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
-    store: store,
+    store: new MongoDBStore(session)({
+        uri: constants.db_connection_string,
+        collection: 'sessions',
+        expires: 1000 * 60 * 60 * 24,
+        databaseName: 'star-jobs'
+    }),
     proxy: true,
+    name: 'MyCoolWebAppCookieName!!!!',
     cookie: {
         maxAge: 1000 * 60 * 60 * 24,
+        httpOnly: true,
+        sameSite: false,
         secure: true
     },
 }));
 app.use(passport.initialize())
 app.use(passport.session());
+app.use(function (req: any, res, next) {
+    res.locals.user = req.user || null
+    next();
+})
 
 passport.serializeUser((user, done) => {
     done(null, user._id);
@@ -89,7 +89,7 @@ passport.use(new LocalStrategy(async (username, password, done) => {
 
 passport.use(new JWTStrategy({
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-    secretOrKey: 'your_jwt_secret'
+    secretOrKey: process.env.SESSION_SECRET
 },
     function (jwtPayload, cb) {
         return collections.users?.findOne({ _id: jwtPayload._id })

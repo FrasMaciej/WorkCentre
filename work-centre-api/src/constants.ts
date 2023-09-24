@@ -7,5 +7,5 @@ config();
 export const constants = {
     server_port: Number(process.env.SERVER_PORT || 8080),
     db_connection_string: process.env.DB_CONNECTION_STRING,
-    db_name: process.env.DB_NAME
+    db_name: process.env.DB_NAME,
 }
