@@ -47,7 +47,6 @@ export class DashboardOptionsComponent {
     ngOnInit() {
         this.route.firstChild?.url.subscribe(urlSegments => {
             const url = urlSegments.map(segment => segment.path).join('/');
-            console.log(url);
             switch (url) {
                 case 'home':
                     this.dashboardOption = 'home';

@@ -36,11 +36,15 @@ import { AuthorizationService } from '../authorization/authorization.service';
     `,
     styles: [`
         .color-gray {
-            background-color: #26272B;
+            background-color: var(--gray);
         }
 
         .color-dark {
-            background-color: #1B1919;
+            background-color: var(--dark);
+        }
+
+        .font-color-red {
+            color: var(--red);
         }
 
         .custom-grid {
@@ -55,20 +59,12 @@ import { AuthorizationService } from '../authorization/authorization.service';
             box-sizing: border-box; 
         }
 
-        .text-gray {
-            color: #B3ACAC;
-        }
-
         .with-border {
             border-right: 1px solid gray; 
         }
 
         .icon-display {
             transform: scale(1.3);
-        }
-
-        .font-color-red {
-            color: #e84758;
         }
 
         .logout:hover {
