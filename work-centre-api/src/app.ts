@@ -18,7 +18,7 @@ const app = express();
 
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
-
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(cors(
     {
@@ -44,9 +44,10 @@ app.use(session({
     name: 'MyCoolWebAppCookieName!!!!',
     cookie: {
         maxAge: 1000 * 60 * 60 * 24,
+        domain: 'https://star-jobs.azurewebsites.net',
         httpOnly: true,
-        sameSite: false, // "none"/false
-        secure: false     // true/false
+        sameSite: "none", // "none"/false
+        secure: true   // true/false
     },
 }));
 app.use(passport.initialize())
