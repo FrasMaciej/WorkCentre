@@ -44,10 +44,10 @@ app.use(session({
     name: 'MyCoolWebAppCookieName!!!!',
     cookie: {
         maxAge: 1000 * 60 * 60 * 24,
-        domain: 'https://star-jobs.azurewebsites.net',
+        domain: 'star-jobs.azurewebsites.net',
         httpOnly: true,
         sameSite: "none", // "none"/false
-        secure: true   // true/false
+        secure: true  // true/false
     },
 }));
 app.use(passport.initialize())
