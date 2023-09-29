@@ -1,6 +1,7 @@
 import express from 'express';
 import apiRouter from './api/routes/defaultApi';
 import authApiRouter from './api/routes/authApi';
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import session from 'express-session';
 import passport from 'passport';
@@ -25,14 +26,14 @@ app.use(cors(
         credentials: true,
     }
 ));
-app.use(express.urlencoded({
+app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: true,
-    saveUninitialized: false,
+    saveUninitialized: true,
     store: new MongoDBStore(session)({
         uri: constants.db_connection_string,
         collection: 'sessions',
@@ -45,7 +46,7 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 24,
         httpOnly: true,
         sameSite: "none", // "none"/false
-        secure: true   // true/false
+        secure: true     // true/false
     },
 }));
 app.use(passport.initialize())
