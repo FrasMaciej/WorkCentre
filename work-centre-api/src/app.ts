@@ -31,7 +31,7 @@ app.use(express.urlencoded({
 app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(session({
     secret: process.env.SESSION_SECRET,
-    resave: false,
+    resave: true,
     saveUninitialized: false,
     store: new MongoDBStore(session)({
         uri: constants.db_connection_string,
