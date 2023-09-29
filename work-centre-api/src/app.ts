@@ -1,7 +1,6 @@
 import express from 'express';
 import apiRouter from './api/routes/defaultApi';
 import authApiRouter from './api/routes/authApi';
-import bodyParser from 'body-parser';
 import cors from 'cors';
 import session from 'express-session';
 import passport from 'passport';
@@ -26,14 +25,14 @@ app.use(cors(
         credentials: true,
     }
 ));
-app.use(bodyParser.urlencoded({
+app.use(express.urlencoded({
     extended: true
 }));
 app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(session({
     secret: process.env.SESSION_SECRET,
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
     store: new MongoDBStore(session)({
         uri: constants.db_connection_string,
         collection: 'sessions',
@@ -44,10 +43,9 @@ app.use(session({
     name: 'MyCoolWebAppCookieName!!!!',
     cookie: {
         maxAge: 1000 * 60 * 60 * 24,
-        domain: 'star-jobs.azurewebsites.net',
-        httpOnly: true,
+        httpOnly: false,
         sameSite: "none", // "none"/false
-        secure: true  // true/false
+        secure: true   // true/false
     },
 }));
 app.use(passport.initialize())
