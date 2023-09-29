@@ -11,14 +11,15 @@ import { pbkdf2, timingSafeEqual } from 'crypto';
 import { collections } from './database/mongoConnection';
 import MongoDBStore from 'connect-mongodb-session';
 import { Strategy as LocalStrategy } from 'passport-local';
-import passportJWT from "passport-jwt";
+import passportJWT from 'passport-jwt';
 import cookieParser from 'cookie-parser';
 
 const app = express();
 
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
-app.set("trust proxy", 1);
+
+app.set('trust proxy', 1);
 app.use(express.json());
 app.use(cors(
     {
@@ -41,12 +42,12 @@ app.use(session({
         databaseName: 'star-jobs'
     }),
     proxy: true,
-    name: 'MyCoolWebAppCookieName!!!!',
+    name: 'WebAppCookie',
     cookie: {
         maxAge: 1000 * 60 * 60 * 24,
         httpOnly: true,
-        sameSite: "none", // "none"/false
-        secure: true     // true/false
+        sameSite: constants.is_production ? 'none' : false,
+        secure: constants.is_production ? true : false
     },
 }));
 app.use(passport.initialize())
