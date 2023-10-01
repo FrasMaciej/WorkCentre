@@ -8,12 +8,17 @@ export async function login(req, res: Response, next) {
             return res.status(500).json({ error: 'Internal Server Error' });
         } else if (!user) {
             return res.status(401).json({ message: 'Incorrect username or password.' });
-        } else {
-            req.login(user, function (error) {
-                if (error) { return next(error); }
-                const token = jwt.sign({ user }, 'your_jwt_secret');
-                return res.json({ user, token });
-            });
+        }
+        else {
+            if (user.local.verified) {
+                req.login(user, function (error) {
+                    if (error) { return next(error); }
+                    const token = jwt.sign({ user }, 'your_jwt_secret');
+                    return res.json({ user, token });
+                });
+            } else {
+                return res.status(401).send("User not verified");
+            }
         }
         return next;
     })(req, res);

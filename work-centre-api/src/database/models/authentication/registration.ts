@@ -1,11 +1,6 @@
 interface UserSchema {
-    local: {
-        email: string;
-        password: string;
-        firstName: string;
-        lastName: string;
-        salt: string;
-    },
+    _id?: any;
+    local: UserSchemaLocal;
     facebook?: {
         id: string;
         token: string;
@@ -24,4 +19,15 @@ interface UserSchema {
         email: String,
         name: String
     }
+}
+
+interface UserSchemaLocal {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    salt: string;
+    permalink: string;
+    verificationToken: string;
+    verified: boolean;
 }
