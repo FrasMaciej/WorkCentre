@@ -11,13 +11,18 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { DatePipe } from '@angular/common';
-
+import { MatSelectModule } from '@angular/material/select';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 
 @NgModule({
     imports: [CommonModule, AngularSvgIconModule.forRoot()],
-    exports: [MatButtonModule, MatToolbarModule, MatIconModule, AngularSvgIconModule, MatFormFieldModule, MatInputModule, MatCardModule, MatListModule, DatePipe, BrowserModule],
+    exports: [
+        MatButtonModule, MatToolbarModule, MatIconModule, AngularSvgIconModule,
+        MatFormFieldModule, MatInputModule, MatCardModule, MatListModule, DatePipe,
+        BrowserModule, MatSelectModule, MatPaginatorModule,
+    ],
     declarations: [],
     providers: [],
 })
