@@ -32,7 +32,7 @@ export interface Section {
                 </mat-form-field>
             </div>
             <div class="line-bottom"></div>
-            <mat-list *ngIf="true">
+            <mat-list>
                 <ng-container *ngIf="selectedItemType==='users'">
                     <mat-list-item *ngFor="let user of getCurrentList()" class="item_highlight"> 
                         <div class="flex flex-row items-center size">
@@ -48,7 +48,7 @@ export interface Section {
                 </ng-container>
                 <mat-divider></mat-divider>
                 <ng-container *ngIf="selectedItemType==='jobs'">
-                    <mat-list-item *ngFor="let offer of jobOffers" >
+                    <mat-list-item *ngFor="let offer of lists.jobOffers" >
                         <div class="flex flex-row">
                             <div class="circle-container cursor-pointer">
                                 <img src="assets/avatar_placeholder.jpg" alt="Avatar">
@@ -60,12 +60,11 @@ export interface Section {
                         </div>
                     </mat-list-item>
                 </ng-container>
-
             </mat-list>
             <mat-paginator
                 [pageSize]="pageSize"
                 [pageSizeOptions]="pageSizeOptions"
-                [length]="users.length"
+                [length]="getListLength()"
                 (page)="onPageChange($event)">
             </mat-paginator>
         </div>
@@ -107,7 +106,7 @@ export interface Section {
 
         mat-list {
             overflow: auto;
-            max-height: 400px;
+            max-height: 550px;
         }
 
         .size {
@@ -131,42 +130,45 @@ export class ExploreComponent implements OnInit {
     pageIndex = 0;
     pageSizeOptions: number[] = [5, 10, 25];
     pageEvent!: PageEvent;
-    users: Section[] = [
-        {
-            name: 'Test 1 Testowy 1',
-            details: 'Student, IT intern',
-        },
-        {
-            name: 'Test 2 Testowy 2',
-            details: 'Student, IT intern',
-        },
-        {
-            name: 'Test 3 Testowy 3',
-            details: 'Student, IT intern',
-        },
-        {
-            name: 'Test 4 Testowy 4',
-            details: 'Student, IT intern',
-        },
-        {
-            name: 'Test 5 Testowy 5',
-            details: 'Student, IT intern',
-        },
-        {
-            name: 'Test 6 Testowy 6',
-            details: 'Student, IT intern',
-        },
-    ];
-    jobOffers: Section[] = [
-        {
-            name: 'Praca 1',
-            details: 'Comgemini',
-        },
-        {
-            name: 'Praca 2',
-            details: 'Comgemini',
-        },
-    ];
+    lists = {
+        users: [
+            {
+                name: 'Test 1 Testowy 1',
+                details: 'Student, IT intern',
+            },
+            {
+                name: 'Test 2 Testowy 2',
+                details: 'Student, IT intern',
+            },
+            {
+                name: 'Test 3 Testowy 3',
+                details: 'Student, IT intern',
+            },
+            {
+                name: 'Test 4 Testowy 4',
+                details: 'Student, IT intern',
+            },
+            {
+                name: 'Test 5 Testowy 5',
+                details: 'Student, IT intern',
+            },
+            {
+                name: 'Test 6 Testowy 6',
+                details: 'Student, IT intern',
+            },
+        ],
+        jobOffers: [
+            {
+                name: 'Praca 1',
+                details: 'Comgemini',
+            },
+            {
+                name: 'Praca 2',
+                details: 'Comgemini',
+            },
+        ]
+    }
+
 
     constructor() { }
 
@@ -182,12 +184,22 @@ export class ExploreComponent implements OnInit {
     getCurrentList(): Section[] {
         const startIndex = this.pageIndex * this.pageSize;
         const endIndex = startIndex + this.pageSize;
-        return this.users.slice(startIndex, endIndex);
+        return this.lists.users.slice(startIndex, endIndex);
     }
 
     onPageChange(event: PageEvent) {
         this.pageIndex = event.pageIndex;
         this.pageSize = event.pageSize;
+    }
+
+    getListLength() {
+        if (this.selectedItemType === 'users') {
+            return this.lists.users.length;
+        } else if (this.selectedItemType === 'jobs') {
+            return this.lists.jobOffers.length;
+        } else {
+            return 0;
+        }
     }
 
 }
