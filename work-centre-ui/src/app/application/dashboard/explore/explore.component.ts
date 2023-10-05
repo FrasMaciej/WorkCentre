@@ -24,7 +24,7 @@ export interface Section {
                 </mat-form-field>
                 <mat-form-field class="input-width">
                     <mat-label >What are you looking for?</mat-label>
-                    <mat-select [(ngModel)]="selectedItemType" (click)="log()">
+                    <mat-select [(ngModel)]="selectedItemType">
                         <mat-option *ngFor="let itemType of itemTypes" [value]="itemType.value">
                             {{itemType.viewValue}}
                         </mat-option>
@@ -175,10 +175,6 @@ export class ExploreComponent implements OnInit {
     ngOnInit() {
         this.paginator.pageSize = this.pageSize;
         this.paginator.pageIndex = this.pageIndex;
-    }
-
-    log() {
-        console.log(this.selectedItemType);
     }
 
     getCurrentList(): Section[] {

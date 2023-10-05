@@ -18,13 +18,13 @@ import { WelcomeScreenModule } from './application/welcomeScreen/welcomeScreen.m
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     HttpClientModule,
     FormsModule,
     AboutUsModule,
     AuthorizationModule,
     DashboardModule,
-    WelcomeScreenModule
+    WelcomeScreenModule,
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

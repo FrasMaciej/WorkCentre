@@ -12,7 +12,10 @@ import { routes } from './routes';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
-    imports: [CommonModule, CommonControlsModule, RouterModule, ConversationModule, ExploreModule, HomeModule, NotificationsModule, ProfileModule, RouterModule.forChild(routes)],
+    imports: [
+        CommonModule, CommonControlsModule, RouterModule, ConversationModule, ExploreModule,
+        HomeModule, NotificationsModule, ProfileModule, RouterModule.forChild(routes)
+    ],
     exports: [RouterModule],
     declarations: [DashboardComponent, DashboardOptionsComponent],
     providers: [],

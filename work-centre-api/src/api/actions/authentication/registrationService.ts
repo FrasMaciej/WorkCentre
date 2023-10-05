@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { collections } from "../../../database/mongoConnection"
 import { pbkdf2, randomBytes } from 'crypto';
 import * as randomstring from "randomstring";
-import { sendingMail } from '../emailTransporter/mailing';
+import { sendingMail } from '../emailTransporter/mailingService';
+import { UserSchema } from '@app/database/models/users/authentication';
 
 export async function register(req: Request, res: Response, next: NextFunction) {
     const { email, password, firstName, lastName } = req.body;
@@ -27,7 +28,11 @@ export async function register(req: Request, res: Response, next: NextFunction) 
                     permalink,
                     verificationToken,
                     verified: false,
-                }
+                },
+                roles: {
+                    owned: ['employer', 'employee']
+                },
+
             };
 
             try {

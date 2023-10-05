@@ -1,6 +1,9 @@
-interface UserSchema {
+import { Roles } from "./roles";
+
+export interface UserSchema {
     _id?: any;
     local: UserSchemaLocal;
+    roles: Roles;
     facebook?: {
         id: string;
         token: string;

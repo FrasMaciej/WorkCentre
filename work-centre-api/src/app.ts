@@ -1,5 +1,5 @@
 import express from 'express';
-import apiRouter from './api/routes/defaultApi';
+import apiRouter from './api/routes/defaultResponseApi';
 import authApiRouter from './api/routes/authApi';
 import bodyParser from 'body-parser';
 import cors from 'cors';
