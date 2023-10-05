@@ -1,7 +1,9 @@
 name: Angular Azure Deploy
 
 on:
-  [push]
+  push:
+    branches:
+      - main
 
 env:
   AZURE_WEBAPP_NAME: star-jobs  
