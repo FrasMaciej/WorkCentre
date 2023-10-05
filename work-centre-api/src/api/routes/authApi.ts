@@ -13,5 +13,4 @@ authApiRouter.get('/session', loggingActions.isSessionActive);
 authApiRouter.get('/verify-email', verifyEmail);
 
 
-
 export default authApiRouter;

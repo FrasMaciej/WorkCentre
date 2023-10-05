@@ -1,10 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { UsersService } from './users.service';
 
 export interface Section {
     name: string;
     details: string;
+}
+
+interface Lists {
+    users: UserInfoDto[],
+    jobs: JobDto[]
 }
 
 @Component({
@@ -34,21 +40,21 @@ export interface Section {
             <div class="line-bottom"></div>
             <mat-list>
                 <ng-container *ngIf="selectedItemType==='users'">
-                    <mat-list-item *ngFor="let user of getCurrentList()" class="item_highlight"> 
+                    <mat-list-item *ngFor="let user of lists.users" class="item_highlight"> 
                         <div class="flex flex-row items-center size">
                             <div class="circle-container cursor-pointer">
                                 <img src="assets/avatar_placeholder.jpg" alt="Avatar">
                             </div>
                             <div class="ml-4 cursor-pointer ">
-                                <div class="text-color" matListItemTitle>{{user.name}}</div>
-                                <div class="text-color" matListItemLine>{{user.details}}</div>
+                                <div class="text-color" matListItemTitle>{{user.firstName}}</div>
+                                <div class="text-color" matListItemLine>{{user.lastName}}</div>
                             </div>
                         </div>
                     </mat-list-item>
                 </ng-container>
                 <mat-divider></mat-divider>
                 <ng-container *ngIf="selectedItemType==='jobs'">
-                    <mat-list-item *ngFor="let offer of lists.jobOffers" >
+                    <mat-list-item *ngFor="let offer of lists.jobs" >
                         <div class="flex flex-row">
                             <div class="circle-container cursor-pointer">
                                 <img src="assets/avatar_placeholder.jpg" alt="Avatar">
@@ -130,58 +136,31 @@ export class ExploreComponent implements OnInit {
     pageIndex = 0;
     pageSizeOptions: number[] = [5, 10, 25];
     pageEvent!: PageEvent;
-    lists = {
-        users: [
-            {
-                name: 'Test 1 Testowy 1',
-                details: 'Student, IT intern',
-            },
-            {
-                name: 'Test 2 Testowy 2',
-                details: 'Student, IT intern',
-            },
-            {
-                name: 'Test 3 Testowy 3',
-                details: 'Student, IT intern',
-            },
-            {
-                name: 'Test 4 Testowy 4',
-                details: 'Student, IT intern',
-            },
-            {
-                name: 'Test 5 Testowy 5',
-                details: 'Student, IT intern',
-            },
-            {
-                name: 'Test 6 Testowy 6',
-                details: 'Student, IT intern',
-            },
-        ],
-        jobOffers: [
-            {
-                name: 'Praca 1',
-                details: 'Comgemini',
-            },
-            {
-                name: 'Praca 2',
-                details: 'Comgemini',
-            },
-        ]
+    lists: Lists = {
+        users: [],
+        jobs: []
     }
 
+    
+    constructor(private usersService: UsersService) { }
 
-    constructor() { }
-
-    ngOnInit() {
+    async ngOnInit() {
+        this.lists.users = await this.usersService.getUsers();
         this.paginator.pageSize = this.pageSize;
         this.paginator.pageIndex = this.pageIndex;
+        
     }
 
-    getCurrentList(): Section[] {
-        const startIndex = this.pageIndex * this.pageSize;
-        const endIndex = startIndex + this.pageSize;
-        return this.lists.users.slice(startIndex, endIndex);
+    async getUsers() {
+        const users: UserInfoDto[] = await this.usersService.getUsers();
+        this.lists.users = users;
     }
+
+    // getCurrentList(): Lists[] {
+    //     const startIndex = this.pageIndex * this.pageSize;
+    //     const endIndex = startIndex + this.pageSize;
+    //     return this.lists.users.slice(startIndex, endIndex);
+    // }
 
     onPageChange(event: PageEvent) {
         this.pageIndex = event.pageIndex;
@@ -192,7 +171,7 @@ export class ExploreComponent implements OnInit {
         if (this.selectedItemType === 'users') {
             return this.lists.users.length;
         } else if (this.selectedItemType === 'jobs') {
-            return this.lists.jobOffers.length;
+            return this.lists.jobs.length;
         } else {
             return 0;
         }

@@ -32,7 +32,6 @@ export async function register(req: Request, res: Response, next: NextFunction) 
                 roles: {
                     owned: ['employer', 'employee']
                 },
-
             };
 
             try {

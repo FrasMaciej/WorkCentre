@@ -1,10 +1,11 @@
-import { ObjectId } from "mongodb";
 import { collections } from "../../../database/mongoConnection";
+import { ObjectId } from "mongodb";
 
 export async function verifyEmail(req, res) {
     const token = req.param('token');
     const userId = req.param('userId');
-    const user = await collections?.users?.findOne(new ObjectId(userId));
+
+    const user = await collections.users?.findOne({ "_id": new ObjectId(userId) });
 
     if (!user) {
         return res.status(400).send({ msg: "User does not exits." });
