@@ -14,9 +14,6 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import passportJWT from 'passport-jwt';
 import cookieParser from 'cookie-parser';
 import usersApiRouter from './api/routes/usersApi';
-import { readAppSettings } from './constants';
-
-const appSettings = readAppSettings();
 
 const app = express();
 const JWTStrategy = passportJWT.Strategy;
