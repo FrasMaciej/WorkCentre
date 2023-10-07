@@ -1,5 +1,5 @@
 import express from 'express';
-import apiRouter from './api/routes/defaultApi';
+import apiRouter from './api/routes/defaultResponseApi';
 import authApiRouter from './api/routes/authApi';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -13,9 +13,12 @@ import MongoDBStore from 'connect-mongodb-session';
 import { Strategy as LocalStrategy } from 'passport-local';
 import passportJWT from 'passport-jwt';
 import cookieParser from 'cookie-parser';
+import usersApiRouter from './api/routes/usersApi';
+import { readAppSettings } from './constants';
+
+const appSettings = readAppSettings();
 
 const app = express();
-
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
@@ -113,9 +116,10 @@ app.listen(constants.server_port, async () => {
 });
 
 
-app.use('/api', apiRouter, authApiRouter);
+app.use('/api', apiRouter, authApiRouter, usersApiRouter);
 
 process.on('SIGINT', async () => {
     await closeDatabaseConnection();
     process.exit();
 });
+

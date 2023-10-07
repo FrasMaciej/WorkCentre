@@ -1,5 +1,6 @@
 import { MongoClient, ServerApiVersion, Db, Collection } from 'mongodb';
 import { constants } from '../constants';
+import { UserSchema } from './models/users/authentication';
 
 const uri = constants.db_connection_string || '';
 const client: MongoClient = new MongoClient(uri, {
