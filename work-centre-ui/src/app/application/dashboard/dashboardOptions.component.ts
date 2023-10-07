@@ -21,7 +21,7 @@ import { ActivatedRoute, Router } from '@angular/router';
                 <mat-icon class="icon-display">mail_outline</mat-icon>
                 <div>Conversation</div>
             </button>
-            <button class="flex gap-x-3 items-center" [class.font-color-red]="dashboardOption==='profile'" (click)="changeSelected('profile')" routerLink="profile">
+            <button class="flex gap-x-3 items-center" [class.font-color-red]="dashboardOption==='profile'" (click)="changeSelected('profile')" routerLink="profile/me">
                 <mat-icon class="icon-display">person_outline</mat-icon>
                 <div>Profile</div>
             </button>

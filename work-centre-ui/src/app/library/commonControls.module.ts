@@ -13,7 +13,7 @@ import { MatListModule } from '@angular/material/list';
 import { DatePipe } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
+import { MatMenuModule } from '@angular/material/menu';
 
 
 @NgModule({
@@ -21,9 +21,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     exports: [
         MatButtonModule, MatToolbarModule, MatIconModule, AngularSvgIconModule,
         MatFormFieldModule, MatInputModule, MatCardModule, MatListModule, DatePipe,
-        BrowserModule, MatSelectModule, MatPaginatorModule,
+        BrowserModule, MatSelectModule, MatPaginatorModule, MatMenuModule
     ],
     declarations: [],
-    providers: [],
 })
 export class CommonControlsModule { }

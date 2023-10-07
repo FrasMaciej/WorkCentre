@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'profile',
+    selector: 'own-profile',
     template: `
         <div class="ml-4 flex flex-col gap-y-1" *ngIf="dataLoaded">
             <div class="flex">
@@ -29,7 +29,7 @@ import { Component, OnInit } from '@angular/core';
     `]
 })
 
-export class ProfileComponent implements OnInit {
+export class OwnProfileComponent implements OnInit {
     user!: UserInfoDto;
     email: string = '';
     dataLoaded = false;

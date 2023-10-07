@@ -4,8 +4,9 @@ import { HomeComponent } from "./home/home.component";
 import { ConversationComponent } from "./conversation/conversation.component";
 import { ExploreComponent } from "./explore/explore.component";
 import { NotificationsComponent } from "./notifications/notifications.component";
-import { ProfileComponent } from "./profile/profile.component";
+import { OwnProfileComponent } from "./profile/ownProfile/ownProfile.component";
 import { AuthGuardService } from "../authorization/authGuard.service";
+import { UserProfileComponent } from "./profile/userProfile/userProfile.component";
 
 export const routes: Routes = [
     {
@@ -14,11 +15,20 @@ export const routes: Routes = [
         canActivate: [AuthGuardService],
         children: [
             { path: '', pathMatch: 'full', redirectTo: 'home' },
-            { path: 'home', component: HomeComponent, canActivate: [AuthGuardService] },
-            { path: 'explore', component: ExploreComponent, canActivate: [AuthGuardService] },
-            { path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuardService] },
-            { path: 'conversation', component: ConversationComponent, canActivate: [AuthGuardService] },
-            { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
+            { path: 'home', component: HomeComponent },
+            { path: 'explore', component: ExploreComponent },
+            { path: 'notifications', component: NotificationsComponent },
+            { path: 'conversation', component: ConversationComponent },
+            {
+                path: 'profile', children: [
+                    {
+                        path: 'me', component: OwnProfileComponent,
+                    },
+                    {
+                        path: ':id', component: UserProfileComponent
+                    }
+                ]
+            },
         ]
     },
 

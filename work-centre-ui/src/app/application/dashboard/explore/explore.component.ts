@@ -40,17 +40,7 @@ interface Lists {
             <div class="line-bottom"></div>
             <mat-list>
                 <ng-container *ngIf="selectedItemType==='users'">
-                    <mat-list-item *ngFor="let user of lists.users" class="item_highlight"> 
-                        <div class="flex flex-row items-center size">
-                            <div class="circle-container cursor-pointer">
-                                <img src="assets/avatar_placeholder.jpg" alt="Avatar">
-                            </div>
-                            <div class="ml-4 cursor-pointer ">
-                                <div class="text-color" matListItemTitle>{{user.firstName}}</div>
-                                <div class="text-color" matListItemLine>{{user.lastName}}</div>
-                            </div>
-                        </div>
-                    </mat-list-item>
+                    <users-list [users]="lists.users" />
                 </ng-container>
                 <mat-divider></mat-divider>
                 <ng-container *ngIf="selectedItemType==='jobs'">

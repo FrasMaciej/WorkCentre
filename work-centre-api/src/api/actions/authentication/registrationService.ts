@@ -8,7 +8,6 @@ import { readAppSettings } from '../../../constants';
 const appSettings = readAppSettings();
 
 export async function register(req: Request, res: Response, next: NextFunction) {
-    console.log(appSettings);
     const { email, password, firstName, lastName } = req.body;
     const existingUser = await collections?.users?.findOne({ 'local.email': email });
     if (existingUser) {

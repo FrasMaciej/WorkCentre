@@ -12,7 +12,7 @@ export async function sendingMail({ from, to, subject, text }) {
         });
         return await Transporter.sendMail(mailOptions);
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 
 }
