@@ -3,8 +3,8 @@
 
 import * as process from 'process';
 import { config } from 'dotenv'
-import path from 'path';
-import fs from 'fs';
+import { settingsLocal } from './appSettingsLocal';
+import { settingsProd } from './appSettingsProd';
 
 config();
 export const constants = {
@@ -15,24 +15,12 @@ export const constants = {
 }
 
 export function readAppSettings() {
-    try {
-        // fs.readFile("./appSettingsProd.json");
-        // const data = fs.readFileSync('appSettingsProd.json', 'utf8');
+    let appSettings;
 
-
-        // const settingsProd = require("appSettingsProd.json");
-        // const settingsLocal = require("appSettingsLocal.json");
-        // let config;
-        // if (constants.is_production) {
-        //     config = settingsProd;
-        // } else {
-        //     config = settingsLocal;
-        // }
-        // const appState = {
-        //     config: config,
-        // };
-        // console.log('Ustawienia konfiguracyjne:', appState.config);
-    } catch (err) {
-        console.error(err);
+    if (process.env.NODE_ENV === 'production') {
+        appSettings = settingsProd;
+    } else {
+        appSettings = settingsLocal;
     }
+    return appSettings;
 }

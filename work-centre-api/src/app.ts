@@ -16,7 +16,7 @@ import cookieParser from 'cookie-parser';
 import usersApiRouter from './api/routes/usersApi';
 import { readAppSettings } from './constants';
 
-readAppSettings();
+const appSettings = readAppSettings();
 
 const app = express();
 const JWTStrategy = passportJWT.Strategy;
@@ -122,3 +122,4 @@ process.on('SIGINT', async () => {
     await closeDatabaseConnection();
     process.exit();
 });
+

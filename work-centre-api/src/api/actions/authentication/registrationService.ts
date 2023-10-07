@@ -4,8 +4,11 @@ import { pbkdf2, randomBytes } from 'crypto';
 import * as randomstring from "randomstring";
 import { sendingMail } from '../emailTransporter/mailingService';
 import { UserSchema } from '@app/database/models/users/authentication';
+import { readAppSettings } from '../../../constants';
+const appSettings = readAppSettings();
 
 export async function register(req: Request, res: Response, next: NextFunction) {
+    console.log(appSettings);
     const { email, password, firstName, lastName } = req.body;
     const existingUser = await collections?.users?.findOne({ 'local.email': email });
     if (existingUser) {
@@ -27,7 +30,7 @@ export async function register(req: Request, res: Response, next: NextFunction) 
                     lastName,
                     permalink,
                     verificationToken,
-                    verified: false,
+                    verified: appSettings.emailConfigurationEnabled ? false : true ,
                 },
                 roles: {
                     owned: ['employer', 'employee']
@@ -36,7 +39,9 @@ export async function register(req: Request, res: Response, next: NextFunction) 
 
             try {
                 await collections.users?.insertOne(newUser, function (err) {
-                    sendEmail(newUser);
+                    if(appSettings.emailConfigurationEnabled) {
+                        sendEmail(newUser);
+                    }
                 });
                 return res.status(201).json({ message: 'User registered successfully.' });
             } catch (err) {
