@@ -14,6 +14,7 @@ import { DatePipe } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
@@ -21,7 +22,7 @@ import { MatMenuModule } from '@angular/material/menu';
     exports: [
         MatButtonModule, MatToolbarModule, MatIconModule, AngularSvgIconModule,
         MatFormFieldModule, MatInputModule, MatCardModule, MatListModule, DatePipe,
-        BrowserModule, MatSelectModule, MatPaginatorModule, MatMenuModule
+        BrowserModule, MatSelectModule, MatPaginatorModule, MatMenuModule, MatDialogModule
     ],
     declarations: [],
 })

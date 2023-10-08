@@ -7,7 +7,7 @@ import { UserProfileComponent } from './userProfile/userProfile.component';
 @NgModule({
     imports: [CommonModule, CommonControlsModule],
     exports: [],
-    declarations: [OwnProfileComponent],
+    declarations: [OwnProfileComponent, UserProfileComponent],
     providers: [],
 })
 export class ProfileModule { }

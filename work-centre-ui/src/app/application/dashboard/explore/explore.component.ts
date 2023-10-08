@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { UsersService } from './users.service';
+import { ExploreService } from './explore.service';
 
 export interface Section {
     name: string;
@@ -131,14 +131,14 @@ export class ExploreComponent implements OnInit {
         jobs: []
     }
 
-    
-    constructor(private usersService: UsersService) { }
+
+    constructor(private usersService: ExploreService) { }
 
     async ngOnInit() {
         this.lists.users = await this.usersService.getUsers();
         this.paginator.pageSize = this.pageSize;
         this.paginator.pageIndex = this.pageIndex;
-        
+
     }
 
     async getUsers() {

@@ -4,7 +4,7 @@ import { lastValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
-export class UsersService {
+export class ExploreService {
     constructor(private httpClient: HttpClient) { }
 
     getUsers(): Promise<UserInfoDto[]> {
