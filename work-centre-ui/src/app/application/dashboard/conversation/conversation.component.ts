@@ -80,7 +80,7 @@ export class ConversationComponent implements OnInit {
     userId = '';
 
     constructor() {
-        this.socket = io.connect('https://star-jobs-api.azurewebsites.net/');
+        this.socket = io.connect('https://star-jobs-api.azurewebsites.net');
     }
 
     ngOnInit() {
