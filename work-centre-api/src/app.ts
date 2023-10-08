@@ -18,6 +18,7 @@ import usersApiRouter from './api/routes/usersApi';
 const app = express();
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
+const path = require('path');
 
 app.set('trust proxy', 1);
 app.use(express.json());
@@ -31,6 +32,31 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(cookieParser(process.env.SESSION_SECRET));
+
+
+/* CHAT */
+const server = app.listen(1337);
+const io = require('socket.io')(server, {
+    cors: {
+        origin: ['http://star-jobs.azurewebsites.net', 'https://star-jobs.azurewebsites.net', 'http://localhost:4200', 'https://localhost:4200'],
+        methods: ["GET", "POST"]
+    }
+});
+
+app.use(express.static(path.join(__dirname, "public")));
+io.on('connection', (socket) => {
+    console.log('new connection made');
+
+    socket.on('send-message', (message) => {
+        console.log('message received:', message);
+        io.emit('message-received', message);
+        console.log(message)
+    });
+});
+io.attach(server);
+/* CHAT */
+
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: true,
@@ -119,4 +145,3 @@ process.on('SIGINT', async () => {
     await closeDatabaseConnection();
     process.exit();
 });
-

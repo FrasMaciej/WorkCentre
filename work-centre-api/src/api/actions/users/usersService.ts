@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { collections } from "../../../database/mongoConnection"
 
 export async function getUsers(req, res) {
@@ -11,3 +12,28 @@ export async function getUsers(req, res) {
         return res.json({});
     }
 }
+
+export async function getUser(req, res) {
+    try {
+        const userId = req.params.id;
+        const user = await collections.users?.findOne({ _id: new ObjectId(userId) });
+        if (user) {
+            const parsedUser = {
+                _id: String(user._id),
+                email: user.local.email,
+                firstName: user.local.firstName,
+                lastName: user.local.lastName,
+            };
+            return res.json(parsedUser);
+        } else {
+            return res.status(404).json({ message: "User not found" });
+        }
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+
+
+
