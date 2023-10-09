@@ -83,7 +83,6 @@ export class ConversationComponent implements OnInit {
   userId = '';
 
   constructor(private conversationService: ConversationService, private user: LoggedUserService) {
-    this.socket = io.connect('http://localhost:3000');
   }
 
   ngOnInit() {

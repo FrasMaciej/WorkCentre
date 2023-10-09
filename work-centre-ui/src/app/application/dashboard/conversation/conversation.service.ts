@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import * as io from 'socket.io-client';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ConversationService {
   private socket: any;
 
   constructor(private httpClient: HttpClient) {
-    this.socket = io.connect('http://localhost:3000');
+    this.socket = io.connect(environment.serverUrl);
   }
 
   getMessages(): Observable<any> {
