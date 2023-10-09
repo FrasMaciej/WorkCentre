@@ -29,16 +29,17 @@ export async function register(req: Request, res: Response, next: NextFunction) 
                     lastName,
                     permalink,
                     verificationToken,
-                    verified: appSettings.emailConfigurationEnabled ? false : true ,
+                    verified: appSettings.emailConfigurationEnabled ? false : true,
                 },
                 roles: {
                     owned: ['employer', 'employee']
                 },
+                conversationIds: []
             };
 
             try {
                 await collections.users?.insertOne(newUser, function (err) {
-                    if(appSettings.emailConfigurationEnabled) {
+                    if (appSettings.emailConfigurationEnabled) {
                         sendEmail(newUser);
                     }
                 });
