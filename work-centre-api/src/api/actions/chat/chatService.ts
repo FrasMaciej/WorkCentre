@@ -6,4 +6,5 @@ export async function getChats(req, res) {
     console.log(userId);
     const user = await collections.users?.findOne({ _id: new ObjectId(userId) });
     const chatIds = user?.conversationIds;
+    console.log(chatIds);
 }
