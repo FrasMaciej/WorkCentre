@@ -1,5 +1,6 @@
 /// <reference path="../../shared/types/auth.d.ts" />
 /// <reference path="../../shared/types/user.d.ts" />
+/// <reference path="../../shared/types/message.d.ts" />
 
 import * as process from 'process';
 import { config } from 'dotenv'

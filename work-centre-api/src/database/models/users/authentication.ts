@@ -4,6 +4,7 @@ export interface UserSchema {
     _id?: any;
     local: UserSchemaLocal;
     roles: Roles;
+    conversationIds: string[],
     facebook?: {
         id: string;
         token: string;
