@@ -19,6 +19,7 @@ import { AuthorizationService } from '../authorization/authorization.service';
                 <dashboard-options (dashboardOptionValueChanged)="getDashboardOption($event)"></dashboard-options>
             </section>
             <section class="color-gray with-border">
+                <conversations-list></conversations-list>
             </section>
             <section class="color-gray">
                 <router-outlet></router-outlet>

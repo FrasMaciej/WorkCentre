@@ -1,10 +1,12 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, Input } from '@angular/core';
 import * as io from 'socket.io-client';
+import { ConversationService } from './conversation.service';
+import { LoggedUserService } from 'src/app/commonServices/userContext.service';
 
 
 @Component({
-    selector: 'app-conversation',
-    template: `
+  selector: 'app-conversation',
+  template: `
      <div class="chat-container">
       <div class="messages" #messagesList>
         <div *ngFor="let message of messages" [ngClass]="{'incoming': message.incoming, 'outgoing': !message.incoming}">
@@ -17,7 +19,7 @@ import * as io from 'socket.io-client';
       </form>
     </div>
     `,
-    styles: [`
+  styles: [`
       .chat-container {
         display: flex;
         flex-direction: column;
@@ -70,55 +72,45 @@ import * as io from 'socket.io-client';
     `]
 })
 export class ConversationComponent implements OnInit {
-    @ViewChild('messagesList') messagesList!: ElementRef;
-    @ViewChild('formElement') formElement!: ElementRef;
-    @ViewChild('inputElement') inputElement!: ElementRef;
+  @Input() receiverId = '';
+  @ViewChild('messagesList') messagesList!: ElementRef;
+  @ViewChild('formElement') formElement!: ElementRef;
+  @ViewChild('inputElement') inputElement!: ElementRef;
 
-    private socket: any;
-    messageText: string = ''
-    messages: Array<any> = [];
-    userId = '';
+  private socket: any;
+  messageText: string = ''
+  messages: Array<any> = [];
+  userId = '';
 
-    constructor() {
-        this.socket = io.connect('http://localhost:1337');
+  constructor(private conversationService: ConversationService, private user: LoggedUserService) {
+    this.socket = io.connect('http://localhost:3000');
+  }
+
+  ngOnInit() {
+    this.messages = new Array();
+    const userInfo: any = localStorage.getItem('userInfo');
+    this.userId = JSON.parse(userInfo)._id;
+
+    this.conversationService.getMessages().subscribe((msg: any) => {
+      this.receiveMessage(msg);
+    });
+  }
+
+  receiveMessage(msg: any) {
+    if (this.userId !== msg.senderId) {
+      msg.incoming = true;
+      this.messages.push(msg);
     }
+  }
 
-    ngOnInit() {
-        this.messages = new Array();
-        const userInfo: any = localStorage.getItem('userInfo');
-        this.userId = JSON.parse(userInfo)._id;
-
-        this.socket.on('message-received', (msg: any) => {
-            this.receiveMessage(msg);
-        });
-        this.socket.emit('event1', {
-            msg: 'Client to server, can you hear me server?'
-        });
-        this.socket.on('event2', (data: any) => {
-            console.log(data.msg);
-            this.socket.emit('event3', {
-                msg: 'Yes, its working for me!!'
-            });
-        });
-        this.socket.on('event4', (data: any) => {
-            console.log(data.msg);
-        });
-    }
-
-    receiveMessage(msg: any) {
-        if (this.userId !== msg.senderId) {
-            msg.incoming = true;
-            this.messages.push(msg);
-        }
-    }
-
-    sendMessage() {
-        const message = {
-            text: this.messageText,
-            senderId: this.userId,
-        };
-        this.socket.emit('send-message', message);
-        this.messages.push(message);
-        this.messageText = 'aaa';
-    }
+  sendMessage() {
+    this.conversationService.sendMessage({
+      sender: this.user.data._id,
+      receiver: this.receiverId,
+      content: this.messageText,
+      timestamp: new Date()
+    });
+    this.messages.push({ text: this.messageText, senderId: this.userId, });
+    this.messageText = '';
+  }
 }

@@ -3,6 +3,7 @@ import { ConversationComponent } from './conversation.component';
 import { SendMessageModalComponent } from './sendMessageModal.component';
 import { CommonControlsModule } from 'src/app/library/commonControls.module';
 import { FormsModule } from '@angular/forms';
+import { ConversationsListComponent } from './conversationsList.component';
 
 @NgModule({
     imports: [CommonControlsModule, FormsModule],

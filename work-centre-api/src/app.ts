@@ -14,6 +14,9 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import passportJWT from 'passport-jwt';
 import cookieParser from 'cookie-parser';
 import usersApiRouter from './api/routes/usersApi';
+import { messageSchema } from './database/models/message/message';
+import { ObjectId } from 'mongodb';
+import chatApiRouter from './api/routes/chatApi';
 
 const app = express();
 const JWTStrategy = passportJWT.Strategy;
@@ -35,7 +38,8 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 
 
 /* CHAT */
-const server = app.listen(1337);
+// const server = app.listen(3000);
+const server = require('http').createServer(app);
 const io = require('socket.io')(server, {
     cors: {
         origin: ['http://star-jobs.azurewebsites.net', 'https://star-jobs.azurewebsites.net', 'http://localhost:4200', 'https://localhost:4200'],
@@ -45,13 +49,65 @@ const io = require('socket.io')(server, {
 
 app.use(express.static(path.join(__dirname, "public")));
 io.on('connection', (socket) => {
-    console.log('new connection made');
+    socket.on('send-message', async (message) => {
+        const newMessage: messageSchema = {
+            sender: message.sender,
+            receiver: message.receiver,
+            content: message.content,
+            timestamp: new Date(),
+            chatId: message.chatId
+        };
 
-    socket.on('send-message', (message) => {
-        console.log('message received:', message);
-        io.emit('message-received', message);
-        console.log(message)
+        const senderUser = await collections.users?.findOne({ _id: new ObjectId(newMessage.sender) });
+        const receiverUser = await collections.users?.findOne({ _id: new ObjectId(newMessage.receiver) });
+
+        const conversation = await collections.conversations?.findOne({ _id: new ObjectId(newMessage.chatId) });
+        if (conversation) {
+            await collections.conversations?.updateOne(
+                { _id: new ObjectId(newMessage.chatId) },
+                { $push: { "messages": { sender: newMessage.sender, receiver: newMessage.receiver, content: newMessage.content, timestamp: newMessage.timestamp } } })
+        } else {
+            const conversation = {
+                messages: [{ sender: newMessage.sender, receiver: newMessage.receiver, content: newMessage.content, timestamp: newMessage.timestamp }],
+                members: [
+                    { _id: newMessage.sender, name: `${senderUser?.local.firstName} ${senderUser?.local.lastName}` },
+                    { _id: newMessage.receiver, name: `${receiverUser?.local.firstName} ${receiverUser?.local.lastName}` }
+                ]
+            }
+
+            const result = await collections.conversations?.insertOne(conversation);
+            if (result) {
+                await collections.users?.updateOne(
+                    { _id: new ObjectId(newMessage.sender) },
+                    { $push: { "conversationIds": String(result?.insertedId) } });
+                await collections.users?.updateOne(
+                    { _id: new ObjectId(newMessage.receiver) },
+                    { $push: { "conversationIds": String(result?.insertedId) } });
+            }
+        }
+
+
+
+        io.to(message.receiverSocketId).emit('message-received', message);
     });
+
+    socket.on('create-chat', async (message) => {
+        const data = {
+            sender: message.sender,
+            receiver: message.receiver
+        }
+
+        const conversation = await collections.conversations?.findOne({ toId: data.receiver, fromId: data.sender });
+        if (conversation) {
+            return;
+        } else {
+            await collections.conversations?.insertOne({
+                messages: [],
+                members: []
+            });
+        }
+    })
+
 });
 io.attach(server);
 /* CHAT */
@@ -133,13 +189,14 @@ app.get('/', (req, res) => {
     res.send('Welcome on Work-Centre Server ®');
 });
 
-app.listen(constants.server_port, async () => {
+server.listen(constants.server_port, async () => {
     console.log(`Express is listening on port ${constants.server_port}`);
     await connectToDatabase();
 });
 
 
-app.use('/api', apiRouter, authApiRouter, usersApiRouter);
+
+app.use('/api', apiRouter, authApiRouter, usersApiRouter, chatApiRouter);
 
 process.on('SIGINT', async () => {
     await closeDatabaseConnection();

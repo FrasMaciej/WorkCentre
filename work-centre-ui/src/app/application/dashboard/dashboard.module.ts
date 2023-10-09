@@ -10,6 +10,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { ProfileModule } from './profile/profile.module';
 import { routes } from './routes';
 import { CommonModule } from '@angular/common';
+import { ConversationsListComponent } from './conversation/conversationsList.component';
 
 @NgModule({
     imports: [
@@ -17,7 +18,7 @@ import { CommonModule } from '@angular/common';
         HomeModule, NotificationsModule, ProfileModule, RouterModule.forChild(routes)
     ],
     exports: [RouterModule],
-    declarations: [DashboardComponent, DashboardOptionsComponent],
+    declarations: [DashboardComponent, DashboardOptionsComponent, ConversationsListComponent],
     providers: [],
 })
 export class DashboardModule { }
