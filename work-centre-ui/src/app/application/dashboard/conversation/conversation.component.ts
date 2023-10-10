@@ -1,14 +1,15 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, Input } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, Input, OnDestroy } from '@angular/core';
 import * as io from 'socket.io-client';
 import { ConversationService } from './conversation.service';
 import { LoggedUserService } from 'src/app/commonServices/userContext.service';
-
+import { Subscription } from 'rxjs';
+import { Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-conversation',
   template: `
      <div class="chat-container">
-      <div class="messages" #messagesList>
+      <div class="messages" #messagesList #scrollMe>
         <div *ngFor="let message of chat.messages" [ngClass]="{'incoming': getUserId() === message.sender, 'outgoing': getUserId() !== message.sender}">
           {{ message.content }}
         </div>
@@ -71,14 +72,16 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
       }
     `]
 })
-export class ConversationComponent implements OnInit {
+export class ConversationComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() receiverId: string | any = '';
   @ViewChild('messagesList') messagesList!: ElementRef;
   @ViewChild('formElement') formElement!: ElementRef;
   @ViewChild('inputElement') inputElement!: ElementRef;
+  @ViewChild('scrollMe') myScrollContainer!: ElementRef;
+
+  private messagesSubscription: Subscription | undefined;
 
   messageText: string = ''
-  messages: Array<any> = [];
   chat: ConversationDto = {
     messages: [],
     members: [],
@@ -86,28 +89,44 @@ export class ConversationComponent implements OnInit {
     _id: ''
   };
 
-  constructor(private conversationService: ConversationService, private user: LoggedUserService) {
+  constructor(private conversationService: ConversationService, private user: LoggedUserService, private renderer: Renderer2) {
     conversationService.changeEmitted$.subscribe(chat => {
       this.chat = chat;
       this.receiverId = this.chat.members.find(m => m._id !== this.user.id)?._id;
-      this.conversationService.getMessages().subscribe((msg: any) => {
-        this.receiveMessage(msg);
+      if (this.messagesSubscription) {
+        this.messagesSubscription.unsubscribe();
+      }
+      this.messagesSubscription = this.conversationService.getMessages().subscribe((msg: any) => {
+        this.chat.messages.push(msg);
       });
     });
   }
 
   ngOnInit() {
-
+    this.scrollToBottom();
   }
 
-  receiveMessage(msg: any) {
-    if (this.user.id !== msg.senderId) {
-      msg.incoming = true;
-      this.chat.messages.push(msg);
+  ngAfterViewInit() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    } catch (err) { }
+  }
+
+  ngOnDestroy() {
+    if (this.messagesSubscription) {
+      this.messagesSubscription.unsubscribe();
     }
   }
 
+
   sendMessage() {
+    if (!this.messageText) {
+      return;
+    }
     this.conversationService.sendMessage({
       sender: this.user.id,
       receiver: this.receiverId,
@@ -115,7 +134,6 @@ export class ConversationComponent implements OnInit {
       timestamp: new Date(),
       chatId: this.chat._id
     });
-    this.chat.messages.push({ content: this.messageText, sender: this.user.id, receiver: this.receiverId, timestamp: new Date() });
     this.messageText = '';
   }
 

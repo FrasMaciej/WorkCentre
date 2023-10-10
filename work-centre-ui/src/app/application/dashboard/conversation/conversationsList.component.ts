@@ -12,7 +12,7 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
           (click)="onConversationClick(chat)"
           [class.selected]="chat === selectedChat">
           <div class="flex items-center justify-center cursor-pointer py-2">
-              <div class="text-white">{{ chat.label }}</div>
+            <div class="text-white">{{ chat.label }}</div>
           </div>
         </mat-list-item>
       </mat-list>

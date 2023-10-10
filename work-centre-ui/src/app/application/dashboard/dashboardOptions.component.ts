@@ -68,6 +68,7 @@ export class DashboardOptionsComponent {
                     break;
             }
         });
+        this.dashboardOptionValueChanged.emit(this.dashboardOption);
     }
 
     changeSelected(option: string) {
