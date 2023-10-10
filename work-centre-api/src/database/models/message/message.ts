@@ -1,4 +1,4 @@
-export interface messageSchema {
+export interface MessageSchema {
     sender: string;
     receiver: string;
     content: string;

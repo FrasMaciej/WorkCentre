@@ -9,8 +9,8 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
   template: `
      <div class="chat-container">
       <div class="messages" #messagesList>
-        <div *ngFor="let message of messages" [ngClass]="{'incoming': message.incoming, 'outgoing': !message.incoming}">
-          {{ message.text }}
+        <div *ngFor="let message of chat.messages" [ngClass]="{'incoming': getUserId() === message.sender, 'outgoing': getUserId() !== message.sender}">
+          {{ message.content }}
         </div>
       </div>
       <form #formElement>
@@ -72,44 +72,54 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
     `]
 })
 export class ConversationComponent implements OnInit {
-  @Input() receiverId = '';
+  @Input() receiverId: string | any = '';
   @ViewChild('messagesList') messagesList!: ElementRef;
   @ViewChild('formElement') formElement!: ElementRef;
   @ViewChild('inputElement') inputElement!: ElementRef;
 
-  private socket: any;
   messageText: string = ''
   messages: Array<any> = [];
-  userId = '';
+  chat: ConversationDto = {
+    messages: [],
+    members: [],
+    label: '',
+    _id: ''
+  };
 
   constructor(private conversationService: ConversationService, private user: LoggedUserService) {
-  }
-
-  ngOnInit() {
-    this.messages = new Array();
-    const userInfo: any = localStorage.getItem('userInfo');
-    this.userId = JSON.parse(userInfo)._id;
-
-    this.conversationService.getMessages().subscribe((msg: any) => {
-      this.receiveMessage(msg);
+    conversationService.changeEmitted$.subscribe(chat => {
+      this.chat = chat;
+      this.receiverId = this.chat.members.find(m => m._id !== this.user.id)?._id;
+      this.conversationService.getMessages().subscribe((msg: any) => {
+        this.receiveMessage(msg);
+      });
     });
   }
 
+  ngOnInit() {
+
+  }
+
   receiveMessage(msg: any) {
-    if (this.userId !== msg.senderId) {
+    if (this.user.id !== msg.senderId) {
       msg.incoming = true;
-      this.messages.push(msg);
+      this.chat.messages.push(msg);
     }
   }
 
   sendMessage() {
     this.conversationService.sendMessage({
-      sender: this.user.data._id,
+      sender: this.user.id,
       receiver: this.receiverId,
       content: this.messageText,
-      timestamp: new Date()
+      timestamp: new Date(),
+      chatId: this.chat._id
     });
-    this.messages.push({ text: this.messageText, senderId: this.userId, });
+    this.chat.messages.push({ content: this.messageText, sender: this.user.id, receiver: this.receiverId, timestamp: new Date() });
     this.messageText = '';
+  }
+
+  getUserId() {
+    return this.user.id;
   }
 }
