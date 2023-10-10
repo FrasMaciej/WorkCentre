@@ -11,7 +11,7 @@ export class ConversationService {
   private emitChangeSource = new Subject<any>();
   changeEmitted$ = this.emitChangeSource.asObservable();
   emitChange(change: any) {
-      this.emitChangeSource.next(change);
+    this.emitChangeSource.next(change);
   }
 
   constructor(private httpClient: HttpClient) {
@@ -25,6 +25,7 @@ export class ConversationService {
       });
     });
   }
+
 
   sendMessage(message: sendMessageDto): void {
     this.socket.emit('send-message', message);

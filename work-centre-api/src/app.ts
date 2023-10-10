@@ -87,8 +87,7 @@ io.on('connection', (socket) => {
                     { $push: { "conversationIds": String(result?.insertedId) } });
             }
         }
-
-        io.to(message.receiverSocketId).emit('message-received', message);
+        io.emit('message-received', message);
     });
 
     socket.on('send-message-dedicated', async (message) => {
@@ -153,7 +152,7 @@ io.on('connection', (socket) => {
                     { $push: { "conversationIds": String(result?.insertedId) } });
             }
         }
-        io.to(message.receiverSocketId).emit('message-received', message);
+        io.broadcast.emit('message-received', message);
     });
 
     socket.on('create-chat', async (message) => {

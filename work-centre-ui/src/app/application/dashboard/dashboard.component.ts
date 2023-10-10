@@ -21,7 +21,7 @@ import { ConversationComponent } from './conversation/conversation.component';
                 <dashboard-options (dashboardOptionValueChanged)="getDashboardOption($event)"></dashboard-options>
             </section>
             <section class="color-gray with-border">
-                <conversations-list (chatSelected)="onChatSelect($event)"></conversations-list>
+                <conversations-list *ngIf="dashboardOption==='conversation'"(chatSelected)="onChatSelect($event)"></conversations-list>
             </section>
             <section class="color-gray">
                 <router-outlet></router-outlet>
