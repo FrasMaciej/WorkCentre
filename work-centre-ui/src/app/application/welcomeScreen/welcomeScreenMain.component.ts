@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'welcome-screen-main',
     template: `
-    <body class="background">
+    <body class="background bg-gradient-to-r from-blue-500 to-purple-600">
         <mat-toolbar>
             <span class="spacer"></span>
             <button class="m-3 text-white" mat-button color="primary" (click)="navigate('sign-up')">Sign up</button>
@@ -14,8 +14,8 @@ import { Router } from '@angular/router';
             </button>
         </mat-toolbar>
         <div class="flex justify-between items-center responsive">
-            <div class="ml-16 mt-24 text-6xl font-bold">
-                WorkCentre
+            <div class="ml-16 mt-24 text-6xl font-bold text-white">
+                StarJobs
             </div>
             <div class="mr-96 mt-24 flex flex-col gap-3 responsive2">
                 <button mat-fab extended color="primary" class="bg-black  border-white rounded-lg main-button" (click)="navigate('panel')">
@@ -36,7 +36,6 @@ import { Router } from '@angular/router';
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
-            background-color: #E9E7DC;
         }
 
         .spacer {

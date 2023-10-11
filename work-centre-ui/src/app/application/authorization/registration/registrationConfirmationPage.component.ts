@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
@@ -15,8 +15,7 @@ import { Router } from '@angular/router';
                     After receiving the email follow the link provided to complete you registration.
                 </div>
                 <div class="flex flex-col">
-                    <span>If you not got any mail <b class="cursor-pointer">Resend confirmation mail,</b> </span>
-                    <span>or <b class="cursor-pointer" (click)="navigateHome()">back to homepage.</b> </span>
+                    <span><b class="cursor-pointer" (click)="navigateHome()">back to homepage.</b> </span>
                 </div>
             </div>
         </div>
@@ -37,9 +36,16 @@ import { Router } from '@angular/router';
 export class RegistrationConfirmationPageComponent implements OnInit {
     email = 'exampleemail@gmail.com';
 
-    constructor(private router: Router) { }
+    constructor(private router: Router, private route: ActivatedRoute) {
+        this.route.queryParams.subscribe((params) => {
+            console.log(params);
+            this.email = this.route.snapshot.params['e-mail'];
+        })
+    }
 
-    ngOnInit() { }
+    ngOnInit() {
+
+    }
 
     navigateHome() {
         this.router.navigate(['/']);

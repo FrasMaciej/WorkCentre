@@ -6,13 +6,16 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'registration-page',
   template: `
+  <body class="background bg-gradient-to-r from-blue-500 to-purple-600">
     <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
-      <div class="flex justify-center items-center flex-col">
-        <a href="/"> 
-          <svg-icon src="assets/logo/logoBlack.svg" [svgStyle]="{ 'width.px':500, 'height.px': 200 }"></svg-icon> 
+      <div class="flex justify-center items-center flex-col" >
+        <a class="cursor-pointer" href="/">
+          <div class="mt-2 text-6xl font-bold text-white">
+            StarJobs
+          </div>
         </a>
-        <mat-card class="register-form flex flex-col justify-center items-center">
-          <span class="mb-4 text-xl text-center">
+        <mat-card class="register-form flex flex-col justify-center items-center mb-4">
+          <span class="mb-4 mt-1 text-xl text-center">
             Sign up to discover your new career possibilities for free!
           </span>
           <mat-form-field>
@@ -65,22 +68,34 @@ import { Router } from '@angular/router';
               Surname is <strong>required</strong>
             </mat-error>
           </mat-form-field>
-          <button class="sign-up-btn m-4" mat-fab extended color="accent" [disabled]="signupButtonDisabled">
+          <button class="sign-up-btn m-2" mat-fab extended color="accent" [disabled]="signupButtonDisabled">
             Sign up
           </button>
-          <span class="mt-4">Already have an account? <b class="cursor-pointer" (click)="navigateToSignIn()">Sign in</b> </span>
+          <span class="mt-2">Already have an account? <b class="cursor-pointer" (click)="navigateToSignIn()">Sign in</b> </span>
         </mat-card>
       </div>
     </form>
+  </body>
   `,
   styles: [
     `
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.background {
+  height: 100%;
+  background: linear-gradient(to right, #3498db, #8e44ad); /* Adjust the gradient colors as needed */
+}
       .register-form {
-        margin-top: 50px;
+        margin-top: 25px;
         height: 50%;
-        width: 600px;
+        width: 700px;
         border-radius: 2rem;
-        padding-top: 25px;
+        padding-top: 15px;
         padding-bottom: 25px;
       }
 
@@ -101,6 +116,11 @@ import { Router } from '@angular/router';
             width: 90%;
         }
       }
+
+      a {
+          text-decoration: none;
+          color: black;
+        }
     `,
   ],
 })
@@ -135,7 +155,7 @@ export class RegistrationPageComponent implements OnInit {
           firstName: this.registrationForm.value.firstName!,
           lastName: this.registrationForm.value.lastName!
         });
-        this.router.navigate(['sign-up-confirmation']);
+        this.router.navigate(['sign-up-confirmation', this.registrationForm.get('email')?.value]);
       } catch (err) {
         this.registrationForm.get('email')?.setValue('');
         this.registrationForm.get('email')?.markAsTouched();

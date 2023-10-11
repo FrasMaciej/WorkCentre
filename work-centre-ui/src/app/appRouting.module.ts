@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: '', component: WelcomeScreenMainComponent, canActivate: [IsLoggedInService] },
   { path: 'sign-in', component: LoginPageComponent, canActivate: [IsLoggedInService] },
   { path: 'sign-up', component: RegistrationPageComponent, canActivate: [IsLoggedInService] },
-  { path: 'sign-up-confirmation', component: RegistrationConfirmationPageComponent, canActivate: [IsLoggedInService] },
+  { path: 'sign-up-confirmation/:e-mail', component: RegistrationConfirmationPageComponent, canActivate: [IsLoggedInService] },
   { path: 'about-us', component: AboutUsComponent, canActivate: [IsLoggedInService] },
   { path: '404', component: NotFoundPageComponent },
   { path: '**', redirectTo: '404' },
