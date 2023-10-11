@@ -3,11 +3,15 @@ import { ProfileService } from '../profile.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { SendMessageModalComponent } from '../../conversation/sendMessageModal.component';
+import { LoggedUserService } from 'src/app/commonServices/userContext.service';
 
 @Component({
   selector: 'user-profile',
   template: `
-    <button mat-raised-button (click)="openSendMessageModal()">Send Message</button>
+    <div *ngIf="!hideButtons">
+      <button mat-flat-button (click)="openSendMessageModal()" class="mb-2 ml-2 ">Send Message</button>
+      <button mat-flat-button class="mb-2 ml-2 ">Send Invitation to friends</button>
+    </div>
     <div *ngIf="userFound" class="container mx-auto p-8 bg-gray-900 text-white">
       <div class="flex items-center justify-between bg-gray-800 p-6 mb-8 rounded-md shadow-md">
         <div>
@@ -61,6 +65,7 @@ import { SendMessageModalComponent } from '../../conversation/sendMessageModal.c
 export class UserProfileComponent implements OnInit {
   userFound = false;
   showNotFoundUserInfo = false;
+  hideButtons = false;
   user: UserDetailsDto = {
     headerInfo: '',
     company: '',
@@ -74,7 +79,7 @@ export class UserProfileComponent implements OnInit {
     lastName: ''
   }
 
-  constructor(private profileService: ProfileService, private route: ActivatedRoute, private dialog: MatDialog) { }
+  constructor(private profileService: ProfileService, private route: ActivatedRoute, private dialog: MatDialog, private userContext: LoggedUserService) { }
 
   async ngOnInit() {
     const userId = this.route.snapshot.paramMap.get('id');
@@ -83,6 +88,9 @@ export class UserProfileComponent implements OnInit {
         const user = await this.profileService.getUserDetails(userId);
         this.user = user;
         this.userFound = true;
+      }
+      if (userId === this.userContext.id) {
+        this.hideButtons = true;
       }
     } catch (err) {
       this.userFound = false;
@@ -98,7 +106,7 @@ export class UserProfileComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      
+
     });
   }
 }

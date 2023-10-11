@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthorizationService } from '../authorization/authorization.service';
+import { ConversationsListComponent } from './conversation/conversationsList.component';
+import { ConversationComponent } from './conversation/conversation.component';
 
 @Component({
     selector: 'dashboard',
@@ -19,7 +21,7 @@ import { AuthorizationService } from '../authorization/authorization.service';
                 <dashboard-options (dashboardOptionValueChanged)="getDashboardOption($event)"></dashboard-options>
             </section>
             <section class="color-gray with-border">
-                <conversations-list></conversations-list>
+                <conversations-list *ngIf="dashboardOption==='conversation'"(chatSelected)="onChatSelect($event)"></conversations-list>
             </section>
             <section class="color-gray">
                 <router-outlet></router-outlet>
@@ -76,6 +78,7 @@ import { AuthorizationService } from '../authorization/authorization.service';
 })
 
 export class DashboardComponent {
+    @ViewChild(ConversationComponent, { static: false }) conversationComponent!: ConversationComponent;
     dashboardOption = '';
 
     constructor(private router: Router, private authorizationService: AuthorizationService, private route: ActivatedRoute) { }
@@ -91,5 +94,9 @@ export class DashboardComponent {
 
     getDashboardOption(option: string) {
         this.dashboardOption = option;
+    }
+
+    onChatSelect(chat: any) {
+        this.conversationComponent.chat = chat;
     }
 }

@@ -1,7 +1,7 @@
-import { messageSchema } from "./message";
+import { MessageSchema } from "./message";
 
 export interface ConversationSchema {
-    messages: messageSchema[];
+    messages: MessageSchema[];
     members: ChatMember[];
 }
 
@@ -9,3 +9,4 @@ interface ChatMember {
     _id: string;
     name: string;
 }
+

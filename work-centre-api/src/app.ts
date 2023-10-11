@@ -14,7 +14,7 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import passportJWT from 'passport-jwt';
 import cookieParser from 'cookie-parser';
 import usersApiRouter from './api/routes/usersApi';
-import { messageSchema } from './database/models/message/message';
+import { MessageSchema } from './database/models/message/message';
 import { ObjectId } from 'mongodb';
 import chatApiRouter from './api/routes/chatApi';
 
@@ -38,7 +38,6 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 
 
 /* CHAT */
-// const server = app.listen(3000);
 const server = require('http').createServer(app);
 const io = require('socket.io')(server, {
     cors: {
@@ -50,7 +49,10 @@ const io = require('socket.io')(server, {
 app.use(express.static(path.join(__dirname, "public")));
 io.on('connection', (socket) => {
     socket.on('send-message', async (message) => {
-        const newMessage: messageSchema = {
+        if (!message.sender || !message.receiver) {
+            return;
+        }
+        const newMessage: MessageSchema = {
             sender: message.sender,
             receiver: message.receiver,
             content: message.content,
@@ -60,8 +62,8 @@ io.on('connection', (socket) => {
 
         const senderUser = await collections.users?.findOne({ _id: new ObjectId(newMessage.sender) });
         const receiverUser = await collections.users?.findOne({ _id: new ObjectId(newMessage.receiver) });
-
         const conversation = await collections.conversations?.findOne({ _id: new ObjectId(newMessage.chatId) });
+
         if (conversation) {
             await collections.conversations?.updateOne(
                 { _id: new ObjectId(newMessage.chatId) },
@@ -85,10 +87,72 @@ io.on('connection', (socket) => {
                     { $push: { "conversationIds": String(result?.insertedId) } });
             }
         }
+        io.emit('message-received', message);
+    });
+
+    socket.on('send-message-dedicated', async (message) => {
+        if (!message.sender || !message.receiver) {
+            return;
+        }
+        const newMessage: MessageSchema = {
+            sender: message.sender,
+            receiver: message.receiver,
+            content: message.content,
+            timestamp: new Date(),
+            chatId: message.chatId
+        };
 
 
+        const senderUser = await collections.users?.findOne({ _id: new ObjectId(newMessage.sender) });
+        const receiverUser = await collections.users?.findOne({ _id: new ObjectId(newMessage.receiver) });
+        const conversation = await collections.conversations?.findOne({
+            $and: [
+                {
+                    "members": {
+                        $elemMatch: {
+                            "_id": newMessage.sender,
+                        }
+                    }
+                },
+                {
+                    "members": {
+                        $elemMatch: {
+                            "_id": newMessage.receiver,
+                        }
+                    }
+                },
+                {
+                    $expr: {
+                        $eq: [{ $size: "$members" }, 2]
+                    }
+                }
+            ]
+        });
 
-        io.to(message.receiverSocketId).emit('message-received', message);
+        if (conversation) {
+            await collections.conversations?.updateOne(
+                { _id: new ObjectId(conversation._id) },
+                { $push: { "messages": { sender: newMessage.sender, receiver: newMessage.receiver, content: newMessage.content, timestamp: newMessage.timestamp } } })
+        } else {
+            const conversation = {
+                messages: [{ sender: newMessage.sender, receiver: newMessage.receiver, content: newMessage.content, timestamp: newMessage.timestamp }],
+                members: [
+                    { _id: newMessage.sender, name: `${senderUser?.local.firstName} ${senderUser?.local.lastName}` },
+                    { _id: newMessage.receiver, name: `${receiverUser?.local.firstName} ${receiverUser?.local.lastName}` }
+                ]
+            }
+
+            const result = await collections.conversations?.insertOne(conversation);
+            if (result) {
+                await collections.users?.updateOne(
+                    { _id: new ObjectId(newMessage.sender) },
+                    { $push: { "conversationIds": String(result?.insertedId) } });
+                await collections.users?.updateOne(
+                    { _id: new ObjectId(newMessage.receiver) },
+                    { $push: { "conversationIds": String(result?.insertedId) } });
+            }
+        }
+        io.broadcast.emit('message-received', message);
     });
 
     socket.on('create-chat', async (message) => {
@@ -110,6 +174,7 @@ io.on('connection', (socket) => {
 
 });
 io.attach(server);
+
 /* CHAT */
 
 

@@ -13,17 +13,17 @@ Deployment: Azure:
 # Goals
 
 #### Done:
-- ...
+- Registration with Passport
+- Basic User Dashborad
+
 
 #### Mostly done:
 - Frontend and Backend configuration with github actions and deploy on Azure (mostly done, needs some CI/CD improvements)
 
 #### To-do:
-- Registration with Passport
 - Registration with OAuth
 - Endpoints protection
 - Api Documentation (OpenApi?)
-- Basic User Dashborad
 - Project and Implementation of user roles and permissions
 - Dockerizing
 - ...

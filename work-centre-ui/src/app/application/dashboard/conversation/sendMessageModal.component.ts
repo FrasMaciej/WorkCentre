@@ -4,8 +4,8 @@ import { ConversationService } from './conversation.service';
 import { LoggedUserService } from 'src/app/commonServices/userContext.service';
 
 @Component({
-    selector: 'app-send-message-modal',
-    template: `
+  selector: 'app-send-message-modal',
+  template: `
     <div class="container">
       <h2 mat-dialog-title class="text-2xl font-semibold">Send Message</h2>
       <div mat-dialog-content class="w-full">
@@ -19,33 +19,33 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
       </div>
     </div>
   `,
-    styles: [`
+  styles: [`
     textarea {
       height: 150px;
     }
   `]
 })
 export class SendMessageModalComponent {
-    message: string = '';
-    receiverId: string = '';
+  message: string = '';
+  receiverId: string = '';
 
-    constructor(
-        private conversationService: ConversationService,
-        public dialogRef: MatDialogRef<SendMessageModalComponent>,
-        private user: LoggedUserService,
-        @Inject(MAT_DIALOG_DATA) public data: any
-    ) { }
+  constructor(
+    private conversationService: ConversationService,
+    public dialogRef: MatDialogRef<SendMessageModalComponent>,
+    private user: LoggedUserService,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) { }
 
-    onNoClick(): void {
-        this.dialogRef.close();
-    }
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 
-    sendMessage() {
-        this.conversationService.sendMessage({
-            sender: this.user.id,
-            receiver: this.data.recipientId,
-            content: this.message,
-            timestamp: new Date()
-        });
-    }
+  sendMessage() {
+    this.conversationService.sendDedicatedMessage({
+      sender: this.user.id,
+      receiver: this.data.recipientId,
+      content: this.message,
+      timestamp: new Date()
+    });
+  }
 }
