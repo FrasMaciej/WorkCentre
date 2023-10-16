@@ -2,9 +2,9 @@ export { }
 
 declare global {
 
-    interface UserListDto extends UserInfoDto{
+    interface UserListDto extends UserInfoDto {
     }
-    
+
     interface UserInfoDto {
         _id: string;
         email: string;
@@ -12,21 +12,42 @@ declare global {
         lastName: string;
     }
 
+    interface UpdateUserDto {
+        _id: string;
+        userDetails: UserDetails;
+    }
+
     interface UserDetailsDto extends UserInfoDto {
         headerInfo: string;
         company: string;
-        skills: string[];
-        description: string;
+        skills: Skill[];
+        profileDescription: string;
         experience: UserExperienceDto[];
         phone: number;
+    }
+
+    interface UserDetails {
+        headerInfo: string;
+        company: string;
+        skills: Skill[];
+        profileDescription: string;
+        experience: UserExperienceDto[];
+        phone: number;
+        email: string;
     }
 
     interface UserExperienceDto {
         name: string;
         place?: string;
         period: {
-            from: string;
-            to: string;
+            from: Date;
+            to: Date;
+            form?: any;
         }
+    }
+
+    export interface Skill {
+        name: string;
+        description: string;
     }
 }

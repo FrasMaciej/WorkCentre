@@ -1,3 +1,4 @@
+import { UserProfileSchema } from "../profile/profile";
 import { Roles } from "./roles";
 
 export interface UserSchema {
@@ -5,6 +6,7 @@ export interface UserSchema {
     local: UserSchemaLocal;
     roles: Roles;
     conversationIds: string[],
+    profile: UserProfileSchema,
     facebook?: {
         id: string;
         token: string;

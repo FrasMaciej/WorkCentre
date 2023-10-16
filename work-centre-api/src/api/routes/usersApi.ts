@@ -5,5 +5,7 @@ const usersApiRouter = express.Router();
 
 usersApiRouter.get('/users', usersActions.getUsers);
 usersApiRouter.get('/user/:id', usersActions.getUser);
+usersApiRouter.put('/user', usersActions.updateProfile);
+
 
 export default usersApiRouter;

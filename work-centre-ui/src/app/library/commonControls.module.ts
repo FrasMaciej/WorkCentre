@@ -15,6 +15,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 @NgModule({
@@ -22,7 +24,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     exports: [
         MatButtonModule, MatToolbarModule, MatIconModule, AngularSvgIconModule,
         MatFormFieldModule, MatInputModule, MatCardModule, MatListModule, DatePipe,
-        BrowserModule, MatSelectModule, MatPaginatorModule, MatMenuModule, MatDialogModule
+        BrowserModule, MatSelectModule, MatPaginatorModule, MatMenuModule, MatDialogModule,
+        MatDatepickerModule, MatNativeDateModule
     ],
     declarations: [],
 })

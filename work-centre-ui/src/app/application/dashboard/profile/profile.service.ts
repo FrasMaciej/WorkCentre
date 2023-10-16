@@ -8,7 +8,11 @@ import { environment } from 'src/environments/environment';
 export class ProfileService {
     constructor(private httpClient: HttpClient) { }
     
-    getUserDetails(userId: string): Promise<UserDetailsDto> {
-        return lastValueFrom(this.httpClient.get<UserDetailsDto>(`${environment.apiURL}/user/${userId}`));
+    getUserDetails(userId: string): Promise<any> {
+        return lastValueFrom(this.httpClient.get<any>(`${environment.apiURL}/user/${userId}`));
+    }
+
+    updateUserProfile(dto: UpdateUserDto) {
+        return lastValueFrom(this.httpClient.put<UpdateUserDto>(`${environment.apiURL}/user`, dto));
     }
 }

@@ -19,10 +19,13 @@ export async function getUser(req, res) {
         const user = await collections.users?.findOne({ _id: new ObjectId(userId) });
         if (user) {
             const parsedUser = {
-                _id: String(user._id),
-                email: user.local.email,
-                firstName: user.local.firstName,
-                lastName: user.local.lastName,
+                primary: {
+                    _id: String(user._id),
+                    email: user.local.email,
+                    firstName: user.local.firstName,
+                    lastName: user.local.lastName,
+                },
+                details: user.profile
             };
             return res.json(parsedUser);
         } else {
@@ -34,6 +37,17 @@ export async function getUser(req, res) {
     }
 }
 
+export async function updateProfile(req, res) {
+    try {
+        const userData = req.body;
+        collections.users?.updateOne(
+            { _id: new ObjectId(userData._id) },
+            { "$set": { profile: userData.userDetails } });
+        console.log(userData);
+    } catch (err) {
+        console.error(err);
+    }
+}
 
 
 
