@@ -146,12 +146,6 @@ export class ExploreComponent implements OnInit {
         this.lists.users = users;
     }
 
-    // getCurrentList(): Lists[] {
-    //     const startIndex = this.pageIndex * this.pageSize;
-    //     const endIndex = startIndex + this.pageSize;
-    //     return this.lists.users.slice(startIndex, endIndex);
-    // }
-
     onPageChange(event: PageEvent) {
         this.pageIndex = event.pageIndex;
         this.pageSize = event.pageSize;

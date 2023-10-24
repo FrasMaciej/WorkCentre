@@ -2,6 +2,7 @@ import { MongoClient, ServerApiVersion, Db, Collection } from 'mongodb';
 import { constants } from '../constants';
 import { UserSchema } from './models/users/authentication';
 import { ConversationSchema } from './models/message/conversation';
+import { JobSchema } from './models/job/job';
 
 const uri = constants.db_connection_string || '';
 const client: MongoClient = new MongoClient(uri, {
@@ -36,10 +37,16 @@ async function closeDatabaseConnection() {
 async function loadCollections(database: Db) {
     const usersCollection = await database.collection<UserSchema>('users');
     const conversationsCollection = await database.collection<ConversationSchema>('conversations');
+    const jobsCollection = await database.collection<JobSchema>('jobs');
 
     collections.users = usersCollection;
     collections.conversations = conversationsCollection;
+    collections.jobs = jobsCollection;
 }
 
 export { connectToDatabase, closeDatabaseConnection };
-export const collections: { users?: Collection<UserSchema>, conversations?: Collection<ConversationSchema> } = {};
+export const collections: {
+    users?: Collection<UserSchema>,
+    conversations?: Collection<ConversationSchema>,
+    jobs?: Collection<JobSchema>
+} = {};

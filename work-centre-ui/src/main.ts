@@ -2,6 +2,7 @@
 /// <reference path="../../shared/types/user.d.ts" />
 /// <reference path="../../shared/types/jobs.d.ts" />
 /// <reference path="../../shared/types/message.d.ts" />
+/// <reference path="../../shared/types/jobs.d.ts" />
 
 
 import { enableProdMode } from '@angular/core';

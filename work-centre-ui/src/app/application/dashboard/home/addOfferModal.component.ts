@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { JobsService } from './jobs.service';
 
 @Component({
     selector: 'add-offer-modal',
@@ -15,12 +16,17 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
                     <div class="modal-body">
                     <div class="form-group">
                         <mat-form-field>
-                        <input matInput placeholder="Title" required>
+                        <input matInput placeholder="Title" name="name" [(ngModel)]="jobOfferForm.name" required>
                         </mat-form-field>
                     </div>
                     <div class="form-group">
                         <mat-form-field>
-                        <input matInput placeholder="Company" required>
+                        <input matInput placeholder="Details" name="details" [(ngModel)]="jobOfferForm.details" required>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
+                        <input matInput placeholder="Company" name="company" [(ngModel)]="jobOfferForm.company" required>
                         </mat-form-field>
                     </div>
                     <mat-form-field>
@@ -46,22 +52,19 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 
 export class AddOfferModalComponent implements OnInit {
-    userJobOffers = [
-        { title: 'Software Engineer', company: 'Tech Co.', applicants: 5, startDate: new Date().setMonth(6), endDate: new Date().setMonth(8), applicationHistory: [] },
-        { title: 'UX Designer', company: 'Design Studio', applicants: 8, startDate: new Date(), endDate: new Date(), applicationHistory: [] },
-    ];
     jobOfferForm: any;
-    newJobOffer: any = {};
     user: any;
 
     constructor(
         public dialogRef: MatDialogRef<AddOfferModalComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any
+        @Inject(MAT_DIALOG_DATA) public data: any,
+        private jobsService: JobsService
     ) {
         this.user = this.data.user;
         this.jobOfferForm = {
-            title: ['', Validators.required],
-            company: ['', Validators.required],
+            name: '',
+            company: '',
+            details: '',
             dateForm: new FormGroup({
                 start: new FormControl(new Date()),
                 end: new FormControl(new Date())
@@ -72,16 +75,13 @@ export class AddOfferModalComponent implements OnInit {
     ngOnInit() { }
 
     addJobOffer() {
-        this.userJobOffers.push({
-            title: this.newJobOffer.title,
-            company: this.newJobOffer.company,
-            startDate: this.newJobOffer.startDate,
-            endDate: this.newJobOffer.endDate,
-            applicants: 0,
-            applicationHistory: []
+        this.jobsService.addJob({
+            name: this.jobOfferForm.name,
+            company: this.jobOfferForm.company,
+            details: this.jobOfferForm.details,
+            dateFrom: this.jobOfferForm.dateForm.get('start').value,
+            dateTo: this.jobOfferForm.dateForm.get('end').value
         });
-
-        this.newJobOffer = {};
     }
 
 
