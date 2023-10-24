@@ -38,7 +38,6 @@ export class RegistrationConfirmationPageComponent implements OnInit {
 
     constructor(private router: Router, private route: ActivatedRoute) {
         this.route.queryParams.subscribe((params) => {
-            console.log(params);
             this.email = this.route.snapshot.params['e-mail'];
         })
     }

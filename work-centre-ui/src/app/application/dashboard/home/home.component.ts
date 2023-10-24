@@ -216,11 +216,9 @@ export class HomeComponent implements OnInit {
 
 
   viewOfferStatus(offer: any) {
-    console.log(`Viewing status of ${offer.title}`);
   }
 
   cancelOffer(offer: any) {
-    console.log(`Cancelling offer for ${offer.title}`);
   }
 
   isCurrentDateInRange(startDate: Date, endDate: Date): boolean {

@@ -43,7 +43,6 @@ export async function updateProfile(req, res) {
         collections.users?.updateOne(
             { _id: new ObjectId(userData._id) },
             { "$set": { profile: userData.userDetails } });
-        console.log(userData);
     } catch (err) {
         console.error(err);
     }

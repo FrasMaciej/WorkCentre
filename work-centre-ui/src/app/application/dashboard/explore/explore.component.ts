@@ -47,7 +47,7 @@ interface Lists {
                     <mat-list-item *ngFor="let offer of lists.jobs" >
                         <div class="flex flex-row">
                             <div class="circle-container cursor-pointer">
-                                <img src="assets/avatar_placeholder.jpg" alt="Avatar">
+                                <img src="assets/job_placeholder.png" alt="Avatar">
                             </div>
                             <div class="ml-4 cursor-pointer">
                                 <div class="text-color" matListItemTitle>{{offer.name}}</div>
@@ -132,10 +132,12 @@ export class ExploreComponent implements OnInit {
     }
 
 
-    constructor(private usersService: ExploreService) { }
+    constructor(private usersService: ExploreService, private exploreService: ExploreService) { }
 
     async ngOnInit() {
         this.lists.users = await this.usersService.getUsers();
+        this.lists.jobs = await this.exploreService.getJobs();
+
         this.paginator.pageSize = this.pageSize;
         this.paginator.pageIndex = this.pageIndex;
 

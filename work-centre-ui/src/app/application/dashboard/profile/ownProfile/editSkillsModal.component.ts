@@ -50,7 +50,6 @@ export class EditSkillsModalComponent {
     if (!this.data.userDetails?.skills || this.data.userDetails?.skills.length <= 0) {
       this.skills = [{ name: '', description: '' }]
     } else {
-      console.log(this.data.userDetails.skills);
       this.skills = this.data.userDetails.skills;
     }
   }

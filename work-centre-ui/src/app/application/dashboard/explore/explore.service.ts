@@ -10,4 +10,8 @@ export class ExploreService {
     getUsers(): Promise<UserInfoDto[]> {
         return lastValueFrom(this.httpClient.get<UserInfoDto[]>(environment.apiURL + '/users'));
     }
+
+    getJobs(): Promise<JobDto[]> {
+        return lastValueFrom(this.httpClient.get<JobDto[]>(environment.apiURL + '/jobs'));
+    }
 }
