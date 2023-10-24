@@ -15,8 +15,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatTableModule } from '@angular/material/table';
+
 
 
 @NgModule({
@@ -25,7 +27,7 @@ import { MatNativeDateModule } from '@angular/material/core';
         MatButtonModule, MatToolbarModule, MatIconModule, AngularSvgIconModule,
         MatFormFieldModule, MatInputModule, MatCardModule, MatListModule, DatePipe,
         BrowserModule, MatSelectModule, MatPaginatorModule, MatMenuModule, MatDialogModule,
-        MatDatepickerModule, MatNativeDateModule
+        MatDatepickerModule, MatNativeDateModule, MatTableModule
     ],
     declarations: [],
 })

@@ -1,10 +1,10 @@
 export interface UserProfileSchema {
-    company: string;
-    headerInfo: string;
-    skills: Skill[];
-    profileDescription: string;
-    experience: Experience[];
-    phone: number;
+    company?: string;
+    headerInfo?: string;
+    skills?: Skill[];
+    profileDescription?: string;
+    experience?: Experience[];
+    phone?: number;
 }
 
 export interface Skill {
