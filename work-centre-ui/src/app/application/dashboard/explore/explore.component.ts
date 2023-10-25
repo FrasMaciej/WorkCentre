@@ -40,21 +40,10 @@ interface Lists {
             <div class="line-bottom"></div>
             <mat-list>
                 <ng-container *ngIf="selectedItemType==='users'">
-                    <users-list [users]="lists.users" />
+                    <users-list [users]="currentList.users" />
                 </ng-container>
-                <mat-divider></mat-divider>
                 <ng-container *ngIf="selectedItemType==='jobs'">
-                    <mat-list-item *ngFor="let offer of lists.jobs" >
-                        <div class="flex flex-row">
-                            <div class="circle-container cursor-pointer">
-                                <img src="assets/job_placeholder.png" alt="Avatar">
-                            </div>
-                            <div class="ml-4 cursor-pointer">
-                                <div class="text-color" matListItemTitle>{{offer.name}}</div>
-                                <div  class="text-color" matListItemLine>{{offer.details}}</div>
-                            </div>
-                        </div>
-                    </mat-list-item>
+                    <jobs-list [jobs]="currentList.jobs"/>
                 </ng-container>
             </mat-list>
             <mat-paginator
@@ -79,7 +68,6 @@ interface Lists {
             height: 55px;
             border-radius: 50%;
             overflow: hidden;
-            /* border: 2px solid #ccc;  */
         }
 
         .line-bottom {
@@ -91,7 +79,6 @@ interface Lists {
         }
 
         .item_highlight:hover{
-            /* background-color: red; */
             background-color: gray;
             color: var(--gray) !important;
         }
@@ -116,7 +103,7 @@ export class ExploreComponent implements OnInit {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     searchFormControl = new FormControl('');
     searchText = '';
-    itemTypes: any = [
+    itemTypes: any[] = [
         { value: 'jobs', viewValue: 'Jobs' },
         { value: 'users', viewValue: 'Users' },
         { value: 'companies', viewValue: 'Companies' },
@@ -131,26 +118,39 @@ export class ExploreComponent implements OnInit {
         jobs: []
     }
 
+    currentList: Lists = {
+        users: [],
+        jobs: []
+    }
 
     constructor(private usersService: ExploreService, private exploreService: ExploreService) { }
 
     async ngOnInit() {
-        this.lists.users = await this.usersService.getUsers();
-        this.lists.jobs = await this.exploreService.getJobs();
+        this.lists.users = await this.getUsers();
+        this.lists.jobs = await this.getJobs();
+        this.currentList.users = this.lists.users.slice(0, this.pageSize);
+        this.currentList.jobs = this.lists.jobs.slice(0, this.pageSize);
 
         this.paginator.pageSize = this.pageSize;
         this.paginator.pageIndex = this.pageIndex;
-
     }
 
     async getUsers() {
-        const users: UserInfoDto[] = await this.usersService.getUsers();
-        this.lists.users = users;
+        return this.usersService.getUsers();
+    }
+
+    async getJobs() {
+        return this.exploreService.getJobs();
     }
 
     onPageChange(event: PageEvent) {
-        this.pageIndex = event.pageIndex;
-        this.pageSize = event.pageSize;
+        if (this.selectedItemType === 'users') {
+            return this.currentList.users = this.lists.users.slice(this.paginator.pageIndex * this.paginator.pageSize, (this.paginator.pageIndex + 1) * this.paginator.pageSize);
+        } else if (this.selectedItemType === 'jobs') {
+            return this.currentList.jobs = this.lists.jobs.slice(this.paginator.pageIndex * this.paginator.pageSize, (this.paginator.pageIndex + 1) * this.paginator.pageSize);;
+        } else {
+            return 0;
+        }
     }
 
     getListLength() {
@@ -162,5 +162,4 @@ export class ExploreComponent implements OnInit {
             return 0;
         }
     }
-
 }

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'users-list',
     template: `
-    <mat-list-item *ngFor="let user of users" class="item_highlight cursor-pointer"> 
+    <mat-list-item *ngFor="let user of users; let last = last" [class.mat-list-item-divider]="!last"> 
         <div class="flex flex-row items-center size" (click)="navigateToProfile(user._id)">
             <div class="circle-container cursor-pointer">
                 <img src="assets/avatar_placeholder.jpg" alt="Avatar">
@@ -36,6 +36,10 @@ import { Router } from '@angular/router';
         .size {
             height: 60px;
             padding-bottom: 18px;
+        }
+
+        .mat-list-item-divider {
+            border-bottom: 1px solid gray;
         }
     `]
 })
