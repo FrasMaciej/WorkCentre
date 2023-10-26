@@ -7,6 +7,9 @@ export interface UserSchema {
     roles: Roles;
     conversationIds: string[],
     profile: UserProfileSchema,
+    jobsAuthor?: string[],
+    jobsApplicant?: string[],
+    organizationsOwner?: string[],
     facebook?: {
         id: string;
         token: string;

@@ -6,6 +6,7 @@ declare global {
         company: string,
         details: string,
         dateFrom: Date,
-        dateTo: Date
+        dateTo: Date,
+        applicants: number
     }
 }

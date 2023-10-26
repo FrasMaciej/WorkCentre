@@ -18,6 +18,7 @@ import { MessageSchema } from './database/models/message/message';
 import { ObjectId } from 'mongodb';
 import chatApiRouter from './api/routes/chatApi';
 import jobsApiRouter from './api/routes/jobsApi';
+import organizationsApiRouter from './api/routes/organizationsApi';
 
 const app = express();
 const JWTStrategy = passportJWT.Strategy;
@@ -262,7 +263,7 @@ server.listen(constants.server_port, async () => {
 
 
 
-app.use('/api', apiRouter, authApiRouter, usersApiRouter, chatApiRouter, jobsApiRouter);
+app.use('/api', apiRouter, authApiRouter, usersApiRouter, chatApiRouter, jobsApiRouter, organizationsApiRouter);
 
 process.on('SIGINT', async () => {
     await closeDatabaseConnection();

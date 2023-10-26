@@ -5,6 +5,7 @@ import { AddOfferModalComponent } from './addOfferModal.component';
 import { LoggedUserService } from 'src/app/commonServices/userContext.service';
 import { ProfileService } from '../profile/profile.service';
 import { AddOrganizationModalComponent } from './addOrganizationModal.component';
+import { JobsService } from './jobs.service';
 
 @Component({
   selector: 'home',
@@ -20,7 +21,7 @@ import { AddOrganizationModalComponent } from './addOrganizationModal.component'
         <h2 class="text-2xl font-bold mb-2">Your Job Offers</h2>
         <mat-table [dataSource]="userJobOffers">
           <ng-container matColumnDef="statusIcon">
-            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-header-cell *matHeaderCellDef>Active?</mat-header-cell>
             <mat-cell *matCellDef="let element">
               <mat-icon [ngClass]="{'text-green-500': isCurrentDateInRange(element.startDate, element.endDate), 'text-gray-500': !isCurrentDateInRange(element.startDate, element.endDate)}">
                 {{ isCurrentDateInRange(element.startDate, element.endDate) ? 'check_circle' : 'highlight_off' }}
@@ -30,7 +31,7 @@ import { AddOrganizationModalComponent } from './addOrganizationModal.component'
           <ng-container matColumnDef="title">
             <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
             <mat-cell *matCellDef="let element">
-              {{ element.title }}
+              {{ element.name }}
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="company">
@@ -43,11 +44,11 @@ import { AddOrganizationModalComponent } from './addOrganizationModal.component'
           </ng-container>
           <ng-container matColumnDef="startDate">
             <mat-header-cell *matHeaderCellDef>Start Date</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{ element.startDate | date }}</mat-cell>
+            <mat-cell *matCellDef="let element">{{ element.dateFrom | date }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="endDate">
             <mat-header-cell *matHeaderCellDef>End Date</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{ element.endDate | date }}</mat-cell>
+            <mat-cell *matCellDef="let element">{{ element.dateTo | date }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="actions">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -91,11 +92,11 @@ import { AddOrganizationModalComponent } from './addOrganizationModal.component'
           </ng-container>
           <ng-container matColumnDef="startDate">
             <mat-header-cell *matHeaderCellDef>Start Date</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{ element.startDate | date }}</mat-cell>
+            <mat-cell *matCellDef="let element">{{ element.dateFrom | date }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="endDate">
             <mat-header-cell *matHeaderCellDef>End Date</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{ element.endDate | date }}</mat-cell>
+            <mat-cell *matCellDef="let element">{{ element.dateTo | date }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="actions">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -144,7 +145,7 @@ import { AddOrganizationModalComponent } from './addOrganizationModal.component'
       }
 
       .mat-column-statusIcon {
-        flex: 0 0 7%;
+        flex: 0 0 10%;
       }
     `,
   ],
@@ -156,17 +157,10 @@ export class HomeComponent implements OnInit {
   jobOfferForm: any;
   user: any;
 
-  userJobOffers = [
-    { title: 'Software Engineer', company: 'Tech Co.', applicants: 5, startDate: new Date().setMonth(6), endDate: new Date().setMonth(8), applicationHistory: [] },
-    { title: 'UX Designer', company: 'Design Studio', applicants: 8, startDate: new Date(), endDate: new Date(), applicationHistory: [] },
-  ];
+  userJobOffers = [];
+  appliedJobOffers = [];
 
-  appliedJobOffers = [
-    { title: 'Data Analyst', company: 'Data Corp.', applicants: 3, startDate: new Date(), endDate: new Date().setMonth(10), applicationHistory: [] },
-    { title: 'Marketing Specialist', company: 'Marketing Agency', applicants: 6, startDate: new Date(), endDate: new Date(), applicationHistory: [] },
-  ];
-
-  constructor(public dialog: MatDialog, private userContext: LoggedUserService, private profileService: ProfileService) {
+  constructor(public dialog: MatDialog, private userContext: LoggedUserService, private profileService: ProfileService, private jobsService: JobsService) {
 
     this.jobOfferForm = {
       title: ['', Validators.required],
@@ -183,6 +177,8 @@ export class HomeComponent implements OnInit {
     try {
       if (userId) {
         const user = await this.profileService.getUserDetails(userId);
+        const jobsAuthor = await this.jobsService.getJobsAuthor();
+        this.userJobOffers = jobsAuthor;
         this.user = user.primary;
       }
     } catch (err) {

@@ -1,59 +1,62 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { OrganizationsService } from './organizations.service';
 
 @Component({
     selector: 'add-organization-modal',
     template: `
         <div class="modal-content p-14" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
+            <div role="document">
                 <form (ngSubmit)="addOrganization()" #dateRangeForm="ngForm"> 
                     <div class="modal-header">
-                    <h5 class="modal-title">Add Job Offer</h5>
+                        <h5 class="modal-title">Add Organization</h5>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group flex flex-col gap-y-1">
                             <mat-form-field>
-                            <input matInput placeholder="Name" required>
+                                <input matInput placeholder="Name" name="name" [(ngModel)]="organizationForm.name" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput placeholder="Description" name="description" [(ngModel)]="organizationForm.description" required>
                             </mat-form-field>
                         </div>
                     </div>
                     <div class="modal-footer">
-                    <button type="button" mat-button color="warn" >Close</button>
-                    <button type="submit" mat-button color="primary" [disabled]="jobOfferForm.invalid">Add Organization</button>
+                        <button type="button" mat-button color="warn" (click)="closeModal()">Close</button>
+                        <button type="submit" mat-button color="primary">Add Organization</button>
                     </div>
                 </form>
-                </div>
             </div>
         </div>
     `
 })
 
-export class AddOrganizationModalComponent implements OnInit {
-    jobOfferForm: any;
+export class AddOrganizationModalComponent {
+    organizationForm: AddOrganizationDto;
     newJobOffer: any = {};
-    user: any;
 
     constructor(
         public dialogRef: MatDialogRef<AddOrganizationModalComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any
+        @Inject(MAT_DIALOG_DATA) public data: any,
+        private organizationsService: OrganizationsService
     ) {
-        this.user = this.data.user;
-        this.jobOfferForm = {
-            title: ['', Validators.required],
-            company: ['', Validators.required],
-            dateForm: new FormGroup({
-                start: new FormControl(new Date()),
-                end: new FormControl(new Date())
-            })
+        this.organizationForm = {
+            name: '',
+            description: ''
         };
     }
 
-    addOrganization() {
-        
+    closeModal() {
+        this.dialogRef.close();
     }
 
-    ngOnInit() { }
+    async addOrganization() {
+        await this.organizationsService.addOrganization({
+            name: this.organizationForm.name,
+            description: this.organizationForm.description
+        });
+        this.dialogRef.close();
+    }
 
 }

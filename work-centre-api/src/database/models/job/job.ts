@@ -3,4 +3,6 @@ export interface JobSchema {
     company: string;
     dateFrom: Date;
     dateTo: Date;
+    details: string;
+    applicants: number;
 }
