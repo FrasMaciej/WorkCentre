@@ -19,4 +19,8 @@ export class JobsService {
     addJob(job: JobDto): Promise<JobDto[]> {
         return lastValueFrom(this.httpClient.post<JobDto[]>(environment.apiURL + '/jobs', { job, ownerId: this.user.id }));
     }
+
+    removeJob(id: string): Promise<JobDto[]> {
+        return lastValueFrom(this.httpClient.delete<JobDto[]>(environment.apiURL + `/jobs/${id}`));
+    }
 }

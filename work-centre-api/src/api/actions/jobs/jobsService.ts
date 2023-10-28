@@ -33,6 +33,16 @@ export async function getJobs(req, res) {
     }
 }
 
+export async function removeJob(req, res) {
+    const id = req.params.id;
+    try {
+        await collections.jobs?.deleteOne({ _id: new ObjectId(id) });
+        return res.status(200).json();
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 export async function getJobsAuthor(req, res) {
     const userId = req.params.id;
 

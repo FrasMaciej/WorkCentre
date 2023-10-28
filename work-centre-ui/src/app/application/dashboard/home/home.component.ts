@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddOfferModalComponent } from './addOfferModal.component';
 import { LoggedUserService } from 'src/app/commonServices/userContext.service';
 import { ProfileService } from '../profile/profile.service';
 import { AddOrganizationModalComponent } from './addOrganizationModal.component';
 import { JobsService } from './jobs.service';
+import { ConfirmationDialog } from 'src/app/library/confirmationModal/confirmationDialog.component';
+
 
 @Component({
   selector: 'home',
@@ -151,6 +153,7 @@ import { JobsService } from './jobs.service';
   ],
 })
 export class HomeComponent implements OnInit {
+  confirmationDialog: MatDialogRef<ConfirmationDialog>;
   isAddJobModalOpen: boolean = false;
   selectedOffer: any;
   newJobOffer: any = {};
@@ -160,7 +163,10 @@ export class HomeComponent implements OnInit {
   userJobOffers = [];
   appliedJobOffers = [];
 
-  constructor(public dialog: MatDialog, private userContext: LoggedUserService, private profileService: ProfileService, private jobsService: JobsService) {
+  constructor(
+    public dialog: MatDialog, private userContext: LoggedUserService, private profileService: ProfileService,
+    private jobsService: JobsService
+  ) {
 
     this.jobOfferForm = {
       title: ['', Validators.required],
@@ -173,17 +179,7 @@ export class HomeComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const userId = this.userContext.id;
-    try {
-      if (userId) {
-        const user = await this.profileService.getUserDetails(userId);
-        const jobsAuthor = await this.jobsService.getJobsAuthor();
-        this.userJobOffers = jobsAuthor;
-        this.user = user.primary;
-      }
-    } catch (err) {
-      console.error(err);
-    }
+    this.getOwnedJobs();
   }
 
   openAddJobModal() {
@@ -215,11 +211,36 @@ export class HomeComponent implements OnInit {
   }
 
   cancelOffer(offer: any) {
+    this.confirmationDialog = this.dialog.open(ConfirmationDialog, {
+      disableClose: false
+    });
+    this.confirmationDialog.componentInstance.confirmMessage = "Are you sure you want to delete organization?";
+
+    this.confirmationDialog.afterClosed().subscribe(async result => {
+      if (result) {
+        await this.jobsService.removeJob(offer._id);
+        this.getOwnedJobs();
+      }
+    });
   }
 
   isCurrentDateInRange(startDate: Date, endDate: Date): boolean {
     const currentDate = new Date();
     return startDate <= currentDate && currentDate <= endDate;
+  }
+
+  async getOwnedJobs() {
+    const userId = this.userContext.id;
+    try {
+      if (userId) {
+        const user = await this.profileService.getUserDetails(userId);
+        const jobsAuthor = await this.jobsService.getJobsAuthor();
+        this.userJobOffers = jobsAuthor;
+        this.user = user.primary;
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
 
 }
