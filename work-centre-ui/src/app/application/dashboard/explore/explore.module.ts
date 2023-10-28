@@ -5,9 +5,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { UsersListComponent } from './usersList.component';
 import { JobsListComponent } from './jobsList.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
-    imports: [CommonControlsModule, FormsModule, ReactiveFormsModule, MatDividerModule],
+    imports: [CommonControlsModule, FormsModule, ReactiveFormsModule, MatDividerModule, CommonModule],
     exports: [],
     declarations: [ExploreComponent, UsersListComponent, JobsListComponent],
     providers: [],
