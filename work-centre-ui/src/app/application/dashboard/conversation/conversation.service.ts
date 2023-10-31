@@ -16,6 +16,14 @@ export class ConversationService {
 
   constructor(private httpClient: HttpClient) {
     this.socket = io.connect(environment.serverUrl);
+
+    this.socket.on('connect_error', (error) => {
+      console.error('WebSocket connection error:', error);
+    });
+
+    this.socket.on('connect_timeout', (timeout) => {
+      console.error('WebSocket connection timeout:', timeout);
+    });
   }
 
   getMessages(): Observable<any> {

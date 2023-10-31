@@ -11,7 +11,6 @@ import { EditProfileDescriptionModalComponent } from './editProfileDescriptionMo
 @Component({
   selector: 'own-profile',
   template: `
-    <div class="mb-2 ml-1 font-medium text-xl">This is your profile</div>
     <div *ngIf="userFound" class="container mx-auto p-8 bg-gray-900 text-white">
       <div class="bg-gray-800 p-6 mb-8 rounded-md shadow-md">
         <div class="flex items-center justify-between">

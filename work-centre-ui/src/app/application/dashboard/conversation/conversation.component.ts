@@ -73,7 +73,7 @@ import { Renderer2 } from '@angular/core';
     `]
 })
 export class ConversationComponent implements OnInit, OnDestroy, AfterViewInit {
-  @Input() receiverId: string | any = '';
+  @Input() receiverId: string = '';
   @ViewChild('messagesList') messagesList!: ElementRef;
   @ViewChild('formElement') formElement!: ElementRef;
   @ViewChild('inputElement') inputElement!: ElementRef;
@@ -110,18 +110,17 @@ export class ConversationComponent implements OnInit, OnDestroy, AfterViewInit {
     this.scrollToBottom();
   }
 
-  scrollToBottom(): void {
-    try {
-      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
-    } catch (err) { }
-  }
-
   ngOnDestroy() {
     if (this.messagesSubscription) {
       this.messagesSubscription.unsubscribe();
     }
   }
 
+  scrollToBottom(): void {
+    try {
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    } catch (err) { }
+  }
 
   sendMessage() {
     if (!this.messageText) {

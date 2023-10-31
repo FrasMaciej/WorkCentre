@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ExploreService } from './explore.service';
+import { OrganizationsService } from '../home/organizations.service';
 
 export interface Section {
     name: string;
@@ -10,7 +11,8 @@ export interface Section {
 
 interface Lists {
     users: UserInfoDto[],
-    jobs: JobDto[]
+    jobs: JobDto[],
+    organizations: OrganizationDto[]
 }
 
 @Component({
@@ -44,6 +46,9 @@ interface Lists {
                 </ng-container>
                 <ng-container *ngIf="selectedItemType==='jobs'">
                     <jobs-list [jobs]="currentList.jobs"/>
+                </ng-container>
+                <ng-container *ngIf="selectedItemType==='organizations'">
+                    <organizations-list [organizations]="currentList.organizations"/>
                 </ng-container>
             </mat-list>
             <mat-paginator
@@ -106,7 +111,7 @@ export class ExploreComponent implements OnInit {
     itemTypes: any[] = [
         { value: 'jobs', viewValue: 'Jobs' },
         { value: 'users', viewValue: 'Users' },
-        { value: 'companies', viewValue: 'Companies' },
+        { value: 'organizations', viewValue: 'Companies' },
     ];
     selectedItemType = 'users';
     pageSize = 5;
@@ -115,21 +120,26 @@ export class ExploreComponent implements OnInit {
     pageEvent!: PageEvent;
     lists: Lists = {
         users: [],
-        jobs: []
+        jobs: [],
+        organizations: []
     }
 
     currentList: Lists = {
         users: [],
-        jobs: []
+        jobs: [],
+        organizations: []
+
     }
 
-    constructor(private usersService: ExploreService, private exploreService: ExploreService) { }
+    constructor(private usersService: ExploreService, private exploreService: ExploreService, private organizationsService: OrganizationsService) { }
 
     async ngOnInit() {
         this.lists.users = await this.getUsers();
         this.lists.jobs = await this.getJobs();
+        this.lists.organizations = await this.getOrganizations();
         this.currentList.users = this.lists.users.slice(0, this.pageSize);
         this.currentList.jobs = this.lists.jobs.slice(0, this.pageSize);
+        this.currentList.organizations = this.lists.organizations.slice(0, this.pageSize);
 
         this.paginator.pageSize = this.pageSize;
         this.paginator.pageIndex = this.pageIndex;
@@ -143,11 +153,19 @@ export class ExploreComponent implements OnInit {
         return this.exploreService.getJobs();
     }
 
+    async getOrganizations() {
+        return this.organizationsService.getOrganizations();
+    }
+
     onPageChange(event: PageEvent) {
+        const itemsFrom = this.paginator.pageIndex * this.paginator.pageSize;
+        const itemsTo = (this.paginator.pageIndex + 1) * this.paginator.pageSize;
         if (this.selectedItemType === 'users') {
-            return this.currentList.users = this.lists.users.slice(this.paginator.pageIndex * this.paginator.pageSize, (this.paginator.pageIndex + 1) * this.paginator.pageSize);
+            return this.currentList.users = this.lists.users.slice(itemsFrom, itemsTo);
         } else if (this.selectedItemType === 'jobs') {
-            return this.currentList.jobs = this.lists.jobs.slice(this.paginator.pageIndex * this.paginator.pageSize, (this.paginator.pageIndex + 1) * this.paginator.pageSize);;
+            return this.currentList.jobs = this.lists.jobs.slice(itemsFrom, itemsTo);
+        } else if (this.selectedItemType === 'organizations') {
+            return this.currentList.organizations = this.lists.organizations.slice(itemsFrom, itemsTo);
         } else {
             return 0;
         }
@@ -158,6 +176,8 @@ export class ExploreComponent implements OnInit {
             return this.lists.users.length;
         } else if (this.selectedItemType === 'jobs') {
             return this.lists.jobs.length;
+        } else if (this.selectedItemType === 'organizations') {
+            return this.lists.organizations.length;
         } else {
             return 0;
         }

@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
         <mat-list-item *ngFor="let offer of jobs; let last = last" [class.mat-list-item-divider]="!last">
             <div class="flex flex-row size items-center" [class.item_highlight]="hoveredItem === offer">
                 <div class="circle-container cursor-pointer">
-                    <img src="assets/job_placeholder2.png" alt="Avatar">
+                    <img src="assets/job_placeholder.png" alt="Avatar">
                 </div>
                 <div class="ml-4 cursor-pointer">
                     <div class="text-color" matListItemTitle>{{offer.name}}</div>
