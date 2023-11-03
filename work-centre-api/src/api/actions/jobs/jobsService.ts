@@ -7,7 +7,6 @@ export async function addJob(req, res) {
 
     try {
         const createdJob = await collections.jobs?.insertOne(job);
-        console.log(createdJob);
         if (createdJob?.insertedId) {
             try {
                 await collections.users?.updateOne({ _id: new ObjectId(id) }, { $push: { jobsAuthor: String(createdJob.insertedId) } });
