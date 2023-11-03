@@ -21,7 +21,7 @@ import organizationsApiRouter from './api/routes/organizationsApi';
 export const app = express();
 export const server = require('http').createServer(app);
 
-const chat = require('./chat');
+const chat = require('./sockets/chat');
 console.log(chat);
 
 const JWTStrategy = passportJWT.Strategy;
