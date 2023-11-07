@@ -3,6 +3,10 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ExploreService } from './explore.service';
 import { OrganizationsService } from '../home/organizations.service';
+import { JobsService } from '../home/jobs.service';
+import { takeWhile } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+
 
 export interface Section {
     name: string;
@@ -128,10 +132,15 @@ export class ExploreComponent implements OnInit {
         users: [],
         jobs: [],
         organizations: []
-
     }
+    private subscriptions = new Subscription();
 
-    constructor(private usersService: ExploreService, private exploreService: ExploreService, private organizationsService: OrganizationsService) { }
+
+    constructor(
+        private usersService: ExploreService,
+        private exploreService: ExploreService,
+        private organizationsService: OrganizationsService,
+        private jobsService: JobsService) { }
 
     async ngOnInit() {
         this.lists.users = await this.getUsers();
@@ -143,6 +152,19 @@ export class ExploreComponent implements OnInit {
 
         this.paginator.pageSize = this.pageSize;
         this.paginator.pageIndex = this.pageIndex;
+
+        this.subscriptions.add(
+            this.jobsService.data.subscribe(res => {
+                if (!!res) {
+                    this.lists.jobs = res;
+                    this.currentList.jobs = res;
+                }
+            })
+        );
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
     }
 
     async getUsers() {

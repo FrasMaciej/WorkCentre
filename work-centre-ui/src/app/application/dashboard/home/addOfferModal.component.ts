@@ -90,8 +90,11 @@ export class AddOfferModalComponent {
                 dateTo: this.jobOfferForm.dateForm.get('end').value,
                 applicants: 0
             });
+            const jobs = await this.jobsService.getJobs();
+            console.log(jobs);
+            this.jobsService.setData(jobs);
         } catch (err) {
-
+            console.error(err);
         }
     }
 

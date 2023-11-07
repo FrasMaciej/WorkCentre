@@ -7,6 +7,7 @@ import { ProfileService } from '../profile/profile.service';
 import { AddOrganizationModalComponent } from './addOrganizationModal.component';
 import { JobsService } from './jobs.service';
 import { ConfirmationDialog } from 'src/app/library/confirmationModal/confirmationDialog.component';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -162,6 +163,7 @@ export class HomeComponent implements OnInit {
 
   userJobOffers = [];
   appliedJobOffers = [];
+  subscriptions = new Subscription();
 
   constructor(
     public dialog: MatDialog, private userContext: LoggedUserService, private profileService: ProfileService,
@@ -180,6 +182,13 @@ export class HomeComponent implements OnInit {
 
   async ngOnInit() {
     this.getOwnedJobs();
+    this.subscriptions.add(
+      this.jobsService.data.subscribe(res => {
+        if (!!res) {
+          this.getOwnedJobs();
+        }
+      })
+    );
   }
 
   openAddJobModal() {

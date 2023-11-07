@@ -10,9 +10,9 @@ export async function addJob(req, res) {
         if (createdJob?.insertedId) {
             try {
                 await collections.users?.updateOne({ _id: new ObjectId(id) }, { $push: { jobsAuthor: String(createdJob.insertedId) } });
-                return res.status(201);
+                return res.status(201).json({});
             } catch (err) {
-                return res.status(400);
+                return res.status(400).json({});
             }
         } else {
             return res.status(400).send('Job creation failed');
