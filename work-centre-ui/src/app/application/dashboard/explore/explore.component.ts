@@ -115,10 +115,10 @@ export class ExploreComponent implements OnInit {
     itemTypes: any[] = [
         { value: 'jobs', viewValue: 'Jobs' },
         { value: 'users', viewValue: 'Users' },
-        { value: 'organizations', viewValue: 'Companies' },
+        { value: 'organizations', viewValue: 'Organizations' },
     ];
-    selectedItemType = 'users';
-    pageSize = 5;
+    selectedItemType = 'jobs';
+    pageSize = 10;
     pageIndex = 0;
     pageSizeOptions: number[] = [5, 10, 25];
     pageEvent!: PageEvent;

@@ -1,56 +1,60 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'jobs-list',
-    template: `
-        <mat-list-item *ngFor="let offer of jobs; let last = last" [class.mat-list-item-divider]="!last">
-            <div class="flex flex-row size items-center" [class.item_highlight]="hoveredItem === offer">
-                <div class="circle-container cursor-pointer">
-                    <img src="assets/job_placeholder.png" alt="Avatar">
-                </div>
-                <div class="ml-4 cursor-pointer">
-                    <div class="text-color" matListItemTitle>{{offer.name}}</div>
-                    <div class="text-color" matListItemLine>{{offer.details}}</div>
-                </div>
-            </div>
-        </mat-list-item>
-    `,
-    styles: [`
-        .text-color {
-            color: var(--white);
-        }
+  selector: 'jobs-list',
+  template: `
+    <mat-grid-list cols="2" rowHeight="100px" gutterSize="16px">
+      <mat-grid-tile *ngFor="let offer of jobs" (mouseenter)="setHoveredItem(offer)" (mouseleave)="setHoveredItem(null)">
+        <div class="tile-content" [class.item_highlight]="hoveredItem === offer">
+          <div class="circle-container cursor-pointer">
+            <img src="assets/job_placeholder.png" alt="Avatar">
+          </div>
+          <div class="ml-4 cursor-pointer">
+            <div class="text-color" matListItemTitle>{{offer.name}}</div>
+            <div class="text-color" matListItemLine>{{offer.details}}</div>
+          </div>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+  `,
+  styles: [`
+    .text-color {
+      color: var(--white);
+    }
 
-        .circle-container {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            overflow: hidden;
-        }
+    .circle-container {
+      width: 55px;
+      height: 55px;
+      border-radius: 5%;
+      overflow: hidden;
+    }
 
-        .item_highlight:hover {
-            background-color: gray;
-            color: var(--gray) !important;
-        }
+    .item_highlight {
+      background-color: gray;
+      color: var(--gray) !important;
+    }
 
-        .size {
-            height: 60px;
-            padding-bottom: 18px;
-        }
-        .mat-list-item-divider {
-            border-bottom: 1px solid gray;
-        }
-    `]
+    .tile-content {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      border: 1px solid gray;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 95%;
+    }
+  `]
 })
 
 export class JobsListComponent implements OnInit {
-    @Input() jobs: any;
-    hoveredItem: any;
+  @Input() jobs: any;
+  hoveredItem: any;
 
-    constructor() { }
+  constructor() { }
 
-    ngOnInit() { }
+  ngOnInit() { }
 
-    setHoveredItem(offer: any) {
-        this.hoveredItem = offer;
-    }
+  setHoveredItem(offer: any) {
+    this.hoveredItem = offer;
+  }
 }

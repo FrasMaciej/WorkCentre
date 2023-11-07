@@ -4,17 +4,19 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'users-list',
     template: `
-    <mat-list-item *ngFor="let user of users; let last = last" [class.mat-list-item-divider]="!last"> 
-        <div class="flex flex-row items-center size" (click)="navigateToProfile(user._id)">
-            <div class="circle-container cursor-pointer">
-                <img src="assets/avatar_placeholder.jpg" alt="Avatar">
-            </div>
-            <div class="ml-4 cursor-pointer">
-                <div class="text-color" matListItemTitle>{{user.firstName}}</div>
-                <div class="text-color" matListItemLine>{{user.lastName}}</div>
-            </div>
-        </div>
-    </mat-list-item>
+        <mat-grid-list cols="2" rowHeight="100px" gutterSize="16px">
+            <mat-grid-tile *ngFor="let user of users" (mouseenter)="setHoveredItem(user)" (mouseleave)="setHoveredItem(null)">
+                <div class="tile-content" [class.item_highlight]="hoveredItem === user">
+                <div class="circle-container cursor-pointer">
+                    <img src="assets/avatar_placeholder.jpg" alt="Avatar">
+                </div>
+                <div class="ml-4 cursor-pointer">
+                    <div class="text-color" matListItemTitle>{{user.firstName}}</div>
+                    <div class="text-color" matListItemLine>{{user.lastName}}</div>
+                </div>
+                </div>
+            </mat-grid-tile>
+        </mat-grid-list>
     `,
     styles: [`
         .text-color {
@@ -22,30 +24,32 @@ import { Router } from '@angular/router';
         }
 
         .circle-container {
-            width: 55px; 
+            width: 55px;
             height: 55px;
-            border-radius: 50%;
+            border-radius: 5%;
             overflow: hidden;
         }
 
-        .item_highlight:hover{
+        .item_highlight {
             background-color: gray;
             color: var(--gray) !important;
         }
-        
-        .size {
-            height: 60px;
-            padding-bottom: 18px;
-        }
 
-        .mat-list-item-divider {
-            border-bottom: 1px solid gray;
+        .tile-content {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border: 1px solid gray;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 95%;
         }
     `]
 })
 
 export class UsersListComponent implements OnInit {
     @Input() users: UserInfoDto[] = [];
+    hoveredItem: any;
 
     constructor(private router: Router) { }
 
@@ -53,5 +57,9 @@ export class UsersListComponent implements OnInit {
 
     navigateToProfile(id: string) {
         this.router.navigate(['dashboard', 'profile', id])
+    }
+
+    setHoveredItem(offer: any) {
+        this.hoveredItem = offer;
     }
 }

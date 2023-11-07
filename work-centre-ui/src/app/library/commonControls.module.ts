@@ -15,6 +15,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 
 
@@ -24,7 +25,7 @@ import { MatTableModule } from '@angular/material/table';
         MatButtonModule, MatToolbarModule, MatIconModule, AngularSvgIconModule,
         MatFormFieldModule, MatInputModule, MatCardModule, MatListModule,
         MatSelectModule, MatPaginatorModule, MatMenuModule, MatDialogModule,
-        MatDatepickerModule, MatNativeDateModule, MatTableModule
+        MatDatepickerModule, MatNativeDateModule, MatTableModule, MatGridListModule
     ],
     declarations: [],
 })
