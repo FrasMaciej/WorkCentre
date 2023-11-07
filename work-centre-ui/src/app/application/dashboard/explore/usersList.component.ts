@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
     selector: 'users-list',
     template: `
         <mat-grid-list cols="2" rowHeight="100px" gutterSize="16px">
-            <mat-grid-tile *ngFor="let user of users" (mouseenter)="setHoveredItem(user)" (mouseleave)="setHoveredItem(null)">
+            <mat-grid-tile *ngFor="let user of users" (mouseenter)="setHoveredItem(user)" (mouseleave)="setHoveredItem(null)" (click)="navigateToProfile(user._id)">
                 <div class="tile-content" [class.item_highlight]="hoveredItem === user">
                 <div class="circle-container cursor-pointer">
                     <img src="assets/avatar_placeholder.jpg" alt="Avatar">
