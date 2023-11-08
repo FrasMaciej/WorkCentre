@@ -57,6 +57,7 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
         <p class="not-found-message">Sorry, the requested user could not be found.</p>
       </div>
     </div>
+    
   `,
   styles: [
     `
