@@ -15,10 +15,9 @@ Deployment: Azure:
 #### Done:
 - Registration with Passport
 - Basic User Dashborad
-
+- Frontend and Backend configuration with github actions and deploy on Azure
 
 #### Mostly done:
-- Frontend and Backend configuration with github actions and deploy on Azure (mostly done, needs some CI/CD improvements)
 
 #### To-do:
 - Registration with OAuth
