@@ -53,6 +53,11 @@ import { FormControl, FormGroup } from '@angular/forms';
     </div>
   `,
   styles: [`
+    .modal-body {
+      max-height: 400px; 
+      overflow-y: auto; 
+      padding: 40px;
+    }
   `]
 })
 export class EditExperienceModalComponent {
@@ -63,17 +68,19 @@ export class EditExperienceModalComponent {
     private profileService: ProfileService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.experience = this.data.userDetails?.experience ? this.data.userDetails?.experience.map((exp: any) => ({
-      name: exp.name,
-      period: {
-        from: exp.period.from,
-        to: exp.period.to,
-        form: new FormGroup({
-          start: new FormControl(exp.period.from),
-          end: new FormControl(exp.period.to)
-        })
-      }
-    })) :
+    this.experience = this.data.userDetails?.experience ? [
+      ...this.data.userDetails?.experience.map((exp: any) => ({
+        name: exp.name,
+        period: {
+          from: exp.period.from,
+          to: exp.period.to,
+          form: new FormGroup({
+            start: new FormControl(exp.period.from),
+            end: new FormControl(exp.period.to)
+          })
+        }
+      }))
+    ] :
       [
         {
           name: '',
@@ -123,6 +130,7 @@ export class EditExperienceModalComponent {
         })
       }
     });
+    console.log(this.experience)
   }
 
   removeExperience(index: number) {

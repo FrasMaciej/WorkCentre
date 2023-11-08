@@ -287,18 +287,16 @@ export class OwnProfileComponent implements OnInit {
   constructor(private profileService: ProfileService, private dialog: MatDialog, private userContext: LoggedUserService) { }
 
   async ngOnInit() {
-    const userId = this.userContext.id;
     try {
-      if (userId) {
-        const user = await this.profileService.getUserDetails(userId);
-        this.user = user.primary;
-        this.userDetails = user.details;
-        this.userFound = true;
-      }
+      this.getUserData();
     } catch (err) {
       this.userFound = false;
       this.showNotFoundUserInfo = true;
     }
+
+    this.dialog.afterAllClosed.subscribe(result => {
+      this.getUserData();
+    })
   }
 
   async modifyProfileField(field: string) {
@@ -352,4 +350,13 @@ export class OwnProfileComponent implements OnInit {
     }
   }
 
+  async getUserData() {
+    const userId = this.userContext.id;
+    if (userId) {
+      const user = await this.profileService.getUserDetails(userId);
+      this.user = user.primary;
+      this.userDetails = user.details;
+      this.userFound = true;
+    }
+  }
 }

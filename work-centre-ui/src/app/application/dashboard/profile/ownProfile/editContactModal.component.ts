@@ -28,7 +28,6 @@ import { ProfileService } from '../profile.service';
     </div>
   `,
   styles: [`
-    /* You can include any custom styles here if needed */
   `]
 })
 export class EditContactModalComponent {

@@ -7,7 +7,7 @@ import { ProfileService } from '../profile.service';
   template: `
     <div class="bg-white p-14 shadow-md" *ngIf="skills">
       <h2 class="text-2xl font-bold mb-4">Edit Skills Section</h2>
-      <form (ngSubmit)="saveChanges()" #skillsForm="ngForm">
+      <form (ngSubmit)="saveChanges()" #skillsForm="ngForm" class="modal-body">
         <div class="mb-4" *ngFor="let skill of skills; let i = index">
           <div class="flex justify-between mb-2">
             <label for="skills" class="block text-sm font-medium text-gray-600">Skill {{ i + 1 }}:</label>
@@ -37,6 +37,11 @@ import { ProfileService } from '../profile.service';
     </div>
   `,
   styles: [`
+      .modal-body {
+        max-height: 400px; 
+        overflow-y: auto; 
+        padding: 40px;
+      }
   `]
 })
 export class EditSkillsModalComponent {
@@ -50,7 +55,7 @@ export class EditSkillsModalComponent {
     if (!this.data.userDetails?.skills || this.data.userDetails?.skills.length <= 0) {
       this.skills = [{ name: '', description: '' }]
     } else {
-      this.skills = this.data.userDetails.skills;
+      this.skills = this.data.userDetails.skills.map(s => s);
     }
   }
 
