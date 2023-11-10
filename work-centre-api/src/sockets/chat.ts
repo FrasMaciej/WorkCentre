@@ -4,6 +4,7 @@ import { app } from "../app";
 import { MessageSchema } from '../database/models/message/message';
 import { ObjectId } from 'mongodb';
 import { server } from "../app";
+import { Server as Engine } from "engine.io";
 
 const path = require('path');
 
@@ -14,6 +15,7 @@ const io = require('socket.io')(server, {
         methods: ["GET", "POST"]
     }
 });
+
 
 app.use(express.static(path.join(__dirname, "public")));
 io.on('connection', (socket) => {
@@ -148,4 +150,9 @@ io.on('connection', (socket) => {
     })
 
 });
+
 io.attach(server);
+
+server.on('upgrade', (request, socket, head) => {
+    (io.engine as Engine).handleUpgrade(request, socket, head);
+});
