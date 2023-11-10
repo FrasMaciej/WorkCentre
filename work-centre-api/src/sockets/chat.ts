@@ -5,11 +5,12 @@ import { MessageSchema } from '../database/models/message/message';
 import { ObjectId } from 'mongodb';
 import { server } from "../app";
 import { Server as Engine } from "engine.io";
+import { Server } from "socket.io";
 
 const path = require('path');
 
 
-const io = require('socket.io')(server, {
+const io = new Server(server, {
     cors: {
         origin: ['http://star-jobs.azurewebsites.net', 'https://star-jobs.azurewebsites.net', 'http://localhost:4200', 'https://localhost:4200'],
         methods: ["GET", "POST"]
