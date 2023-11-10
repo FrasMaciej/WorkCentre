@@ -7,6 +7,7 @@ import { EditSkillsModalComponent } from './editSkillsModal.component';
 import { EditContactModalComponent } from './editContactModal.component';
 import { EditExperienceModalComponent } from './editExperienceModal.component';
 import { EditProfileDescriptionModalComponent } from './editProfileDescriptionModal.component';
+import { ComponentType } from '@angular/cdk/portal';
 
 @Component({
   selector: 'own-profile',
@@ -129,11 +130,9 @@ import { EditProfileDescriptionModalComponent } from './editProfileDescriptionMo
         <p class="not-found-message">Sorry, the requested user could not be found.</p>
       </div>
     </div>
-
-
-    `,
+  `,
   styles: [`
-    .button-section {
+  .button-section {
       display: flex;
       margin-bottom: 20px;
     }
@@ -261,19 +260,18 @@ import { EditProfileDescriptionModalComponent } from './editProfileDescriptionMo
     .not-found-message {
       color: #888;
     }
-    `]
+  `]
 })
 
 export class OwnProfileComponent implements OnInit {
   userFound = false;
   showNotFoundUserInfo = false;
-  hideButtons = false;
   user: UserInfoDto = {
     _id: '',
     email: '',
     firstName: '',
     lastName: ''
-  }
+  };
   userDetails: UserDetails = {
     headerInfo: '',
     company: '',
@@ -282,7 +280,13 @@ export class OwnProfileComponent implements OnInit {
     experience: [],
     phone: 0,
     email: ''
-  }
+  };
+  sections = [
+    { title: 'Description', field: 'profileDescription', type: 'text' },
+    { title: 'Skills', field: 'skills', type: 'list' },
+    { title: 'Experience', field: 'experience', type: 'list' },
+    { title: 'Contact', field: 'email', type: 'text' }
+  ];
 
   constructor(private profileService: ProfileService, private dialog: MatDialog, private userContext: LoggedUserService) { }
 
@@ -296,57 +300,38 @@ export class OwnProfileComponent implements OnInit {
 
     this.dialog.afterAllClosed.subscribe(result => {
       this.getUserData();
-    })
+    });
   }
 
   async modifyProfileField(field: string) {
     try {
-      switch (field) {
-        case 'main':
-          this.dialog.open(EditMainDataModalComponent, {
-            data: {
-              user: { ...this.user },
-              userDetails: { ...this.userDetails },
-            }
-          });
-          break;
-        case 'skills':
-          this.dialog.open(EditSkillsModalComponent, {
-            data: {
-              user: { ...this.user },
-              userDetails: { ...this.userDetails },
-            }
-          });
-          break;
-        case 'profileDescription':
-          this.dialog.open(EditProfileDescriptionModalComponent, {
-            data: {
-              user: { ...this.user },
-              userDetails: { ...this.userDetails },
-            }
-          });
-          break;
-        case 'experience':
-          this.dialog.open(EditExperienceModalComponent, {
-            data: {
-              user: { ...this.user },
-              userDetails: { ...this.userDetails },
-            }
-          });
-          break;
-        case 'contact':
-          this.dialog.open(EditContactModalComponent, {
-            data: {
-              user: { ...this.user },
-              userDetails: { ...this.userDetails },
-            }
-          });
-          break;
-        default:
-          break;
-      }
+      const modalComponent = this.getModalComponent(field);
+      const dialogRef = this.dialog.open(modalComponent, {
+        data: { user: { ...this.user }, userDetails: { ...this.userDetails } }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        this.getUserData();
+      });
     } catch (error) {
       console.error('Error modifying profile field:', error);
+    }
+  }
+
+  getModalComponent(field: string): ComponentType<any> {
+    switch (field) {
+      case 'main':
+        return EditMainDataModalComponent;
+      case 'skills':
+        return EditSkillsModalComponent;
+      case 'profileDescription':
+        return EditProfileDescriptionModalComponent;
+      case 'experience':
+        return EditExperienceModalComponent;
+      case 'contact':
+        return EditContactModalComponent;
+      default:
+        throw new Error(`Invalid field: ${field}`);
     }
   }
 

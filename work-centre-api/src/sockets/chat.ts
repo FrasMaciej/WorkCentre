@@ -7,6 +7,7 @@ import { server } from "../app";
 
 const path = require('path');
 
+
 const io = require('socket.io')(server, {
     cors: {
         origin: ['http://star-jobs.azurewebsites.net', 'https://star-jobs.azurewebsites.net', 'http://localhost:4200', 'https://localhost:4200'],
@@ -16,6 +17,10 @@ const io = require('socket.io')(server, {
 
 app.use(express.static(path.join(__dirname, "public")));
 io.on('connection', (socket) => {
+    socket.on('join-room', (roomId) => {
+        socket.join(roomId);
+    });
+
     socket.on('send-message', async (message) => {
         if (!message.sender || !message.receiver) {
             return;
@@ -31,6 +36,8 @@ io.on('connection', (socket) => {
         const senderUser = await collections.users?.findOne({ _id: new ObjectId(newMessage.sender) });
         const receiverUser = await collections.users?.findOne({ _id: new ObjectId(newMessage.receiver) });
         const conversation = await collections.conversations?.findOne({ _id: new ObjectId(newMessage.chatId) });
+
+        const roomId = String(conversation?._id);
 
         if (conversation) {
             await collections.conversations?.updateOne(
@@ -55,7 +62,7 @@ io.on('connection', (socket) => {
                     { $push: { "conversationIds": String(result?.insertedId) } });
             }
         }
-        io.emit('message-received', message);
+        io.to(roomId).emit('message-received', message);
     });
 
     socket.on('send-message-dedicated', async (message) => {

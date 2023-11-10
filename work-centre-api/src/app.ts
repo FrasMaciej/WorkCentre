@@ -19,6 +19,7 @@ import jobsApiRouter from './api/routes/jobsApi';
 import organizationsApiRouter from './api/routes/organizationsApi';
 
 export const app = express();
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 export const server = require('http').createServer(app);
 
 const chat = require('./sockets/chat');

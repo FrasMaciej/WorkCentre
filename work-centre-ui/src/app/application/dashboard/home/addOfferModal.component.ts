@@ -103,7 +103,6 @@ export class AddOfferModalComponent implements OnInit {
                     applicants: 0
                 });
                 const jobs = await this.jobsService.getJobs();
-                console.log(jobs);
                 this.jobsService.setData(jobs);
             } catch (err) {
                 console.error(err);

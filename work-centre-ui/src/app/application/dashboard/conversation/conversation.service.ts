@@ -34,7 +34,6 @@ export class ConversationService {
     });
   }
 
-
   sendMessage(message: sendMessageDto): void {
     this.socket.emit('send-message', message);
   }
@@ -45,5 +44,9 @@ export class ConversationService {
 
   getChats(userId: string): Promise<ConversationDto> {
     return lastValueFrom(this.httpClient.get<ConversationDto>(environment.apiURL + '/chats/' + userId));
+  }
+
+  joinConversationRoom(conversationId: string): void {
+    this.socket.emit('join-room', conversationId);
   }
 }
