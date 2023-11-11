@@ -32,6 +32,16 @@ export async function getJobs(req, res) {
     }
 }
 
+export async function getJob(req, res) {
+    const id = req.params.id;
+    const job = await collections.jobs?.findOne({ _id: new ObjectId(id) })
+    try {
+        return res.json(job);
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 export async function removeJob(req, res) {
     const id = req.params.id;
     try {

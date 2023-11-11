@@ -7,11 +7,12 @@ import { UsersListComponent } from './usersList.component';
 import { JobsListComponent } from './jobsList.component';
 import { OrganizationsListComponent } from './oganizationsList.component';
 import { CommonModule } from '@angular/common';
+import { JobPageComponent } from './jobPage.component';
 
 @NgModule({
     imports: [CommonControlsModule, FormsModule, ReactiveFormsModule, MatDividerModule, CommonModule],
     exports: [],
-    declarations: [ExploreComponent, UsersListComponent, JobsListComponent, OrganizationsListComponent],
+    declarations: [ExploreComponent, UsersListComponent, JobsListComponent, OrganizationsListComponent, JobPageComponent],
     providers: [],
 })
 export class ExploreModule { }

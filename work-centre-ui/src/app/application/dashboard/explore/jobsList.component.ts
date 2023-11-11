@@ -1,11 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'jobs-list',
   template: `
     <mat-grid-list cols="2" rowHeight="100px" gutterSize="16px">
       <mat-grid-tile *ngFor="let offer of jobs" (mouseenter)="setHoveredItem(offer)" (mouseleave)="setHoveredItem(null)">
-        <div class="tile-content" [class.item_highlight]="hoveredItem === offer">
+        <div class="tile-content" [class.item_highlight]="hoveredItem === offer" (click)="navigateToJob(offer)">
           <div class="circle-container cursor-pointer">
             <img src="assets/job_placeholder.png" alt="Avatar">
           </div>
@@ -50,11 +51,15 @@ export class JobsListComponent implements OnInit {
   @Input() jobs: any;
   hoveredItem: any;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() { }
 
   setHoveredItem(offer: any) {
     this.hoveredItem = offer;
+  }
+
+  navigateToJob(offer) {
+    this.router.navigate(['dashboard', 'job', offer._id])
   }
 }

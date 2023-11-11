@@ -8,6 +8,7 @@ import { OwnProfileComponent } from "./profile/ownProfile/ownProfile.component";
 import { AuthGuardService } from "../authorization/authGuard.service";
 import { UserProfileComponent } from "./profile/userProfile/userProfile.component";
 import { RecruiterPanelComponent } from "./recruiterPanel/recruiterPanel.component";
+import { JobPageComponent } from "./explore/jobPage.component";
 
 export const routes: Routes = [
     {
@@ -21,6 +22,13 @@ export const routes: Routes = [
             { path: 'notifications', component: NotificationsComponent },
             { path: 'conversation', component: ConversationComponent },
             { path: 'recruiter-panel', component: RecruiterPanelComponent },
+            {
+                path: 'job', children: [
+                    {
+                        path: ':id', component: JobPageComponent
+                    }
+                ]
+            },
             {
                 path: 'profile', children: [
                     {
