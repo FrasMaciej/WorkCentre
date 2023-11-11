@@ -6,14 +6,11 @@ import { JobsService } from './jobs.service';
 @Component({
     selector: 'add-offer-modal',
     template: `
-        <div class="modal-content p-14" tabindex="-1" role="dialog">
+        <h1 mat-dialog-title class="bg-blue-700 text-white p-4">Add new job offer</h1>
+        <div class="p-8" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <form (ngSubmit)="addJobOffer()" [formGroup]="jobOfferForm"> 
-                    <div class="modal-header">
-                        <h5 class="modal-title">Add Job Offer</h5>
-                    </div>
-                    <div class="modal-body">
+                <form (ngSubmit)="addJobOffer()" [formGroup]="jobOfferForm" class="modal-content"> 
+                    <div class="mb-10 gap-y-2">
                         <div class="form-group">
                             <mat-form-field>
                                 <input matInput placeholder="Title" formControlName="name">
@@ -44,20 +41,24 @@ import { JobsService } from './jobs.service';
                             <mat-error *ngIf="jobOfferForm.get('dateForm').get('start').hasError('required') || jobOfferForm.get('dateForm').get('end').hasError('required')">Date is required</mat-error>
                         </mat-form-field>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" mat-button color="warn" (click)="closeModal()">Close</button>
-                        <button type="submit" mat-button color="primary" [disabled]="jobOfferForm.invalid">Add Job Offer</button>
+                    <div class="modal-footer gap-x-4">
+                        <button type="button" mat-stroked-button color="basic" (click)="closeModal()">Close</button>
+                        <button type="submit" mat-raised-button color="primary" [disabled]="jobOfferForm.invalid">Add Job Offer</button>
                     </div>
                 </form>
-                </div>
             </div>
         </div>
     `,
     styles: [`
         mat-form-field {
             ::ng-deep {
-                width: 260px;
+                width: 100%;
             }
+        }
+
+        .modal-content {
+            width: 500px;
+            height: 400px;
         }
     `]
 })

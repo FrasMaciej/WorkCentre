@@ -6,10 +6,10 @@ import { ProfileService } from '../profile.service';
 @Component({
   selector: 'app-edit-skills-modal',
   template: `
-    <div class="bg-white p-14 shadow-md" *ngIf="skillsForm">
-      <h2 class="text-2xl font-bold mb-4">Edit Skills Section</h2>
-      <form [formGroup]="skillsForm" (ngSubmit)="saveChanges()" class="modal-body">
-        <div formArrayName="skills">
+    <h1 mat-dialog-title class="bg-blue-700 text-white p-4">Edit Skills Section</h1>
+    <div class="bg-white p-4 shadow-md modal-size" *ngIf="skillsForm">
+      <form [formGroup]="skillsForm" (ngSubmit)="saveChanges()" class="flex flex-col justify-between">
+      <div formArrayName="skills">
           <div *ngFor="let skillGroup of skillsForm.controls['skills']['controls']; let i = index">
             <div class="flex justify-between mb-2">
               <label class="block text-sm font-medium text-gray-600">Skill {{ i + 1 }}:</label>
@@ -18,33 +18,50 @@ import { ProfileService } from '../profile.service';
               </button>
             </div>
             <div formGroupName="{{ i }}" class="flex flex-col mb-4 items-center">
-              <label for="name" class="block text-sm font-medium text-gray-600">Name</label>
-              <input type="text" id="name" formControlName="name" required
-                class="w-full border border-gray-300 rounded-md p-2">
-              <label for="description" class="block text-sm font-medium text-gray-600">Description</label>
-              <input type="text" id="description" formControlName="description" required
-                class="w-full border border-gray-300 rounded-md p-2">
+              <mat-form-field appearance="fill">
+                <mat-label>Name</mat-label>
+                <input matInput type="text" formControlName="name" required>
+                <mat-error *ngIf="skillsForm.get('skills').get(i.toString()).get('name').hasError('required')">
+                  Name is required.
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Description</mat-label>
+                <input matInput type="text" formControlName="description" required>
+                <mat-error *ngIf="skillsForm.get('skills').get(i.toString()).get('description').hasError('required')">
+                  Description is required.
+                </mat-error>
+              </mat-form-field>
             </div>
           </div>
         </div>
 
-        <div class="text-center">
-          <button type="button" (click)="addSkill()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-            Add Skill
+        <div class="flex justify-between gap-x-4">
+          <button mat-stroked-button color="basic" type="button" (click)="addSkill()">
+            Add next skill
           </button>
-          <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-            Save
-          </button>
+          <div class="flex gap-x-4">
+            <button mat-stroked-button color="basic" type="button" (click)="closeModal()">
+              Cancel
+            </button>
+            <button type="submit" mat-raised-button color="primary">
+              Save
+            </button>
+          </div>
         </div>
       </form>
     </div>
   `,
   styles: [`
-      .modal-body {
-        max-height: 400px; 
-        overflow-y: auto; 
-        padding: 40px;
-      }
+    .modal-size {
+      width: 500px;
+      max-height: 600px;
+      overflow-y: auto; 
+    }
+
+    mat-form-field {
+      width: 100%;
+    }
   `]
 })
 export class EditSkillsModalComponent {
@@ -68,6 +85,10 @@ export class EditSkillsModalComponent {
   }
 
   saveChanges() {
+    if (this.skillsForm.invalid) {
+      return;
+    }
+
     this.dialogRef.close();
     const updatedSkills = this.skillsForm.value.skills;
     this.profileService.updateUserProfile({
@@ -94,5 +115,9 @@ export class EditSkillsModalComponent {
 
   removeSkill(index: number) {
     (this.skillsForm.get('skills') as FormArray).removeAt(index);
+  }
+
+  closeModal(): void {
+    this.dialogRef.close();
   }
 }

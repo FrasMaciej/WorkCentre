@@ -1,64 +1,70 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ProfileService } from '../profile.service';
 
 @Component({
   selector: 'app-edit-experience-modal',
   template: `
-    <div class="modal-content p-14">
-      <div class="modal-header">
-        <h2 class="modal-title text-2xl font-bold">Edit Experience Section</h2>
-      </div>
-      <div class="modal-body">
-        <form [formGroup]="experienceForm" (ngSubmit)="saveChanges()">
-          <div formArrayName="experience">
-            <div *ngFor="let expCtrl of experienceForm.get('experience')['controls']; let i = index" class="mb-4">
-              <div class="flex flex-row justify-between mb-2">
-                <label class="block text-sm font-medium text-gray-600">{{i+1}}. Experience Name:</label>
-                <button type="button" (click)="removeExperience(i)"
-                  class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-2">
-                  Remove
-                </button>
-              </div>
-              <input type="text" [formControl]="expCtrl.get('name')" required
-                class="w-full border border-gray-300 rounded-md p-2">
+    <h1 mat-dialog-title class="bg-blue-700 text-white p-4">Edit Experience Section</h1>
+    <div class="bg-white p-4 shadow-md modal-size" *ngIf="experienceForm">
+      <form [formGroup]="experienceForm" (ngSubmit)="saveChanges()" class="flex flex-col justify-between">
+        <div formArrayName="experience" class="mb-8">
+          <div *ngFor="let expCtrl of experienceForm.controls['experience']['controls']; let i = index" class="mb-4">
+            <div class="flex justify-between mb-2">
+              <label class="block text-sm font-medium text-gray-600">Experience {{i+1}}:</label>
+              <button type="button" (click)="removeExperience(i)" class="ml-2 bg-red-500 text-white p-2 rounded">
+                Remove
+              </button>
+            </div>
+            <div formGroupName="{{ i }}" class="flex flex-col mb-4 items-center">
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Experience Name</mat-label>
+                <input matInput formControlName="name" required>
+                <mat-error *ngIf="experienceForm.get('experience').get(i.toString()).get('name').hasError('required')">
+                  Experience Name is required.
+                </mat-error>
+              </mat-form-field>
               
-              <label class="block text-sm font-medium text-gray-600 mt-1">Period:</label>
-              <mat-form-field>
-                <mat-label>Enter a date range</mat-label>
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Period</mat-label>
                 <mat-date-range-input [rangePicker]="picker" [formGroup]="expCtrl.get('period').get('form')">
                   <input matStartDate placeholder="Start date" formControlName="start">
                   <input matEndDate placeholder="End date" formControlName="end">
                 </mat-date-range-input>
                 <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-date-range-picker #picker></mat-date-range-picker>
               </mat-form-field>
             </div>
           </div>
+        </div>
 
-          <div class="text-center">
-            <button type="button" (click)="addExperience()"
-              class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-              Add next experience
+        <div class="flex justify-between">
+          <button mat-stroked-button color="basic" type="button" (click)="addExperience()">
+            Add next experience
+          </button>
+          <div class="flex gap-x-4">
+            <button mat-stroked-button color="basic" type="button" (click)="closeModal()">
+              Cancel
             </button>
-          </div>
-
-          <div class="text-center mt-4">
-            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+            <button type="submit" mat-raised-button color="primary">
               Save
             </button>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   `,
   styles: [`
-    .modal-body {
-      max-height: 400px; 
+    .modal-size {
+      width: 500px;
+      max-height: 600px;
       overflow-y: auto; 
-      padding: 40px;
+    }
+
+    mat-form-field {
+      width: 100%;
     }
   `]
 })
@@ -78,11 +84,13 @@ export class EditExperienceModalComponent {
     if (this.data.userDetails?.experience && this.data.userDetails?.experience.length > 0) {
       this.data.userDetails.experience.forEach((exp: any) => this.addExperience(exp));
     } else {
-      this.addExperience(); // Dodaj domyślny rekord, jeśli brak
+      this.addExperience();
     }
   }
 
   saveChanges() {
+    if (this.experienceForm.invalid) return;
+
     this.dialogRef.close();
     const updatedExperience = this.experienceForm.value.experience;
     this.profileService.updateUserProfile({
@@ -121,5 +129,9 @@ export class EditExperienceModalComponent {
 
   removeExperience(index: number) {
     (this.experienceForm.get('experience') as FormArray).removeAt(index);
+  }
+
+  closeModal(): void {
+    this.dialogRef.close();
   }
 }

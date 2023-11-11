@@ -7,11 +7,13 @@ import { CommonControlsModule } from '../commonControls.module';
   imports: [CommonControlsModule],
   selector: 'app-confirm-dialog',
   template: `
-    <h1 mat-dialog-title class="bg-blue-700 text-white p-4">Confirm</h1>
-    <div mat-dialog-content class="p-4">{{ confirmMessage }}</div>
-    <div mat-dialog-actions class="p-4">
-      <button mat-button color="warn" (click)="dialogRef.close(true)">Confirm</button>
-      <button mat-button (click)="dialogRef.close(false)">Cancel</button>
+    <div class="flex flex-col">
+      <h1 mat-dialog-title class="bg-red-700 text-white p-4">Confirm</h1>
+      <div mat-dialog-content class="p-4">{{ confirmMessage }}</div>
+      <div class="p-4 flex flex-row justify-end">
+        <button mat-stroked-button color="basic" (click)="dialogRef.close(false)" class="mr-2">Cancel</button>
+        <button mat-raised-button color="warn" (click)="dialogRef.close(true)">Confirm</button>
+      </div>
     </div>
   `,
 })
