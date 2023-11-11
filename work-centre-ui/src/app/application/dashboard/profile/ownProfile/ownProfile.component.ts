@@ -12,63 +12,6 @@ import { ComponentType } from '@angular/cdk/portal';
 @Component({
   selector: 'own-profile',
   template: `
-    <!-- <div *ngIf="userFound" class="container mx-auto p-8 bg-gray-900 text-white">
-      <div class="bg-gray-800 p-6 mb-8 rounded-md shadow-md">
-        <div class="flex items-center justify-between">
-          <div>
-            <h2 class="text-3xl font-semibold mb-2 font-montserrat">{{user.firstName}} {{user.lastName}}</h2>
-            <p class="text-gray-400">{{userDetails?.headerInfo}}</p>
-            <p class="text-gray-400">{{userDetails?.company}}</p>
-          </div>
-          <img src="assets/avatar_placeholder.jpg" alt="Avatar" class="rounded-full w-16 h-16">
-        </div>
-        <button class="btn btn-primary" (click)="modifyProfileField('main')">Edit</button>
-      </div>
-
-      <div class="bg-gray-800 p-6 mb-8 rounded-md shadow-md">
-        <h3 class="text-2xl font-semibold mb-4 font-montserrat">Description</h3>
-        <p class="text-gray-400">
-          {{userDetails?.profileDescription}}
-        </p>
-        <button class="btn btn-primary" (click)="modifyProfileField('profileDescription')">Edit</button>
-      </div>
-
-      <div class="bg-gray-800 p-6 mb-8 rounded-md shadow-md">
-        <h3 class="text-2xl font-semibold mb-4 font-montserrat">Skills</h3>
-        <ul class="flex flex-col">
-          <li class=" text-white flex flex-col" *ngFor="let skill of userDetails?.skills">
-            <div class="text-blue font-medium text-lg">{{skill.name}}</div>
-            <div *ngIf="skill?.description">{{skill.description}}</div>
-          </li>
-        </ul>
-        <button class="btn btn-primary" (click)="modifyProfileField('skills')">Edit</button>
-      </div>
-
-      <div class="bg-gray-800 p-6 mb-8 rounded-md shadow-md">
-        <h3 class="text-2xl font-semibold mb-4 font-montserrat">Experience</h3>
-        <div class="mb-4" *ngFor="let exp of userDetails?.experience">
-          <h4 class="text-xl font-semibold">{{exp.name}}</h4>
-          <p class="text-gray-400">{{exp.period.from | date }} - {{exp.period.to | date }}</p>
-        </div>
-        <button class="btn btn-primary" (click)="modifyProfileField('experience')">Edit</button>
-      </div>
-
-      <div class="bg-gray-800 p-6 rounded-md shadow-md">
-        <h3 class="text-2xl font-semibold mb-4 font-montserrat">Contact</h3>
-        <p class="text-gray-400" *ngIf="userDetails?.email">Email: {{userDetails.email}}</p>
-        <p class="text-gray-400" *ngIf="userDetails?.phone">Phone: {{userDetails.phone}}</p>
-        <button class="btn btn-primary" (click)="modifyProfileField('contact')">Edit</button>
-      </div>
-    </div>
-    <div *ngIf="showNotFoundUserInfo">
-      <div class="flex items-center justify-center h-full">
-        <div class="text-center">
-          <h2 class="text-3xl font-semibold mb-4 font-montserrat">User Not Found</h2>
-          <p class="text-gray-400 mb-8">Sorry, the requested user could not be found.</p>
-        </div>
-      </div>
-    </div> -->
-
     <div *ngIf="userFound" class="profile-container">
       <div class="background">
         <div class="profile-header">
@@ -79,7 +22,12 @@ import { ComponentType } from '@angular/cdk/portal';
           </div>
           <img src="assets/avatar_placeholder.jpg" alt="Avatar" class="profile-avatar">
         </div>
-        <button class="btn btn-primary" (click)="modifyProfileField('main')">Edit</button>
+        <div class="flex justify-end mt-4">
+          <button mat-raised-button color="basic" (click)="modifyProfileField('main')" class="text-xl">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </button>
+        </div>
       </div>
 
       <div class="background">
@@ -87,7 +35,12 @@ import { ComponentType } from '@angular/cdk/portal';
           <h3 class="section-title">Description</h3>
           <p class="section-content">{{userDetails?.profileDescription}}</p>
         </div>
-        <button class="btn btn-primary" (click)="modifyProfileField('profileDescription')">Edit</button>
+        <div class="flex justify-end">
+          <button mat-raised-button color="basic" (click)="modifyProfileField('profileDescription')" class="text-xl">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </button>
+        </div>
       </div>
 
       <div class="background">
@@ -100,7 +53,12 @@ import { ComponentType } from '@angular/cdk/portal';
             </li>
           </div>
         </div>
-        <button class="btn btn-primary" (click)="modifyProfileField('skills')">Edit</button>
+        <div class="flex justify-end">
+          <button mat-raised-button color="basic" (click)="modifyProfileField('skills')" class="text-xl">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </button>
+        </div>
       </div>
 
       <div class="background">
@@ -111,7 +69,12 @@ import { ComponentType } from '@angular/cdk/portal';
             <p class="experience-period">{{exp.period.from | date }} - {{exp.period.to | date}}</p>
           </div>
         </div>
-        <button class="btn btn-primary" (click)="modifyProfileField('experience')">Edit</button>
+        <div class="flex justify-end">
+          <button mat-raised-button color="basic" (click)="modifyProfileField('experience')" class="text-xl">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </button>
+        </div>
       </div>
 
       <div class="background">
@@ -120,7 +83,12 @@ import { ComponentType } from '@angular/cdk/portal';
           <p class="contact-info" *ngIf="userDetails?.email">Email: {{userDetails.email}}</p>
           <p class="contact-info" *ngIf="userDetails?.phone">Phone: {{userDetails.phone}}</p>
         </div>
-        <button class="btn btn-primary" (click)="modifyProfileField('contact')">Edit</button>
+        <div class="flex justify-end">
+          <button mat-raised-button color="basic" (click)="modifyProfileField('contact')" class="text-xl">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </button>
+        </div>
       </div>
     </div>
 
@@ -260,6 +228,7 @@ import { ComponentType } from '@angular/cdk/portal';
     .not-found-message {
       color: #888;
     }
+
   `]
 })
 

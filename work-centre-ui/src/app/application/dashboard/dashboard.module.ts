@@ -11,11 +11,13 @@ import { ProfileModule } from './profile/profile.module';
 import { routes } from './routes';
 import { CommonModule } from '@angular/common';
 import { ConversationsListComponent } from './conversation/conversationsList.component';
+import { RecruiterPanelModule } from './recruiterPanel/recruiterPanel.module';
+
 
 @NgModule({
     imports: [
         CommonModule, CommonControlsModule, RouterModule, ConversationModule, ExploreModule,
-        HomeModule, NotificationsModule, ProfileModule, RouterModule.forChild(routes)
+        HomeModule, NotificationsModule, ProfileModule, RecruiterPanelModule, RouterModule.forChild(routes)
     ],
     exports: [RouterModule],
     declarations: [DashboardComponent, DashboardOptionsComponent, ConversationsListComponent],

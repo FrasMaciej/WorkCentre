@@ -7,6 +7,7 @@ import { NotificationsComponent } from "./notifications/notifications.component"
 import { OwnProfileComponent } from "./profile/ownProfile/ownProfile.component";
 import { AuthGuardService } from "../authorization/authGuard.service";
 import { UserProfileComponent } from "./profile/userProfile/userProfile.component";
+import { RecruiterPanelComponent } from "./recruiterPanel/recruiterPanel.component";
 
 export const routes: Routes = [
     {
@@ -19,6 +20,7 @@ export const routes: Routes = [
             { path: 'explore', component: ExploreComponent },
             { path: 'notifications', component: NotificationsComponent },
             { path: 'conversation', component: ConversationComponent },
+            { path: 'recruiter-panel', component: RecruiterPanelComponent },
             {
                 path: 'profile', children: [
                     {

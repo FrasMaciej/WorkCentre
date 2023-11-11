@@ -9,6 +9,10 @@ import { ActivatedRoute, Router } from '@angular/router';
                 <mat-icon class="icon-display">home</mat-icon> 
                 <div>Home</div>
              </button>
+             <button class="flex gap-x-3 items-center" [class.font-color-red]="dashboardOption==='recruiter-panel'" (click)="changeSelected('recruiter-panel')" routerLink="recruiter-panel">
+                <mat-icon class="icon-display">work</mat-icon> 
+                <div>Recruiter Panel</div>
+             </button>
             <button class="flex gap-x-3 items-center" [class.font-color-red]="dashboardOption==='explore'" (click)="changeSelected('explore')" routerLink="explore">
                 <mat-icon class="icon-display">explore</mat-icon>
                 <div>Explore</div>
@@ -62,6 +66,9 @@ export class DashboardOptionsComponent {
                     break;
                 case 'profile':
                     this.dashboardOption = 'profile';
+                    break;
+                case 'recruiter-panel':
+                    this.dashboardOption = 'recruiter-panel';
                     break;
                 default:
                     this.dashboardOption = 'home';

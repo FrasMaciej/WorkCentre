@@ -8,9 +8,15 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
 @Component({
   selector: 'user-profile',
   template: `
-    <div *ngIf="!hideButtons" class="button-section">
-      <button mat-flat-button (click)="openSendMessageModal()" class="action-button">Send Message</button>
-      <button mat-flat-button class="action-button">Send Invitation to friends</button>
+    <div *ngIf="!hideButtons" class="button-section ml-2 mb-2">
+      <button button mat-raised-button color="accent" (click)="openSendMessageModal()">
+        <mat-icon> message</mat-icon>
+        Send Message
+      </button>
+      <button mat-raised-button color="accent" class="action-button">
+        <mat-icon>person_add</mat-icon>
+        Send Invitation to friends
+      </button>
     </div>
     <div *ngIf="userFound" class="profile-container">
       <div class="profile-header">
