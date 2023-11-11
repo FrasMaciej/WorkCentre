@@ -126,7 +126,7 @@ export class HomeComponent implements OnInit {
     this.confirmationDialog = this.dialog.open(ConfirmationDialog, {
       disableClose: false
     });
-    this.confirmationDialog.componentInstance.confirmMessage = "Are you sure you want to delete organization?";
+    this.confirmationDialog.componentInstance.confirmMessage = "Are you sure you want to delete job offer?";
 
     this.confirmationDialog.afterClosed().subscribe(async result => {
       if (result) {

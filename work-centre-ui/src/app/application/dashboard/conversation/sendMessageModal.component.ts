@@ -62,7 +62,7 @@ export class SendMessageModalComponent {
       });
       this.sendMessageForm.reset();
     } else {
-      console.log('Please enter a message before sending.');
+      return;
     }
   }
 }

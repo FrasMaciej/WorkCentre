@@ -65,6 +65,8 @@ export class AddOrganizationModalComponent {
                 name: this.organizationForm.value.name,
                 description: this.organizationForm.value.description,
             });
+            const orgs = await this.organizationsService.getOrganizationsOwner();
+            this.organizationsService.setData(orgs);
             this.dialogRef.close();
         }
     }

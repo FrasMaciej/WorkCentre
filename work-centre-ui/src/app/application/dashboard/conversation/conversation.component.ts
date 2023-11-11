@@ -10,7 +10,7 @@ import { Renderer2 } from '@angular/core';
   template: `
      <div class="chat-container">
       <div class="messages" #messagesList #scrollMe>
-        <div *ngFor="let message of chat.messages" [ngClass]="{'incoming': getUserId() === message.sender, 'outgoing': getUserId() !== message.sender}">
+        <div *ngFor="let message of chat.messages" [ngClass]="{'incoming': getUserId() === message.sender, 'outgoing': getUserId() !== message.sender}" class="message">
           {{ message.content }}
         </div>
       </div>
@@ -69,6 +69,11 @@ import { Renderer2 } from '@angular/core';
         border-radius: 5px;
         color: black;
         cursor: pointer;
+      }
+
+      .message {
+        width: 800px;
+        word-wrap: break-word;
       }
     `]
 })

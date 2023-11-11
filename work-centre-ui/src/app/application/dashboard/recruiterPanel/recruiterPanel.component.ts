@@ -9,11 +9,12 @@ import { AddOrganizationModalComponent } from '../home/addOrganizationModal.comp
 import { JobsService } from '../home/jobs.service';
 import { ConfirmationDialog } from 'src/app/library/confirmationModal/confirmationDialog.component';
 import { Subscription } from 'rxjs';
+import { OrganizationsService } from '../home/organizations.service';
 
 @Component({
-    selector: 'recruiter-panel',
-    template: `
-        <div class="container mx-auto my-8 text-white">
+  selector: 'recruiter-panel',
+  template: `
+    <div class="container mx-auto my-8 text-white">
       <div class="flex gap-x-4">
         <button mat-raised-button color="accent" (click)="openAddJobModal()">
             <mat-icon>work</mat-icon>
@@ -75,6 +76,26 @@ import { Subscription } from 'rxjs';
         </mat-table>
       </div>
 
+      <div class="mt-6">
+        <h2 class="text-2xl font-bold mb-2">Your Organizations</h2>
+        <mat-table [dataSource]="userOrganizations">
+          <ng-container matColumnDef="name"> 
+            <mat-header-cell *matHeaderCellDef>name</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.name }}
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="description">
+            <mat-header-cell *matHeaderCellDef>description</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.description }}
+            </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="['name', 'description']"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: ['name', 'description']"></mat-row>
+        </mat-table>
+      </div>
+
       <div class="mt-6" *ngIf="selectedOffer">
         <h2 class="text-2xl font-bold mb-2">Application History for {{ selectedOffer.title }}</h2>
         <mat-table [dataSource]="selectedOffer.applicationHistory">
@@ -86,14 +107,13 @@ import { Subscription } from 'rxjs';
             <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
             <mat-cell *matCellDef="let element">{{ element.status }}</mat-cell>
           </ng-container>
-
           <mat-header-row *matHeaderRowDef="['date', 'status']"></mat-header-row>
           <mat-row *matRowDef="let row; columns: ['date', 'status']"></mat-row>
         </mat-table>
       </div>
     </div>
     `,
-    styles: [`
+  styles: [`
         mat-table {
             width: 100%;
             margin-top: 1rem;
@@ -117,102 +137,110 @@ import { Subscription } from 'rxjs';
 })
 
 export class RecruiterPanelComponent implements OnInit {
-    confirmationDialog: MatDialogRef<ConfirmationDialog>;
-    isAddJobModalOpen: boolean = false;
-    selectedOffer: any;
-    newJobOffer: any = {};
-    jobOfferForm: any;
-    user: any;
+  confirmationDialog: MatDialogRef<ConfirmationDialog>;
+  isAddJobModalOpen: boolean = false;
+  selectedOffer: any;
+  newJobOffer: any = {};
+  jobOfferForm: any;
+  user: any;
 
-    userJobOffers = [];
-    subscriptions = new Subscription();
+  userJobOffers = [];
+  userOrganizations = [];
+  subscriptions = new Subscription();
 
-    constructor(
-        public dialog: MatDialog, private userContext: LoggedUserService, private profileService: ProfileService,
-        private jobsService: JobsService
-    ) {
+  constructor(
+    public dialog: MatDialog, private userContext: LoggedUserService, private profileService: ProfileService,
+    private jobsService: JobsService, private organizationsService: OrganizationsService
+  ) {
 
-        this.jobOfferForm = {
-            title: ['', Validators.required],
-            company: ['', Validators.required],
-            dateForm: new FormGroup({
-                start: new FormControl(new Date()),
-                end: new FormControl(new Date())
-            })
-        };
-    }
+    this.jobOfferForm = {
+      title: ['', Validators.required],
+      company: ['', Validators.required],
+      dateForm: new FormGroup({
+        start: new FormControl(new Date()),
+        end: new FormControl(new Date())
+      })
+    };
+  }
 
-    async ngOnInit() {
-        this.getOwnedJobs();
-        this.subscriptions.add(
-            this.jobsService.data.subscribe(res => {
-                if (!!res) {
-                    this.getOwnedJobs();
-                }
-            })
-        );
-    }
-
-    openAddJobModal() {
-        try {
-            this.dialog.open(AddOfferModalComponent, {
-                data: {
-                    user: { ...this.user },
-                }
-            });
-        } catch (err) {
-            console.error(err);
+  async ngOnInit() {
+    this.getOwnedJobsOrganizations();
+    this.subscriptions.add(
+      this.jobsService.data.subscribe(res => {
+        if (!!res) {
+          this.getOwnedJobsOrganizations();
         }
-    }
-
-    openAddOrganizationModal() {
-        try {
-            this.dialog.open(AddOrganizationModalComponent, {
-                data: {
-                    user: { ...this.user },
-                }
-            });
-        } catch (err) {
-            console.error(err);
+      })
+    );
+    this.subscriptions.add(
+      this.organizationsService.data.subscribe(res => {
+        if (!!res) {
+          this.getOwnedJobsOrganizations();
         }
-    }
+      })
+    );
+  }
 
-
-    viewOfferStatus(offer: any) {
-    }
-
-    cancelOffer(offer: any) {
-        this.confirmationDialog = this.dialog.open(ConfirmationDialog, {
-            disableClose: false
-        });
-        this.confirmationDialog.componentInstance.confirmMessage = "Are you sure you want to delete organization?";
-
-        this.confirmationDialog.afterClosed().subscribe(async result => {
-            if (result) {
-                await this.jobsService.removeJob(offer._id);
-                this.getOwnedJobs();
-            }
-        });
-    }
-
-    isCurrentDateInRange(startDate: Date, endDate: Date): boolean {
-        const currentDate = new Date().getTime();
-
-        if (startDate && endDate) return new Date(startDate)?.getTime() <= currentDate && currentDate <= new Date(endDate)?.getTime()
-        else return false;
-    }
-
-    async getOwnedJobs() {
-        const userId = this.userContext.id;
-        try {
-            if (userId) {
-                const user = await this.profileService.getUserDetails(userId);
-                const jobsAuthor = await this.jobsService.getJobsAuthor();
-                this.userJobOffers = jobsAuthor;
-                this.user = user.primary;
-            }
-        } catch (err) {
-            console.error(err);
+  openAddJobModal() {
+    try {
+      this.dialog.open(AddOfferModalComponent, {
+        data: {
+          user: { ...this.user },
         }
+      });
+    } catch (err) {
+      console.error(err);
     }
+  }
+
+  openAddOrganizationModal() {
+    try {
+      this.dialog.open(AddOrganizationModalComponent, {
+        data: {
+          user: { ...this.user },
+        }
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+
+  viewOfferStatus(offer: any) {
+  }
+
+  cancelOffer(offer: any) {
+    this.confirmationDialog = this.dialog.open(ConfirmationDialog, {
+      disableClose: false
+    });
+    this.confirmationDialog.componentInstance.confirmMessage = "Are you sure you want to delete job offer?";
+
+    this.confirmationDialog.afterClosed().subscribe(async result => {
+      if (result) {
+        await this.jobsService.removeJob(offer._id);
+        this.getOwnedJobsOrganizations();
+      }
+    });
+  }
+
+  isCurrentDateInRange(startDate: Date, endDate: Date): boolean {
+    const currentDate = new Date().getTime();
+
+    if (startDate && endDate) return new Date(startDate)?.getTime() <= currentDate && currentDate <= new Date(endDate)?.getTime()
+    else return false;
+  }
+
+  async getOwnedJobsOrganizations() {
+    const userId = this.userContext.id;
+    try {
+      if (userId) {
+        const user = await this.profileService.getUserDetails(userId);
+        this.userJobOffers = await this.jobsService.getJobsAuthor();
+        this.userOrganizations = await this.organizationsService.getOrganizationsOwner();
+        this.user = user.primary;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
 }
