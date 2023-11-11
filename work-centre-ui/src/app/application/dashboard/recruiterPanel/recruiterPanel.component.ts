@@ -219,7 +219,10 @@ export class RecruiterPanelComponent implements OnInit {
 
   cancelOffer(offer: any) {
     this.confirmationDialog = this.dialog.open(ConfirmationDialog, {
-      disableClose: false
+      disableClose: false,
+      data: {
+        type: 'warning'
+      }
     });
     this.confirmationDialog.componentInstance.confirmMessage = "Are you sure you want to delete job offer?";
 
@@ -240,7 +243,10 @@ export class RecruiterPanelComponent implements OnInit {
 
   async removeOrg(org) {
     this.confirmationDialog = this.dialog.open(ConfirmationDialog, {
-      disableClose: false
+      disableClose: false,
+      data: {
+        type: 'warning'
+      }
     });
     this.confirmationDialog.componentInstance.confirmMessage = "Are you sure you want to delete organization?";
 

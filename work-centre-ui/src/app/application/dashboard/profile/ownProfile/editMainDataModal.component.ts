@@ -14,7 +14,7 @@ import { NgForm } from '@angular/forms';
           <label for="headerInfo" class="block text-sm font-medium text-gray-600">Header Info:</label>
           <mat-form-field appearance="fill" class="w-full">
             <input matInput id="headerInfo" name="headerInfo" [(ngModel)]="data.userDetails.headerInfo" required minlength="3">
-            <mat-error *ngIf="mainForm.controls['headerInfo']?.errors['required']">Header Info is required.</mat-error>
+            <mat-error *ngIf="mainForm.controls['headerInfo']?.errors?.['required']">Header Info is required.</mat-error>
           </mat-form-field>
         </div>
 
@@ -22,7 +22,7 @@ import { NgForm } from '@angular/forms';
           <label for="company" class="block text-sm font-medium text-gray-600">Company:</label>
           <mat-form-field appearance="fill" class="w-full">
             <input matInput id="company" name="company" [(ngModel)]="data.userDetails.company" required minlength="3">
-            <mat-error *ngIf="mainForm.controls['company']?.errors['required']">Company is required.</mat-error>
+            <mat-error *ngIf="mainForm.controls['company']?.errors?.['required']">Company is required.</mat-error>
           </mat-form-field>
         </div>
 
