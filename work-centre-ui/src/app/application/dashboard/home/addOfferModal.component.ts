@@ -102,7 +102,7 @@ export class AddOfferModalComponent implements OnInit {
                     details: this.jobOfferForm.get('details').value,
                     dateFrom: this.jobOfferForm.get('dateForm.start').value,
                     dateTo: this.jobOfferForm.get('dateForm.end').value,
-                    applicants: 0
+                    applicantsIds: []
                 });
                 const jobs = await this.jobsService.getJobs();
                 this.jobsService.setData(jobs);

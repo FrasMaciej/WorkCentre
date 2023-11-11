@@ -4,5 +4,5 @@ export interface JobSchema {
     dateFrom: Date;
     dateTo: Date;
     details: string;
-    applicants: number;
+    applicantsIds: string[];
 }

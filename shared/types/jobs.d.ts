@@ -7,6 +7,6 @@ declare global {
         details: string,
         dateFrom: Date,
         dateTo: Date,
-        applicants: number
+        applicantsIds: string[]
     }
 }

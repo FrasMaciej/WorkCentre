@@ -49,7 +49,7 @@ import { OrganizationsService } from '../home/organizations.service';
           </ng-container>
           <ng-container matColumnDef="applicants">
             <mat-header-cell *matHeaderCellDef>Applicants</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{ element.applicants }}</mat-cell>
+            <mat-cell *matCellDef="let element">{{ element.applicantsIds.length }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="startDate">
             <mat-header-cell *matHeaderCellDef>Start Date</mat-header-cell>
