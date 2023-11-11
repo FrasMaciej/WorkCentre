@@ -23,6 +23,10 @@ export class OrganizationsService {
         return lastValueFrom(this.httpClient.post<AddOrganizationDto[]>(environment.apiURL + '/organizations', { organization, ownerId: this.user.id }));
     }
 
+    removeOrganization(id: string): Promise<any> {
+        return lastValueFrom(this.httpClient.delete<any>(environment.apiURL + `/organizations/${id}`));
+    }
+
     public setData(data: OrganizationDto[]) {
         this.data$.next(data);
     }

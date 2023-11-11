@@ -91,8 +91,16 @@ import { OrganizationsService } from '../home/organizations.service';
               {{ element.description }}
             </mat-cell>
           </ng-container>
-          <mat-header-row *matHeaderRowDef="['name', 'description']"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: ['name', 'description']"></mat-row>
+          <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element" class="flex items-center justify-end space-x-2">
+              <button mat-icon-button (click)="removeOrg(element)">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="['name', 'description', 'actions']"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: ['name', 'description', 'actions']"></mat-row>
         </mat-table>
       </div>
 
@@ -228,6 +236,20 @@ export class RecruiterPanelComponent implements OnInit {
 
     if (startDate && endDate) return new Date(startDate)?.getTime() <= currentDate && currentDate <= new Date(endDate)?.getTime()
     else return false;
+  }
+
+  async removeOrg(org) {
+    this.confirmationDialog = this.dialog.open(ConfirmationDialog, {
+      disableClose: false
+    });
+    this.confirmationDialog.componentInstance.confirmMessage = "Are you sure you want to delete organization?";
+
+    this.confirmationDialog.afterClosed().subscribe(async result => {
+      if (result) {
+        await this.organizationsService.removeOrganization(org._id);
+        this.getOwnedJobsOrganizations();
+      }
+    });
   }
 
   async getOwnedJobsOrganizations() {

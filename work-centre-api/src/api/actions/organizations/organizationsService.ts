@@ -28,6 +28,16 @@ export async function getOrganizations(req, res) {
     }
 }
 
+export async function removeOrganization(req, res) {
+    const orgId = req.params.id;
+    try {
+        await collections.organizations?.deleteOne({ _id: new ObjectId(orgId) });
+        return res.json({}).status(200);
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 export async function getOrganizationsOwner(req, res) {
     const userId = req.params.id;
 
