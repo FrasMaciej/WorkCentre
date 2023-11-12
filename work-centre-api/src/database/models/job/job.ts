@@ -5,4 +5,5 @@ export interface JobSchema {
     dateTo: Date;
     details: string;
     applicantsIds: string[];
+    author?: string;
 }

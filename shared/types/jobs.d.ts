@@ -8,6 +8,7 @@ declare global {
         dateFrom: Date,
         dateTo: Date,
         applicantsIds: string[],
+        author?: string
     }
 
     interface ExtendedJobDto extends JobDto {

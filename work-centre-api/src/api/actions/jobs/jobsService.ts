@@ -2,8 +2,8 @@ import { ObjectId } from "mongodb";
 import { collections } from "../../../database/mongoConnection";
 
 export async function addJob(req, res) {
-    const job: JobDto = { ...req.body.job };
     const id = req.body.ownerId;
+    const job: JobDto = { ...req.body.job, author: id };
 
     try {
         const createdJob = await collections.jobs?.insertOne(job);

@@ -44,12 +44,18 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
                     <p class="text-base">{{ jobOffer.details }}</p>
                 </div>
 
+                <div *ngIf="!isViewerAuthor">
                     <button *ngIf="!alreadyApplied" mat-raised-button color="accent" class="mt-4" (click)="applyForJob()">Apply Now</button>
                     <div *ngIf="alreadyApplied" class="mt-4 flex flex-col gap-x-2">
                         <span>You have already applied for this offer. Wait for recruiter feedback</span>
                         <span>Or you can resign from your application: </span>
                         <button mat-raised-button color="warn" class="mt-4" (click)="resignFromApplication()">Resign</button>
                     </div>
+                </div>
+                <div *ngIf="isViewerAuthor">
+                    <span>This is applicant view of your job offer</span>
+                </div>
+
             </div>
         </div>
     `,
@@ -72,6 +78,7 @@ export class JobPageComponent implements OnInit {
     jobOfferId = '';
     jobOffer: ExtendedJobDto;
     alreadyApplied = false;
+    isViewerAuthor = false;
 
     constructor(private route: ActivatedRoute, private jobsService: JobsService, public dialog: MatDialog, private user: LoggedUserService) {
         this.route.queryParams.subscribe((params) => {
@@ -80,8 +87,9 @@ export class JobPageComponent implements OnInit {
     }
 
     async ngOnInit() {
-        this.jobOffer = await this.jobsService.getJob(this.jobOfferId);
+        await this.getJobOffer();
         this.checkIfAlreadyApplied();
+        this.checkIfViewerIsAuthor();
     }
 
     async applyForJob() {
@@ -96,8 +104,8 @@ export class JobPageComponent implements OnInit {
         this.confirmationDialog.afterClosed().subscribe(async result => {
             if (result) {
                 try {
-                    await this.jobsService.applyForJob(this.jobOffer._id)
-                    this.jobOffer = await this.jobsService.getJob(this.jobOfferId);
+                    await this.jobsService.applyForJob(this.jobOffer._id);
+                    await this.getJobOffer();
                     this.checkIfAlreadyApplied();
                 } catch (err) {
                     console.error(err);
@@ -107,7 +115,7 @@ export class JobPageComponent implements OnInit {
     }
 
     checkIfAlreadyApplied() {
-        if (this.jobOffer.applicantsIds.includes(this.user.id)) {
+        if (this.jobOffer?.applicantsIds.includes(this.user.id)) {
             this.alreadyApplied = true;
         } else {
             this.alreadyApplied = false;
@@ -127,12 +135,20 @@ export class JobPageComponent implements OnInit {
             if (result) {
                 try {
                     await this.jobsService.resignFromJobOffer(this.jobOffer._id)
-                    this.jobOffer = await this.jobsService.getJob(this.jobOfferId);
+                    await this.getJobOffer();
                     this.checkIfAlreadyApplied();
                 } catch (err) {
                     console.error(err);
                 }
             }
         });
+    }
+
+    checkIfViewerIsAuthor() {
+        if (this.jobOffer.author === this.user.id) this.isViewerAuthor = true;
+    }
+
+    async getJobOffer() {
+        this.jobOffer = await this.jobsService.getJob(this.jobOfferId);
     }
 }
