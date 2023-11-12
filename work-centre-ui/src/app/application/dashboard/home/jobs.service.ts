@@ -35,6 +35,10 @@ export class JobsService {
         return lastValueFrom(this.httpClient.post<any>(environment.apiURL + `/jobs/apply`, { dto: { jobId, applicantId: this.user.id } }));
     }
 
+    resignFromJobOffer(jobId: string): Promise<any> {
+        return lastValueFrom(this.httpClient.post<any>(environment.apiURL + `/jobs/resign`, { dto: { jobId, applicantId: this.user.id } }));
+    }
+
     public setData(data: JobDto[]) {
         this.data$.next(data);
     }

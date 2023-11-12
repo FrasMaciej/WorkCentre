@@ -10,6 +10,7 @@ jobsApiRouter.delete('/jobs/:id', jobsActions.removeJob);
 jobsApiRouter.get('/jobs/author/:id', jobsActions.getJobsAuthor);
 jobsApiRouter.get('/jobs/:id', jobsActions.getJob);
 jobsApiRouter.post('/jobs/apply', jobsActions.applyJob);
+jobsApiRouter.post('/jobs/resign', jobsActions.resignJob);
 
 
 export default jobsApiRouter;

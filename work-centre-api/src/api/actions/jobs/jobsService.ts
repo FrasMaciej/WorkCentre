@@ -81,3 +81,13 @@ export async function applyJob(req, res) {
         return err;
     }
 }
+
+export async function resignJob(req, res) {
+    const dto: ApplyForJobDto = req.body.dto;
+    try {
+        await collections.jobs?.updateOne({ _id: new ObjectId(dto.jobId) }, { $pull: { applicantsIds: String(dto.applicantId) } })
+        return res.json({}).status(200);
+    } catch (err) {
+        return err;
+    }
+}

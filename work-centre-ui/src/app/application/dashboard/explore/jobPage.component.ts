@@ -45,7 +45,11 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
                 </div>
 
                     <button *ngIf="!alreadyApplied" mat-raised-button color="accent" class="mt-4" (click)="applyForJob()">Apply Now</button>
-                    <span *ngIf="alreadyApplied"class="mt-4">You have already applied for this offer. Wait for recruiter feedback</span>
+                    <div *ngIf="alreadyApplied" class="mt-4 flex flex-col gap-x-2">
+                        <span>You have already applied for this offer. Wait for recruiter feedback</span>
+                        <span>Or you can resign from your application: </span>
+                        <button mat-raised-button color="warn" class="mt-4" (click)="resignFromApplication()">Resign</button>
+                    </div>
             </div>
         </div>
     `,
@@ -93,6 +97,7 @@ export class JobPageComponent implements OnInit {
             if (result) {
                 try {
                     await this.jobsService.applyForJob(this.jobOffer._id)
+                    this.jobOffer = await this.jobsService.getJob(this.jobOfferId);
                     this.checkIfAlreadyApplied();
                 } catch (err) {
                     console.error(err);
@@ -104,6 +109,30 @@ export class JobPageComponent implements OnInit {
     checkIfAlreadyApplied() {
         if (this.jobOffer.applicantsIds.includes(this.user.id)) {
             this.alreadyApplied = true;
+        } else {
+            this.alreadyApplied = false;
         }
+    }
+
+    async resignFromApplication() {
+        this.confirmationDialog = this.dialog.open(ConfirmationDialog, {
+            disableClose: false,
+            data: {
+                type: 'warning'
+            }
+        });
+        this.confirmationDialog.componentInstance.confirmMessage = "Are you sure you want to resign from, this job offer?";
+        this.confirmationDialog.componentInstance.data.type = "confirm";
+        this.confirmationDialog.afterClosed().subscribe(async result => {
+            if (result) {
+                try {
+                    await this.jobsService.resignFromJobOffer(this.jobOffer._id)
+                    this.jobOffer = await this.jobsService.getJob(this.jobOfferId);
+                    this.checkIfAlreadyApplied();
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        });
     }
 }
