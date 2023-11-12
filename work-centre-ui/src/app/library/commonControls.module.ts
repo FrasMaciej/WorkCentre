@@ -16,9 +16,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatGridListModule } from '@angular/material/grid-list';
-
-
-
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 @NgModule({
     imports: [AngularSvgIconModule.forRoot()],
@@ -26,7 +24,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
         MatButtonModule, MatToolbarModule, MatIconModule, AngularSvgIconModule,
         MatFormFieldModule, MatInputModule, MatCardModule, MatListModule,
         MatSelectModule, MatPaginatorModule, MatMenuModule, MatDialogModule,
-        MatDatepickerModule, MatNativeDateModule, MatTableModule, MatGridListModule
+        MatDatepickerModule, MatNativeDateModule, MatTableModule, MatGridListModule,
+        NgxMatSelectSearchModule
     ],
     declarations: [],
 })

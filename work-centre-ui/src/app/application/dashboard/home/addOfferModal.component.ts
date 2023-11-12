@@ -1,7 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { JobsService } from './jobs.service';
+import { OrganizationsService } from './organizations.service';
+import { ReplaySubject, Subject, take, takeUntil } from 'rxjs';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
     selector: 'add-offer-modal',
@@ -25,7 +28,12 @@ import { JobsService } from './jobs.service';
                         </div>
                         <div class="form-group">
                             <mat-form-field>
-                                <input matInput placeholder="Company" formControlName="company">
+                                <mat-select formControlName="company" placeholder="Company" #singleSelect>
+                                    <mat-option>
+                                        <ngx-mat-select-search placeholder="search" ngx-mat-select-search [formControl]="jobOfferForm['companyFilter']"></ngx-mat-select-search>
+                                    </mat-option>
+                                    <mat-option *ngFor="let org of filteredCompanys | async" [value]="org.name">{{org.name}}</mat-option>
+                                </mat-select>
                                 <mat-error *ngIf="jobOfferForm.get('company').hasError('required')">Company is required</mat-error>
                             </mat-form-field>
                         </div>
@@ -65,18 +73,24 @@ import { JobsService } from './jobs.service';
 })
 
 export class AddOfferModalComponent implements OnInit {
+    @ViewChild('singleSelect', { static: true }) singleSelect: MatSelect;
     jobOfferForm: FormGroup;
     user: any;
+    organizations;
+    filteredCompanys: ReplaySubject<OrganizationDto[]> = new ReplaySubject<OrganizationDto[]>(1);
+    protected _onDestroy = new Subject<void>();
 
     constructor(
         public dialogRef: MatDialogRef<AddOfferModalComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private jobsService: JobsService
+        private jobsService: JobsService,
+        private orgsService: OrganizationsService
     ) {
         this.user = this.data.user;
         this.jobOfferForm = new FormGroup({
             name: new FormControl('', [Validators.required]),
             company: new FormControl('', [Validators.required]),
+            companyFilter: new FormControl(''),
             details: new FormControl('', [Validators.required]),
             dateForm: new FormGroup({
                 start: new FormControl([Validators.required]),
@@ -85,11 +99,52 @@ export class AddOfferModalComponent implements OnInit {
         });
     }
 
-    ngOnInit() {
+    async ngOnInit() {
+        await this.getOrgs();
+        this.filteredCompanys.next(this.organizations.slice());
+
         this.jobOfferForm.setValidators([
             Validators.required,
             this.dateRangeValidator
         ]);
+        this.jobOfferForm.get('companyFilter').valueChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(() => {
+                this.filterCompanys();
+            });
+    }
+
+    ngAfterViewInit() {
+        this.setInitialValue();
+    }
+
+    ngOnDestroy() {
+        this._onDestroy.next();
+        this._onDestroy.complete();
+    }
+
+    protected setInitialValue() {
+        this.filteredCompanys
+            .pipe(take(1), takeUntil(this._onDestroy))
+            .subscribe(() => {
+                this.singleSelect.compareWith = (a: any, b: any) => a && b && a.id === b.id;
+            });
+    }
+
+    protected filterCompanys() {
+        if (!this.organizations) {
+            return;
+        }
+        let search = this.jobOfferForm['companyFilter'].value;
+        if (!search) {
+            this.filteredCompanys.next(this.organizations.slice());
+            return;
+        } else {
+            search = search.toLowerCase();
+        }
+        this.filteredCompanys.next(
+            this.organizations.filter(org => org.name.toLowerCase().indexOf(search) > -1)
+        );
     }
 
     async addJobOffer() {
@@ -127,5 +182,9 @@ export class AddOfferModalComponent implements OnInit {
 
     getDateForm() {
         return this.jobOfferForm.get('dateForm') as FormGroup;
+    }
+
+    async getOrgs() {
+        this.organizations = await this.orgsService.getOrganizations();
     }
 }
