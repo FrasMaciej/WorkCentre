@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { JobsService } from '../home/jobs.service';
 import { ConfirmationDialog } from 'src/app/library/confirmationModal/confirmationDialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { LoggedUserService } from 'src/app/commonServices/userContext.service';
 
 @Component({
     selector: 'job-page',
@@ -43,7 +44,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
                     <p class="text-base">{{ jobOffer.details }}</p>
                 </div>
 
-                <button mat-raised-button color="accent" class="mt-4" (click)="applyForJob()">Apply Now</button>
+                    <button *ngIf="!alreadyApplied" mat-raised-button color="accent" class="mt-4" (click)="applyForJob()">Apply Now</button>
+                    <span *ngIf="alreadyApplied"class="mt-4">You have already applied for this offer. Wait for recruiter feedback</span>
             </div>
         </div>
     `,
@@ -64,9 +66,10 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 export class JobPageComponent implements OnInit {
     confirmationDialog: MatDialogRef<ConfirmationDialog>;
     jobOfferId = '';
-    jobOffer: JobDto;
+    jobOffer: ExtendedJobDto;
+    alreadyApplied = false;
 
-    constructor(private route: ActivatedRoute, private jobsService: JobsService, public dialog: MatDialog) {
+    constructor(private route: ActivatedRoute, private jobsService: JobsService, public dialog: MatDialog, private user: LoggedUserService) {
         this.route.queryParams.subscribe((params) => {
             this.jobOfferId = this.route.snapshot.params['id'];
         });
@@ -74,9 +77,10 @@ export class JobPageComponent implements OnInit {
 
     async ngOnInit() {
         this.jobOffer = await this.jobsService.getJob(this.jobOfferId);
+        this.checkIfAlreadyApplied();
     }
 
-    applyForJob() {
+    async applyForJob() {
         this.confirmationDialog = this.dialog.open(ConfirmationDialog, {
             disableClose: false,
             data: {
@@ -86,7 +90,20 @@ export class JobPageComponent implements OnInit {
         this.confirmationDialog.componentInstance.confirmMessage = "Are you sure you want to apply for this job offer?";
         this.confirmationDialog.componentInstance.data.type = "confirm";
         this.confirmationDialog.afterClosed().subscribe(async result => {
-
+            if (result) {
+                try {
+                    await this.jobsService.applyForJob(this.jobOffer._id)
+                    this.checkIfAlreadyApplied();
+                } catch (err) {
+                    console.error(err);
+                }
+            }
         });
+    }
+
+    checkIfAlreadyApplied() {
+        if (this.jobOffer.applicantsIds.includes(this.user.id)) {
+            this.alreadyApplied = true;
+        }
     }
 }

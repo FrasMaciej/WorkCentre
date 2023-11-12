@@ -71,3 +71,13 @@ export async function getJobsAuthor(req, res) {
         res.status(500).json();
     }
 }
+
+export async function applyJob(req, res) {
+    const dto: ApplyForJobDto = req.body.dto;
+    try {
+        await collections.jobs?.updateOne({ _id: new ObjectId(dto.jobId) }, { $push: { applicantsIds: String(dto.applicantId) } })
+        return res.json({}).status(200);
+    } catch (err) {
+        return err;
+    }
+}

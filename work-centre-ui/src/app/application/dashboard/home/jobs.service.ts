@@ -31,6 +31,10 @@ export class JobsService {
         return lastValueFrom(this.httpClient.delete<JobDto[]>(environment.apiURL + `/jobs/${id}`));
     }
 
+    applyForJob(jobId: string): Promise<any> {
+        return lastValueFrom(this.httpClient.post<any>(environment.apiURL + `/jobs/apply`, { dto: { jobId, applicantId: this.user.id } }));
+    }
+
     public setData(data: JobDto[]) {
         this.data$.next(data);
     }
