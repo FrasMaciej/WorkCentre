@@ -11,6 +11,7 @@ jobsApiRouter.get('/jobs/author/:id', jobsActions.getJobsAuthor);
 jobsApiRouter.get('/jobs/:id', jobsActions.getJob);
 jobsApiRouter.post('/jobs/apply', jobsActions.applyJob);
 jobsApiRouter.post('/jobs/resign', jobsActions.resignJob);
+jobsApiRouter.get('/jobs/applicant/:id', jobsActions.getJobsApplied);
 
 
 export default jobsApiRouter;

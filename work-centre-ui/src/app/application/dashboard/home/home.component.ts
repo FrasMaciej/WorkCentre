@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { AddOfferModalComponent } from './addOfferModal.component';
 import { LoggedUserService } from 'src/app/commonServices/userContext.service';
 import { ProfileService } from '../profile/profile.service';
-import { AddOrganizationModalComponent } from './addOrganizationModal.component';
 import { JobsService } from './jobs.service';
 import { ConfirmationDialog } from 'src/app/library/confirmationModal/confirmationDialog.component';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -18,16 +17,18 @@ import { Subscription } from 'rxjs';
         <h2 class="text-2xl font-bold mb-2">Job Offers Applied</h2>
         <mat-table [dataSource]="appliedJobOffers">
           <ng-container matColumnDef="statusIcon">
-            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-header-cell *matHeaderCellDef>Recruitment Active?</mat-header-cell>
             <mat-cell *matCellDef="let element">
-              <mat-icon [ngClass]="{'text-green-500': isCurrentDateInRange(element.startDate, element.endDate), 'text-gray-500': !isCurrentDateInRange(element.startDate, element.endDate)}">
-                {{ isCurrentDateInRange(element.startDate, element.endDate) ? 'check_circle' : 'highlight_off' }}
+              <mat-icon [ngClass]="{'text-green-500': isCurrentDateInRange(element.dateFrom, element.dateTo), 'text-red-500': !isCurrentDateInRange(element.dateFrom, element.dateTo)}">
+                {{ isCurrentDateInRange(element.dateFrom, element.dateTo) ? 'check_circle' : 'highlight_off' }}
               </mat-icon>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="title">
             <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{ element.title }}</mat-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.name }}
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="company">
             <mat-header-cell *matHeaderCellDef>Company</mat-header-cell>
@@ -35,7 +36,7 @@ import { Subscription } from 'rxjs';
           </ng-container>
           <ng-container matColumnDef="applicants">
             <mat-header-cell *matHeaderCellDef>Applicants</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{ element.applicants }}</mat-cell>
+            <mat-cell *matCellDef="let element">{{ element.applicantsIds.length }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="startDate">
             <mat-header-cell *matHeaderCellDef>Start Date</mat-header-cell>
@@ -48,11 +49,8 @@ import { Subscription } from 'rxjs';
           <ng-container matColumnDef="actions">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
             <mat-cell *matCellDef="let element" class="flex items-center justify-end space-x-2">
-              <button mat-icon-button (click)="viewOfferStatus(element)">
-                <mat-icon>timeline</mat-icon>
-              </button>
-              <button mat-icon-button (click)="cancelOffer(element)">
-                <mat-icon>cancel</mat-icon>
+              <button mat-icon-button (click)="navToDetails(element._id)">
+                <mat-icon>receipt</mat-icon>
               </button>
             </mat-cell>
           </ng-container>
@@ -95,7 +93,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog, private userContext: LoggedUserService, private profileService: ProfileService,
-    private jobsService: JobsService
+    private jobsService: JobsService, private router: Router
   ) {
 
     this.jobOfferForm = {
@@ -109,31 +107,14 @@ export class HomeComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.getOwnedJobs();
+    this.getAppliedJobOffers();
     this.subscriptions.add(
       this.jobsService.data.subscribe(res => {
         if (!!res) {
-          this.getOwnedJobs();
+          this.getAppliedJobOffers();
         }
       })
     );
-  }
-
-  viewOfferStatus(offer: any) {
-  }
-
-  cancelOffer(offer: any) {
-    this.confirmationDialog = this.dialog.open(ConfirmationDialog, {
-      disableClose: false
-    });
-    this.confirmationDialog.componentInstance.confirmMessage = "Are you sure you want to delete job offer?";
-
-    this.confirmationDialog.afterClosed().subscribe(async result => {
-      if (result) {
-        await this.jobsService.removeJob(offer._id);
-        this.getOwnedJobs();
-      }
-    });
   }
 
   isCurrentDateInRange(startDate: Date, endDate: Date): boolean {
@@ -143,16 +124,14 @@ export class HomeComponent implements OnInit {
     else return false;
   }
 
-  async getOwnedJobs() {
-    const userId = this.userContext.id;
-    try {
-      if (userId) {
-        const user = await this.profileService.getUserDetails(userId);
-        this.user = user.primary;
-      }
-    } catch (err) {
-      console.error(err);
-    }
+  async getAppliedJobOffers() {
+    this.appliedJobOffers = await this.jobsService.getAppliedJobOffers();
+    console.log(this.appliedJobOffers);
+  }
+
+  navToDetails(id) {
+    this.router.navigate(['dashboard', 'job', id])
   }
 
 }
+

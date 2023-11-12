@@ -72,6 +72,22 @@ export async function getJobsAuthor(req, res) {
     }
 }
 
+export async function getJobsApplied(req, res) {
+    const userId = req.params.id;
+
+    try {
+        if (userId) {
+            const jobs = await collections.jobs?.find({ applicantsIds: { $in: [userId] } }).toArray();
+            return res.json(jobs);
+        } else {
+            res.status(404).json();
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json();
+    }
+}
+
 export async function applyJob(req, res) {
     const dto: ApplyForJobDto = req.body.dto;
     try {
