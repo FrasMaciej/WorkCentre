@@ -17,16 +17,16 @@ export interface UserSchema {
         email: string;
     },
     twitter?: {
-        id: String,
-        token: String,
-        displayName: String,
-        username: String
+        id: string,
+        token: string,
+        displayName: string,
+        username: string
     },
     google?: {
-        id: String,
-        token: String,
-        email: String,
-        name: String
+        id: string,
+        token: string,
+        email: string,
+        name: string
     }
 }
 

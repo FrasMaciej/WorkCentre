@@ -82,7 +82,6 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
   confirmationDialog: MatDialogRef<ConfirmationDialog>;
-  isAddJobModalOpen: boolean = false;
   selectedOffer: any;
   newJobOffer: any = {};
   jobOfferForm: any;
@@ -126,7 +125,6 @@ export class HomeComponent implements OnInit {
 
   async getAppliedJobOffers() {
     this.appliedJobOffers = await this.jobsService.getAppliedJobOffers();
-    console.log(this.appliedJobOffers);
   }
 
   navToDetails(id) {

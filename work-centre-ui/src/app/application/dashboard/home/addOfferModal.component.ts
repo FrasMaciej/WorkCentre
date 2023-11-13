@@ -30,7 +30,7 @@ import { MatSelect } from '@angular/material/select';
                             <mat-form-field>
                                 <mat-select formControlName="company" placeholder="Company" #singleSelect>
                                     <mat-option>
-                                        <ngx-mat-select-search placeholder="search" ngx-mat-select-search [formControl]="jobOfferForm['companyFilter']"></ngx-mat-select-search>
+                                        <ngx-mat-select-search ngx-mat-select-search [formControl]="jobOfferForm['companyFilter']"></ngx-mat-select-search>
                                     </mat-option>
                                     <mat-option *ngFor="let org of filteredCompanys | async" [value]="org.name">{{org.name}}</mat-option>
                                 </mat-select>

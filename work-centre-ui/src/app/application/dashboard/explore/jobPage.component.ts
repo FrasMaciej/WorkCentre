@@ -129,7 +129,7 @@ export class JobPageComponent implements OnInit {
                 type: 'warning'
             }
         });
-        this.confirmationDialog.componentInstance.confirmMessage = "Are you sure you want to resign from, this job offer?";
+        this.confirmationDialog.componentInstance.confirmMessage = "Are you sure you want to resign from this job offer?";
         this.confirmationDialog.componentInstance.data.type = "confirm";
         this.confirmationDialog.afterClosed().subscribe(async result => {
             if (result) {

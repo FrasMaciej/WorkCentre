@@ -25,6 +25,14 @@ import { ProfileService } from '../profile.service';
                   Experience Name is required.
                 </mat-error>
               </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Experience Company/Place</mat-label>
+                <input matInput formControlName="place" required>
+                <mat-error *ngIf="experienceForm.get('experience').get(i.toString()).get('place').hasError('required')">
+                  Experience Company/Place is required.
+                </mat-error>
+              </mat-form-field>
               
               <mat-form-field appearance="fill" class="w-full">
                 <mat-label>Period</mat-label>
@@ -102,6 +110,7 @@ export class EditExperienceModalComponent {
         profileDescription: this.data.userDetails.profileDescription,
         experience: updatedExperience.map((exp: any) => ({
           name: exp.name,
+          place: exp.place,
           period: {
             from: exp.period.form.start,
             to: exp.period.form.end
@@ -116,6 +125,7 @@ export class EditExperienceModalComponent {
   addExperience(experience?: any) {
     const experienceGroup = this.fb.group({
       name: [experience ? experience.name : '', Validators.required],
+      place: [experience ? experience.place : '', Validators.required],
       period: this.fb.group({
         form: this.fb.group({
           start: [experience ? experience.period.from : new Date()],

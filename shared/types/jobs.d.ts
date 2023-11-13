@@ -19,4 +19,13 @@ declare global {
         jobId: string,
         applicantId: string;
     }
+
+    interface ApplyForJobDto {
+        jobId: string,
+        applicantId: string;
+    }
+
+    interface GetJobApplicantsDto {
+        id: string;
+    }
 }

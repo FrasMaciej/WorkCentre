@@ -13,7 +13,7 @@ export interface Skill {
 }
 export interface Experience {
     name: string;
-    place?: string;
+    place: string;
     period: {
         from: string;
         to: string;

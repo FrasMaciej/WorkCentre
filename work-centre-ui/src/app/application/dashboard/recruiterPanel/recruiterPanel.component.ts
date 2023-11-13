@@ -10,6 +10,7 @@ import { JobsService } from '../home/jobs.service';
 import { ConfirmationDialog } from 'src/app/library/confirmationModal/confirmationDialog.component';
 import { Subscription } from 'rxjs';
 import { OrganizationsService } from '../home/organizations.service';
+import { OfferDetailsModalComponent } from './offerDetailsModal.component';
 
 @Component({
   selector: 'recruiter-panel',
@@ -215,6 +216,17 @@ export class RecruiterPanelComponent implements OnInit {
 
 
   viewOfferStatus(offer: any) {
+    try {
+      const dialogRef = this.dialog.open(OfferDetailsModalComponent, {
+        data: { user: { ...this.user }, jobOffer: offer }
+      });
+
+      // dialogRef.afterClosed().subscribe(result => {
+      //   this.getUserData();
+      // });
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   cancelOffer(offer: any) {

@@ -43,7 +43,12 @@ export class JobsService {
         return lastValueFrom(this.httpClient.get<JobDto[]>(environment.apiURL + `/jobs/applicant/${this.user.id}`));
     }
 
+    getJobOfferApplicants(offerId: string): Promise<UserDetailsDto[]> {
+        return lastValueFrom(this.httpClient.get<UserDetailsDto[]>(environment.apiURL + `/job/applicants/${offerId}`));
+    }
+
     public setData(data: JobDto[]) {
         this.data$.next(data);
     }
+
 }

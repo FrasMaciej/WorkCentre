@@ -3,6 +3,10 @@ export { }
 declare global {
 
     interface UserListDto extends UserInfoDto {
+        _id: string;
+        email: string;
+        firstName: string;
+        lastName: string;
     }
 
     interface UserInfoDto {

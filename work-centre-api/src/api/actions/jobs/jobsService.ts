@@ -107,3 +107,28 @@ export async function resignJob(req, res) {
         return err;
     }
 }
+
+export async function getJobOfferApplicants(req, res) {
+    const offerId = req.params.id;
+    try {
+        const job = await collections.jobs?.findOne({ _id: new ObjectId(offerId) });
+        const applicantsIds = job?.applicantsIds.map(id => new ObjectId(id));
+        const applicants: any = await collections.users?.find({ _id: { $in: applicantsIds } }).toArray();
+        const mappedApplicants: any = applicants.map(a => (
+            {
+                _id: a._id,
+                email: a.local.email,
+                firstName: a.local.firstName,
+                lastName: a.local.lastName,
+                headerInfo: a.profile.headerInfo,
+                company: a.profile.company,
+                skills: a.profile.skills,
+                profileDescription: a.profile.profileDescription,
+                experience: a.profile.experience,
+                phone: a.profile.phone
+            }));
+        return res.json(mappedApplicants);
+    } catch (err) {
+        return err;
+    }
+}
