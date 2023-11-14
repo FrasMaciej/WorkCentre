@@ -11,12 +11,15 @@ import { Renderer2 } from '@angular/core';
     <div class="flex justify-center main-container">
       <div class="chat-container">
         <div class="messages" #messagesList #scrollMe>
-          <div *ngFor="let message of chat.messages" [ngClass]="{'incoming': getUserId() === message.sender, 'outgoing': getUserId() !== message.sender}" class="message flex flex-col">
-            <div class="flex flex-row gap-x-2 justify-items-center">
-              <div class="font-semibold">{{ getMessageAuthor(message)}}  •</div>
-              <div class="text-sm text-gray-700">{{message.timestamp | date:'medium'}}</div>
+          <div *ngFor="let message of chat.messages" [ngClass]="{'incoming': getUserId() === message.sender, 'outgoing': getUserId() !== message.sender}" class="flex flex-row justify-items-center gap-x-1 message-height">
+            <img class="circle-container mr-2" src="assets/avatar_placeholder.jpg" alt="Avatar">
+            <div class="message flex flex-col">
+              <div class="flex flex-row gap-x-2 justify-items-center">
+                <div class="font-semibold">{{ getMessageAuthor(message)}}  •</div>
+                <div class="text-sm text-gray-700">{{message.timestamp | date:'medium'}}</div>
+              </div>
+              <div>{{ message.content }}</div>
             </div>
-            <div>{{ message.content }}</div>
           </div>
         </div>
         <form #formElement>
@@ -27,8 +30,14 @@ import { Renderer2 } from '@angular/core';
     </div>
     `,
   styles: [`
-      .main-container {
+      .circle-container {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
 
+      .message-height {
+        min-height: 50px;
       }
 
       .chat-container {
@@ -85,7 +94,7 @@ import { Renderer2 } from '@angular/core';
       }
 
       .message {
-        width: 740px;
+        width: 650px;
         word-wrap: break-word;
       }
       
