@@ -218,7 +218,8 @@ export class RecruiterPanelComponent implements OnInit {
   viewOfferStatus(offer: any) {
     try {
       const dialogRef = this.dialog.open(OfferDetailsModalComponent, {
-        data: { user: { ...this.user }, jobOffer: offer }
+        data: { user: { ...this.user }, jobOffer: offer },
+        // height: "700px"
       });
     } catch (err) {
       console.error(err);

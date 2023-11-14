@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
     selector: 'users-list',
     template: `
         <mat-grid-list cols="2" rowHeight="150px" gutterSize="16px">
-            <mat-grid-tile *ngFor="let user of users" (mouseenter)="setHoveredItem(user)" (mouseleave)="setHoveredItem(null)" (click)="navigateToProfile(user._id)">
+            <mat-grid-tile *ngFor="let user of users | recursiveFilter: searchText" (mouseenter)="setHoveredItem(user)" (mouseleave)="setHoveredItem(null)" (click)="navigateToProfile(user._id)">
                 <div class="tile-content rounded-md shadow-lg border" [class.item_highlight]="hoveredItem === user">
                     <div class="flex flex-col gap-y-2">
                         <div class="flex flex-row">

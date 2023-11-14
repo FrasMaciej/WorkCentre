@@ -17,6 +17,14 @@ import { CandidatesModalComponent } from './candidatesModal.component';
                 <mat-icon class="mr-2 text-xl">business</mat-icon>
                 <span class="text-lg"><strong>Company:</strong> {{ data.jobOffer.company }}</span>
             </div>
+            <div class="flex items-center mb-4 col-size gap-x-2" *ngIf="data.jobOffer.location">
+                <mat-icon class="mr-2 text-xl">location_on</mat-icon>
+                <span class="text-lg"><strong>Location:</strong> {{ data.jobOffer.location }}</span>
+            </div>
+            <div class="flex items-center mb-4 col-size gap-x-2" *ngIf="data.jobOffer.salary">
+                <mat-icon class="mr-2 text-xl">attach_money</mat-icon>
+                <span class="text-lg"><strong>Salary:</strong> {{ data.jobOffer.salary }}</span>
+            </div>
             <div class="flex items-center mb-4 col-size gap-x-2">
                 <mat-icon class="mr-2 text-xl">schedule</mat-icon>
                 <span class="text-lg"><strong>Recruitment Active:  </strong></span>
@@ -54,7 +62,7 @@ import { CandidatesModalComponent } from './candidatesModal.component';
 
         .container {
             width: 500px;
-            height: 400px;
+            height: 500px;
         }
     `]
 })

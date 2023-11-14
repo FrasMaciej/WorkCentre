@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
   selector: 'jobs-list',
   template: `
     <mat-grid-list cols="2" rowHeight="150px" gutterSize="16px">
-      <mat-grid-tile *ngFor="let offer of jobs" (mouseenter)="setHoveredItem(offer)" (mouseleave)="setHoveredItem(null)">
+      <mat-grid-tile *ngFor="let offer of jobs | recursiveFilter: searchText" (mouseenter)="setHoveredItem(offer)" (mouseleave)="setHoveredItem(null)">
         <div class="tile-content" [class.item_highlight]="hoveredItem === offer" (click)="navigateToJob(offer)">
           <div class="flex flex-col gap-y-2">
             <div class="flex">
@@ -66,6 +66,9 @@ export class JobsListComponent {
   hoveredItem: any;
 
   constructor(private router: Router) { }
+
+  ngOnInit() {
+  }
 
   setHoveredItem(offer: any) {
     this.hoveredItem = offer;

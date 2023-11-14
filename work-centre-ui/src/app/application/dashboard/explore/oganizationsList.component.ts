@@ -4,7 +4,7 @@ import { Component, Input, OnInit } from '@angular/core';
     selector: 'organizations-list',
     template: `
         <mat-grid-list cols="2" rowHeight="100px" gutterSize="16px">
-            <mat-grid-tile *ngFor="let org of organizations; let last = last" (mouseenter)="setHoveredItem(org)" (mouseleave)="setHoveredItem(null)">
+            <mat-grid-tile *ngFor="let org of organizations | recursiveFilter: searchText; let last = last" (mouseenter)="setHoveredItem(org)" (mouseleave)="setHoveredItem(null)">
                 <div class="tile-content" [class.item_highlight]="hoveredItem === org">
                     <div class="circle-container cursor-pointer">
                         <img src="assets/company_placeholder.png" alt="Avatar">

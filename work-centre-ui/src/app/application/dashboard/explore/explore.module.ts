@@ -8,11 +8,12 @@ import { JobsListComponent } from './jobsList.component';
 import { OrganizationsListComponent } from './oganizationsList.component';
 import { CommonModule } from '@angular/common';
 import { JobPageComponent } from './jobPage.component';
+import { RecursiveFilterPipe } from './filter.pipe';
 
 @NgModule({
     imports: [CommonControlsModule, FormsModule, ReactiveFormsModule, MatDividerModule, CommonModule],
     exports: [],
-    declarations: [ExploreComponent, UsersListComponent, JobsListComponent, OrganizationsListComponent, JobPageComponent],
+    declarations: [ExploreComponent, UsersListComponent, JobsListComponent, OrganizationsListComponent, JobPageComponent, RecursiveFilterPipe],
     providers: [],
 })
 export class ExploreModule { }
