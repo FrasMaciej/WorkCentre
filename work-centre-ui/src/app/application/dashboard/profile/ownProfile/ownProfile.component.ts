@@ -17,17 +17,17 @@ import { ComponentType } from '@angular/cdk/portal';
         <div class="profile-header">
           <div>
             <h2 class="profile-name">{{user.firstName}} {{user.lastName}}</h2>
-            <div class="profile-header-info flex justify-items-center gap-x-2">
+            <div class="profile-header-info flex justify-items-center gap-x-2" *ngIf="userDetails?.headerInfo">
               <mat-icon>edit</mat-icon>
               <div>{{userDetails?.headerInfo}}</div>
             </div>
-            <div class="profile-company flex justify-items-center gap-x-2 mb-2">
+            <div class="profile-company flex justify-items-center gap-x-2 mb-2" *ngIf="userDetails?.company">
               <mat-icon>work</mat-icon>
-              <div>{{userDetails?.company}}</div>
+              <div>{{userDetails.company}}</div>
             </div>
-            <div class="profile-company flex justify-items-center gap-x-2">
+            <div class="profile-company flex justify-items-center gap-x-2" *ngIf="userDetails?.location">
               <mat-icon> location_on</mat-icon>
-              <div>{{userDetails?.location}}</div>
+              <div>{{userDetails.location}}</div>
             </div>   
           </div>
           <img src="assets/avatar_placeholder.jpg" alt="Avatar" class="profile-avatar">
@@ -90,13 +90,13 @@ import { ComponentType } from '@angular/cdk/portal';
       <div class="background">
         <div class="profile-section">
           <h3 class="section-title">Contact</h3>
-          <div class="flex flex-items-center gap-x-2">
+          <div class="flex flex-items-center gap-x-2" *ngIf="userDetails?.email">
             <mat-icon>email</mat-icon>
-            <div class="contact-info" *ngIf="userDetails?.phone">{{userDetails.email}}</div>
+            <div class="contact-info">{{userDetails.email}}</div>
           </div>
-          <div class="flex flex-items-center gap-x-2">
+          <div class="flex flex-items-center gap-x-2"  *ngIf="userDetails?.phone">
             <mat-icon>phone</mat-icon>
-            <div class="contact-info" *ngIf="userDetails?.phone">{{userDetails.phone}}</div>
+            <div class="contact-info">{{userDetails.phone}}</div>
           </div>
         </div>
         <div class="flex justify-end">

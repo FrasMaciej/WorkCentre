@@ -13,10 +13,10 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
         <mat-icon> message</mat-icon>
         Send Message
       </button>
-      <button mat-raised-button color="accent" class="action-button">
+      <!-- <button mat-raised-button color="accent" class="action-button">
         <mat-icon>person_add</mat-icon>
         Send Invitation to friends
-      </button>
+      </button> -->
     </div>
     <div *ngIf="userFound" class="profile-container">
       <div class="profile-header">
@@ -38,7 +38,7 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
         <img src="assets/avatar_placeholder.jpg" alt="Avatar" class="profile-avatar">
       </div>
 
-      <div class="profile-section">
+      <div class="profile-section" *ngIf="userDetails.profileDescription">
         <h3 class="section-title">Description</h3>
         <p class="section-content">{{userDetails?.profileDescription}}</p>
       </div>
@@ -46,7 +46,7 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
       <div class="profile-section">
         <h3 class="section-title">Skills</h3>
         <div class="skill-list">
-          <li class="skill-item gap-y-0-5" *ngFor="let skill of userDetails?.skills">
+          <li class="skill-item gap-y-0-5" *ngFor="let skill of userDetails?.skills" >
             <div class="skill-name">{{skill.name}}</div>
             <div *ngIf="skill?.description" class="skill-description">{{skill.description}}</div>
           </li>
