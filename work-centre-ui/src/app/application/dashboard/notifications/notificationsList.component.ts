@@ -52,6 +52,7 @@ export class NotificationsListComponent implements OnInit {
     async onNotificationClick(notification: NotificationsDto) {
         this.selectedNotification = notification;
         this.notificationsService.emitChange(notification);
+        const selectedNotificationId = this.selectedNotification._id;
         await this.notificationsService.changeNotificationStatus({
             notificationId: notification._id,
             userId: this.user.id
@@ -59,6 +60,7 @@ export class NotificationsListComponent implements OnInit {
             const notifications = await this.notificationsService.getNotifications();
             this.notifications = notifications;
             const notificationsNumber = notifications.filter(n => n.viewed === false).length;
+            this.selectedNotification = this.notifications.find(n => n._id === selectedNotificationId)
             this.notificationsService.emitChangeNotificationsNumber(notificationsNumber);
         });
 

@@ -53,7 +53,7 @@ export class DashboardOptionsComponent {
 
     async ngOnInit() {
         const notifications = await this.notificationsService.getNotifications();
-        this.notificationsNumber = notifications?.filter(n => n.viewed == false).length;
+        this.notificationsNumber = notifications.filter(n => n.viewed == false).length;
 
         this.notificationsService.notificationsNumberChangeEmitted$.subscribe(num => {
             this.notificationsNumber = num;
