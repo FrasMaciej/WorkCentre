@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { ConversationsListComponent } from './conversation/conversationsList.component';
 import { RecruiterPanelModule } from './recruiterPanel/recruiterPanel.module';
 import { StatusModalComponent } from './recruiterPanel/statusModal.component';
+import { NotificationsListComponent } from './notifications/notificationsList.component';
 
 
 @NgModule({
@@ -21,7 +22,7 @@ import { StatusModalComponent } from './recruiterPanel/statusModal.component';
         HomeModule, NotificationsModule, ProfileModule, RecruiterPanelModule, RouterModule.forChild(routes)
     ],
     exports: [RouterModule],
-    declarations: [DashboardComponent, DashboardOptionsComponent, ConversationsListComponent, StatusModalComponent],
+    declarations: [DashboardComponent, DashboardOptionsComponent, ConversationsListComponent, StatusModalComponent, NotificationsListComponent],
     providers: [],
 })
 export class DashboardModule { }

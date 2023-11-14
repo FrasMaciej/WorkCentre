@@ -10,9 +10,6 @@ export class ConversationService {
 
   private emitChangeSource = new Subject<any>();
   changeEmitted$ = this.emitChangeSource.asObservable();
-  emitChange(change: any) {
-    this.emitChangeSource.next(change);
-  }
 
   constructor(private httpClient: HttpClient) {
     this.socket = io.connect(environment.serverUrl);
@@ -24,6 +21,10 @@ export class ConversationService {
     this.socket.on('connect_timeout', (timeout) => {
       console.error('WebSocket connection timeout:', timeout);
     });
+  }
+
+  emitChange(change: any) {
+    this.emitChangeSource.next(change);
   }
 
   getMessages(): Observable<any> {

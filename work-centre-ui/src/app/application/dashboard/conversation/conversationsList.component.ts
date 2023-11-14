@@ -32,7 +32,6 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
   ],
 })
 export class ConversationsListComponent implements OnInit {
-  @Output() chatSelected = new EventEmitter<string>();
   chats: any = [];
   selectedChat: any;
 

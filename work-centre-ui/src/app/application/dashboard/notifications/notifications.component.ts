@@ -1,14 +1,25 @@
 import { Component, OnInit } from '@angular/core';
+import { NotificationsService } from './notifications.service';
 
 @Component({
     selector: 'notifications',
     template: `
-        Notifications
+        <div *ngIf="notification?.content">        
+            {{notification.content}}
+        </div>
     `
 })
 
 export class NotificationsComponent implements OnInit {
-    constructor() { }
+    notification: NotificationsDto;
 
-    ngOnInit() { }
+    constructor(private notificationsService: NotificationsService) {
+        this.notificationsService.changeEmitted$.subscribe(notification => {
+            this.notification = notification;
+        });
+    }
+
+    ngOnInit() {
+
+    }
 }

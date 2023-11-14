@@ -1,3 +1,4 @@
+import { NotificationSchema } from "../notifications/notifications";
 import { UserProfileSchema } from "../profile/profile";
 import { Roles } from "./roles";
 
@@ -10,6 +11,7 @@ export interface UserSchema {
     jobsAuthor?: string[],
     jobsApplicant?: string[],
     organizationsOwner?: string[],
+    notifications?: NotificationSchema[],
     facebook?: {
         id: string;
         token: string;

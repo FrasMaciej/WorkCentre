@@ -5,7 +5,7 @@ import { MessageSchema } from '../database/models/message/message';
 import { ObjectId } from 'mongodb';
 import { server } from "../app";
 import { Server as Engine } from "engine.io";
-// import { Server } from "socket.io";
+import { addNotification } from "../api/actions/notifications/notificationsService";
 
 const path = require('path');
 
@@ -65,6 +65,13 @@ io.on('connection', (socket) => {
                     { $push: { "conversationIds": String(result?.insertedId) } });
             }
         }
+        await addNotification({
+            title: "New message received",
+            type: "message",
+            content: `You have new message from ${senderUser?.local.firstName} ${senderUser?.local.lastName}`,
+            receiverId: message.receiver,
+            sender: message.sender
+        });
         io.to(roomId).emit('message-received', message);
     });
 
@@ -130,6 +137,13 @@ io.on('connection', (socket) => {
                     { $push: { "conversationIds": String(result?.insertedId) } });
             }
         }
+        addNotification({
+            title: "New message received",
+            type: "message",
+            content: `You have new message from ${senderUser?.local.firstName} ${senderUser?.local.lastName}`,
+            receiverId: message.receiver,
+            sender: message.sender
+        });
         io.emit('message-received', message);
     });
 

@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import { collections } from "../../../database/mongoConnection";
 import { StateType, states } from "../../../database/models/job/job";
+import { addNotification } from "../notifications/notificationsService";
 
 export async function addJob(req, res) {
     const id = req.body.ownerId;
@@ -92,7 +93,24 @@ export async function getJobsApplied(req, res) {
 export async function applyJob(req, res) {
     const dto: ApplyForJobDto = req.body.dto;
     try {
-        await collections.jobs?.updateOne({ _id: new ObjectId(dto.jobId) }, { $push: { applicants: { id: String(dto.applicantId), state: 'default' } } })
+        const updatedJob = await collections.jobs?.findOneAndUpdate({ _id: new ObjectId(dto.jobId) }, { $push: { applicants: { id: String(dto.applicantId), state: 'default' } } })
+        const applicant = await collections.users?.findOne({ _id: new ObjectId(dto.applicantId) });
+        if (updatedJob?.value?.author) {
+            addNotification({
+                title: "New application for your job offer",
+                type: "new-applicant",
+                content: `${applicant?.local.firstName} ${applicant?.local.lastName} has applied for your job offer: ${updatedJob.value.name}`,
+                receiverId: updatedJob?.value?.author,
+                sender: String(applicant?._id)
+            });
+            addNotification({
+                title: "Application succesfull",
+                type: "applied-for-offer",
+                content: `You have succesfully applied for job offer: ${updatedJob.value.name}`,
+                receiverId: String(applicant?._id),
+                sender: updatedJob?.value?.author
+            });
+        }
         return res.json({}).status(200);
     } catch (err) {
         return err;
@@ -157,10 +175,19 @@ export async function editState(req, res) {
                     job.applicants[applicantIndex].state = state;
                 }
 
-                await collections.jobs?.updateOne(
+                const updatedJob = await collections.jobs?.findOneAndUpdate(
                     { _id: new ObjectId(dto.offerId) },
                     { $set: job }
                 );
+                if (updatedJob && updatedJob.value?.author) {
+                    addNotification({
+                        title: "Application state changed",
+                        type: "application-status-changed",
+                        content: `Your application status for offer ${updatedJob?.value?.name} has changed to: ${state}`,
+                        receiverId: dto.workerId,
+                        sender: updatedJob?.value?.author
+                    });
+                }
 
                 res.status(200).json({ message: 'State updated successfully.' });
             } else {

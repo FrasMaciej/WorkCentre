@@ -17,6 +17,7 @@ import usersApiRouter from './api/routes/usersApi';
 import chatApiRouter from './api/routes/chatApi';
 import jobsApiRouter from './api/routes/jobsApi';
 import organizationsApiRouter from './api/routes/organizationsApi';
+import notificationsApiRouter from './api/routes/notificationsApi';
 
 export const app = express();
 export const server = require('http').createServer(app);
@@ -121,7 +122,7 @@ server.listen(constants.server_port, async () => {
     await connectToDatabase();
 });
 
-app.use('/api', apiRouter, authApiRouter, usersApiRouter, chatApiRouter, jobsApiRouter, organizationsApiRouter);
+app.use('/api', apiRouter, authApiRouter, usersApiRouter, chatApiRouter, jobsApiRouter, organizationsApiRouter, notificationsApiRouter);
 
 process.on('SIGINT', async () => {
     await closeDatabaseConnection();

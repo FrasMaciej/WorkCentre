@@ -120,7 +120,6 @@ export class ConversationComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(private conversationService: ConversationService, private user: LoggedUserService) {
     conversationService.changeEmitted$.subscribe(chat => {
       this.chat = chat;
-      console.log(this.chat);
       this.conversationService.joinConversationRoom(chat._id);
 
       this.receiverId = this.chat.members.find(m => m._id !== this.user.id)?._id;

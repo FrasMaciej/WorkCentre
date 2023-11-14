@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthorizationService } from '../authorization/authorization.service';
-import { ConversationsListComponent } from './conversation/conversationsList.component';
 import { ConversationComponent } from './conversation/conversation.component';
 
 @Component({
@@ -22,6 +21,7 @@ import { ConversationComponent } from './conversation/conversation.component';
             </section>
             <section class="color-gray with-border">
                 <conversations-list *ngIf="dashboardOption==='conversation'"(chatSelected)="onChatSelect($event)"></conversations-list>
+                <notifications-list *ngIf="dashboardOption==='notifications'"></notifications-list>
             </section>
             <section class="color-gray">
                 <router-outlet></router-outlet>
