@@ -6,6 +6,7 @@ declare global {
         type: string;
         content: string;
         timestamp: Date;
+        viewed: boolean;
         _id?: string;
     }
 
@@ -15,5 +16,10 @@ declare global {
         content: string;
         receiverId: string;
         sender: string;
+    }
+
+    interface ChangeNotificationStatusDto {
+        notificationId: string;
+        userId: string;
     }
 }

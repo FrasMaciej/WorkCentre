@@ -20,10 +20,34 @@ export async function addNotification(dto: AddNotificationDto) {
                 _id: new ObjectId(dto.receiverId)
             },
             {
-                $push: { "notifications": { title: dto.title, type: dto.type, content: dto.content, viewed: false, timestamp: new Date() } }
+                $push: { "notifications": { title: dto.title, type: dto.type, content: dto.content, viewed: false, timestamp: new Date(), _id: new ObjectId() } }
             });
         return true;
     } catch (err) {
         return false;
+    }
+}
+
+export async function changeNotificationStatus(req, res) {
+    const dto: ChangeNotificationStatusDto = req.body;
+    try {
+        const user: any = await collections.users?.findOne({ _id: new ObjectId(dto.userId) });
+        if (user) {
+            const notificationIndex: any = user.notifications?.findIndex(
+                notification => (notification._id.toString() === dto.notificationId.toString())
+            );
+            if (notificationIndex !== -1) {
+                user.notifications[notificationIndex]['viewed'] = true;
+                await collections.users?.updateOne(
+                    { "notifications._id": new ObjectId(dto.notificationId) },
+                    { $set: { "notifications.$.viewed": true } }
+                );
+                return res.json({});
+            }
+        }
+        return false;
+    } catch (err) {
+        console.error(err);
+        return res.json({});
     }
 }

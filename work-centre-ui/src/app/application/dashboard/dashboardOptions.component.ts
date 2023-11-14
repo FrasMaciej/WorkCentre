@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NotificationsService } from './notifications/notifications.service';
 
 @Component({
     selector: 'dashboard-options',
@@ -20,6 +21,7 @@ import { ActivatedRoute, Router } from '@angular/router';
             <button class="flex gap-x-3 items-center" [class.font-color-red]="dashboardOption==='notifications'" (click)="changeSelected('notifications')" routerLink="notifications">
                 <mat-icon class="icon-display">notifications_none</mat-icon>
                 <div>Notifications</div>
+                <div class="font-color-red">{{notificationsNumber}}</div>
             </button>
             <button class="flex gap-x-3 items-center" [class.font-color-red]="dashboardOption==='conversation'" (click)="changeSelected('conversation')" routerLink="conversation">
                 <mat-icon class="icon-display">mail_outline</mat-icon>
@@ -45,10 +47,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class DashboardOptionsComponent {
     @Output() dashboardOptionValueChanged = new EventEmitter();
     dashboardOption = '';
+    notificationsNumber: number;
 
-    constructor(private router: Router, private route: ActivatedRoute) { }
+    constructor(private router: Router, private route: ActivatedRoute, private notificationsService: NotificationsService) { }
 
-    ngOnInit() {
+    async ngOnInit() {
+        const notifications = await this.notificationsService.getNotifications();
+        this.notificationsNumber = notifications?.filter(n => n.viewed == false).length;
+
+        this.notificationsService.notificationsNumberChangeEmitted$.subscribe(num => {
+            this.notificationsNumber = num;
+        });
+
         this.route.firstChild?.url.subscribe(urlSegments => {
             const url = urlSegments.map(segment => segment.path).join('/');
             switch (url) {

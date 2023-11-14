@@ -52,7 +52,7 @@ import { ConversationComponent } from './conversation/conversation.component';
 
         .custom-grid {
             display: grid;
-            grid-template-columns: 2fr 3fr 12fr;
+            grid-template-columns: 2.5fr 3fr 12fr;
             grid-template-rows: 1.5fr 10fr 1fr;
             min-height: 100vh; 
         }
@@ -82,6 +82,10 @@ export class DashboardComponent {
     dashboardOption = '';
 
     constructor(private router: Router, private authorizationService: AuthorizationService, private route: ActivatedRoute) { }
+
+    async ngOnInit() {
+
+    }
 
     async logout() {
         try {

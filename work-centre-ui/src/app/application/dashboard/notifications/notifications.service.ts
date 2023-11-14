@@ -8,6 +8,8 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
 export class NotificationsService {
     private emitChangeSource = new Subject<any>();
     changeEmitted$ = this.emitChangeSource.asObservable();
+    private notificationsNumberEmitChange = new Subject<any>();
+    notificationsNumberChangeEmitted$ = this.notificationsNumberEmitChange.asObservable();
 
     constructor(private httpClient: HttpClient, private user: LoggedUserService) { }
 
@@ -15,8 +17,16 @@ export class NotificationsService {
         this.emitChangeSource.next(change);
     }
 
+    emitChangeNotificationsNumber(change: any) {
+        this.notificationsNumberEmitChange.next(change);
+    }
+
     getNotifications() {
         return lastValueFrom(this.httpClient.get<NotificationsDto[]>(`${environment.apiURL}/notifications/${this.user.id}`));
+    }
+
+    changeNotificationStatus(dto: ChangeNotificationStatusDto) {
+        return lastValueFrom(this.httpClient.put<any>(`${environment.apiURL}/notifications/change`, dto));
     }
 
 }
