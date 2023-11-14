@@ -21,10 +21,14 @@ import { ComponentType } from '@angular/cdk/portal';
               <mat-icon>edit</mat-icon>
               <div>{{userDetails?.headerInfo}}</div>
             </div>
-            <div class="profile-company flex justify-items-center gap-x-2">
+            <div class="profile-company flex justify-items-center gap-x-2 mb-2">
               <mat-icon>work</mat-icon>
               <div>{{userDetails?.company}}</div>
             </div>
+            <div class="profile-company flex justify-items-center gap-x-2">
+              <mat-icon> location_on</mat-icon>
+              <div>{{userDetails?.location}}</div>
+            </div>   
           </div>
           <img src="assets/avatar_placeholder.jpg" alt="Avatar" class="profile-avatar">
         </div>
@@ -261,7 +265,8 @@ export class OwnProfileComponent implements OnInit {
     profileDescription: '',
     experience: [],
     phone: 0,
-    email: ''
+    email: '',
+    location: ''
   };
   sections = [
     { title: 'Description', field: 'profileDescription', type: 'text' },

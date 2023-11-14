@@ -29,6 +29,7 @@ declare global {
         experience: UserExperienceDto[];
         phone: number;
         state: string;
+        location?: string;
     }
 
     interface UserDetails {
@@ -39,6 +40,7 @@ declare global {
         experience: UserExperienceDto[];
         phone: number;
         email: string;
+        location?: string;
     }
 
     interface UserExperienceDto {

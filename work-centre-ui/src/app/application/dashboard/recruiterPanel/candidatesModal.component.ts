@@ -35,27 +35,31 @@ import { StatusModalComponent } from './statusModal.component';
   </div>
 
   <div class="mt-4">
-    <div class="flex justify-items-center mb-2">
+    <div class="flex justify-items-center mb-2" *ngIf="candidate?.headerInfo">
       <mat-icon class="text-gray-600 mr-2">info</mat-icon>
       <p>{{ candidate.headerInfo }}</p>
     </div>
-    <div class="flex justify-items-center mb-2">
+    <div class="flex justify-items-center mb-2" *ngIf="candidate?.company">
       <mat-icon class="text-gray-600 mr-2">business</mat-icon>
       <p>{{ candidate.company }}</p>
     </div>
-    <div class="flex justify-items-center mb-2">
+    <div class="flex justify-items-center mb-2" *ngIf="candidate?.profileDescription">
       <mat-icon class="text-gray-600 mr-2">description</mat-icon>
       <p>{{ candidate.profileDescription }}</p>
     </div>
-    <div class="flex justify-items-center mb-2">
+    <div class="flex justify-items-center mb-2" *ngIf="candidate?.location">
+      <mat-icon class="text-gray-600 mr-2">location_on</mat-icon>
+      <p>{{ candidate.location }}</p>
+    </div>
+    <div class="flex justify-items-center mb-2" *ngIf="candidate?.phone">
       <mat-icon class="text-gray-600 mr-2">phone</mat-icon>
       <p>{{ candidate.phone }}</p>
     </div>
-    <div class="flex justify-items-center mb-6">
+    <div class="flex justify-items-center mb-6" *ngIf="candidate?.email">
       <mat-icon class="text-gray-600 mr-2">email</mat-icon>
       <p>{{ candidate.email }}</p>
     </div>
-    <div class="flex justify-items-center mb-4">
+    <div class="flex justify-items-center mb-4" *ngIf="candidate?.state">
       <div>State: </div>&nbsp;
       <b>{{ getStatus(candidate.state) }}</b>
     </div>

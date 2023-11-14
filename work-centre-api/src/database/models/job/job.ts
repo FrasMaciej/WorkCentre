@@ -6,6 +6,8 @@ export interface JobSchema {
     details: string;
     applicants: Applicant[];
     author?: string;
+    salary?: string;
+    locatioN?: string;
 }
 
 export interface Applicant {

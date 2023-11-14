@@ -29,6 +29,7 @@ export async function getDetailedUsers(req, res) {
                 profileDescription: u.profile.profileDescription,
                 experience: u.profile.experience,
                 phone: u.profile.phone,
+                location: u.profile.location
             };
         });
         return res.json(mappedUsers);

@@ -133,7 +133,8 @@ export async function getJobOfferApplicants(req, res) {
                 profileDescription: a.profile.profileDescription,
                 experience: a.profile.experience,
                 phone: a.profile.phone,
-                state: matchingApplicant?.state
+                state: matchingApplicant?.state,
+                location: a.profile.location
             };
         });
         return res.json(mappedApplicants);

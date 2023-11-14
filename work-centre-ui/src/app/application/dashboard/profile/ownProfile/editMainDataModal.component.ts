@@ -26,6 +26,14 @@ import { NgForm } from '@angular/forms';
           </mat-form-field>
         </div>
 
+        <div class="mb-4">
+          <label for="location" class="block text-sm font-medium text-gray-600">Location:</label>
+          <mat-form-field appearance="fill" class="w-full">
+            <input matInput id="location" name="location" [(ngModel)]="data.userDetails.location" required minlength="3">
+            <mat-error *ngIf="mainForm.controls['location']?.errors?.['required']">Location is required.</mat-error>
+          </mat-form-field>
+        </div>
+
         <div class="flex justify-end gap-x-4">
           <button mat-stroked-button color="basic" type="button" (click)="closeModal()">
             Cancel
@@ -61,6 +69,7 @@ export class EditMainDataModalComponent {
           experience: this.data.userDetails.experience,
           phone: this.data.userDetails.phone,
           email: this.data.userDetails.email,
+          location: this.data.userDetails.location,
         }
       });
     }

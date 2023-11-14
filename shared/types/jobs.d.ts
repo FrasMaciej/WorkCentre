@@ -8,7 +8,9 @@ declare global {
         dateFrom: Date,
         dateTo: Date,
         applicants: Applicant[];
-        author?: string
+        author?: string,
+        salary?: string,
+        location?: string
     }
 
     export interface Applicant {

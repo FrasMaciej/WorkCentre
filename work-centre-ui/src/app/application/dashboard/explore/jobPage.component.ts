@@ -36,6 +36,23 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
                     </p>
                 </div>
 
+                
+                <div class="flex flex-col mb-4 gap-y-2" *ngIf="jobOffer?.location">
+                    <div class="text-lg font-semibold flex items-center gap-x-3">
+                        <mat-icon>location_on</mat-icon> 
+                        Location
+                    </div>
+                    <p class="text-base">{{ jobOffer.location }}</p>
+                </div>
+
+                <div class="flex flex-col mb-4 gap-y-2" *ngIf="jobOffer?.salary">
+                    <div class="text-lg font-semibold flex items-center gap-x-3">
+                        <mat-icon> attach_money</mat-icon>
+                        Salary
+                    </div>
+                    <p class="text-base">{{ jobOffer.salary }}</p>
+                </div>
+
                 <div class="flex flex-col mb-4 gap-y-2">
                     <div class="text-lg font-semibold flex items-center gap-x-3">
                         <mat-icon>description</mat-icon> 
@@ -43,6 +60,7 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
                     </div>
                     <p class="text-base">{{ jobOffer.details }}</p>
                 </div>
+                
 
                 <div *ngIf="!isViewerAuthor">
                     <button *ngIf="!alreadyApplied" mat-raised-button color="accent" class="mt-4" (click)="applyForJob()">Apply Now</button>

@@ -5,6 +5,7 @@ export interface UserProfileSchema {
     profileDescription?: string;
     experience?: Experience[];
     phone?: number;
+    location?: string;
 }
 
 export interface Skill {

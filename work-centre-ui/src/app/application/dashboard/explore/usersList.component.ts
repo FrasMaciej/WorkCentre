@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'users-list',
     template: `
-        <mat-grid-list cols="2" rowHeight="4:1">
+        <mat-grid-list cols="2" rowHeight="150px" gutterSize="16px">
             <mat-grid-tile *ngFor="let user of users" (mouseenter)="setHoveredItem(user)" (mouseleave)="setHoveredItem(null)" (click)="navigateToProfile(user._id)">
-                <div class="tile-content" [class.item_highlight]="hoveredItem === user">
+                <div class="tile-content rounded-md shadow-lg border" [class.item_highlight]="hoveredItem === user">
                     <div class="flex flex-col gap-y-2">
                         <div class="flex flex-row">
                             <div class="circle-container cursor-pointer">
@@ -17,11 +17,15 @@ import { Router } from '@angular/router';
                                 <div class="text-color" matListItemLine>{{user.email}}</div>
                             </div>
                         </div>
-                        <div *ngIf="user?.headerInfo">
-                            <div class="text-color" matListItemLine>{{user.headerInfo}}</div>
-                        </div>
-                        <div *ngIf="!user?.headerInfo">
-                            <div class="text-color" matListItemLine>Użytkownik nie udostępnił opisu</div>
+                        <div class="flex flex-row justify-items-center gap-x-2 mt-2">
+                            <div *ngIf="user?.location" class="flex gap-x-1">
+                                <mat-icon>location_on</mat-icon>
+                                <div class="text-color" matListItemLine>{{user.location}}</div>
+                            </div>
+                            <div *ngIf="user?.headerInfo" class="flex gap-x-1">
+                                <mat-icon>edit</mat-icon>
+                                <div class="text-color" matListItemLine>{{user.headerInfo}}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -47,28 +51,24 @@ import { Router } from '@angular/router';
 
         .tile-content {
             display: flex;
-            // align-items: center;
+            align-items: center;
             padding: 16px;
-            border: 1px solid gray;
+            border: 1px solid white;
             border-radius: 4px;
             cursor: pointer;
             width: 95%;
-            height: 125px;
+            height: 150px;
         }
     `]
 })
 
-export class UsersListComponent implements OnInit {
+export class UsersListComponent {
     @Input() users: UserDetailsDto[] = [];
     @Input() searchText: string;
 
     hoveredItem: any;
 
     constructor(private router: Router) { }
-
-    ngOnInit() {
-        console.log(this.users);
-    }
 
     navigateToProfile(id: string) {
         this.router.navigate(['dashboard', 'profile', id])

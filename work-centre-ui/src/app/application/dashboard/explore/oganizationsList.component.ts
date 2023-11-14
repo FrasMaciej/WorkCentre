@@ -38,7 +38,7 @@ import { Component, Input, OnInit } from '@angular/core';
             display: flex;
             align-items: center;
             padding: 16px;
-            border: 1px solid gray;
+            border: 1px solid white;
             border-radius: 4px;
             cursor: pointer;
             width: 95%;

@@ -28,6 +28,17 @@ import { MatSelect } from '@angular/material/select';
                         </div>
                         <div class="form-group">
                             <mat-form-field>
+                                <input matInput placeholder="Salary" formControlName="salary">
+                            </mat-form-field>
+                        </div>
+                        <div class="form-group">
+                            <mat-form-field>
+                                <input matInput placeholder="Location" formControlName="location">
+                                <mat-error *ngIf="jobOfferForm.get('details').hasError('required')">Location is required</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="form-group">
+                            <mat-form-field>
                                 <mat-select formControlName="company" placeholder="Company" #singleSelect>
                                     <mat-option>
                                         <ngx-mat-select-search ngx-mat-select-search [formControl]="jobOfferForm['companyFilter']"></ngx-mat-select-search>
@@ -66,7 +77,7 @@ import { MatSelect } from '@angular/material/select';
 
         .modal-content {
             width: 500px;
-            height: 400px;
+            height: 525px;
         }
         
     `]
@@ -89,6 +100,8 @@ export class AddOfferModalComponent implements OnInit {
         this.user = this.data.user;
         this.jobOfferForm = new FormGroup({
             name: new FormControl('', [Validators.required]),
+            salary: new FormControl(''),
+            location: new FormControl('', [Validators.required]),
             company: new FormControl('', [Validators.required]),
             companyFilter: new FormControl(''),
             details: new FormControl('', [Validators.required]),
@@ -157,6 +170,8 @@ export class AddOfferModalComponent implements OnInit {
                     details: this.jobOfferForm.get('details').value,
                     dateFrom: this.jobOfferForm.get('dateForm.start').value,
                     dateTo: this.jobOfferForm.get('dateForm.end').value,
+                    salary: this.jobOfferForm.get('salary').value,
+                    location: this.jobOfferForm.get('location').value,
                     applicants: [],
                 });
                 const jobs = await this.jobsService.getJobs();
