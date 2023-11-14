@@ -50,7 +50,7 @@ import { OfferDetailsModalComponent } from './offerDetailsModal.component';
           </ng-container>
           <ng-container matColumnDef="applicants">
             <mat-header-cell *matHeaderCellDef>Applicants</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{ element.applicantsIds.length }}</mat-cell>
+            <mat-cell *matCellDef="let element">{{ element.applicants.length }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="startDate">
             <mat-header-cell *matHeaderCellDef>Start Date</mat-header-cell>
@@ -220,10 +220,6 @@ export class RecruiterPanelComponent implements OnInit {
       const dialogRef = this.dialog.open(OfferDetailsModalComponent, {
         data: { user: { ...this.user }, jobOffer: offer }
       });
-
-      // dialogRef.afterClosed().subscribe(result => {
-      //   this.getUserData();
-      // });
     } catch (err) {
       console.error(err);
     }

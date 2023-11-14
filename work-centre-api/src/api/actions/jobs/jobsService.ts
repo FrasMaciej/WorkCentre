@@ -1,9 +1,10 @@
 import { ObjectId } from "mongodb";
 import { collections } from "../../../database/mongoConnection";
+import { StateType, states } from "../../../database/models/job/job";
 
 export async function addJob(req, res) {
     const id = req.body.ownerId;
-    const job: JobDto = { ...req.body.job, author: id };
+    const job = { ...req.body.job, author: id, applicants: [] };
 
     try {
         const createdJob = await collections.jobs?.insertOne(job);
@@ -77,7 +78,7 @@ export async function getJobsApplied(req, res) {
 
     try {
         if (userId) {
-            const jobs = await collections.jobs?.find({ applicantsIds: { $in: [userId] } }).toArray();
+            const jobs = await collections.jobs?.find({ "applicants.id": { $in: [userId] } }).toArray();
             return res.json(jobs);
         } else {
             res.status(404).json();
@@ -91,7 +92,7 @@ export async function getJobsApplied(req, res) {
 export async function applyJob(req, res) {
     const dto: ApplyForJobDto = req.body.dto;
     try {
-        await collections.jobs?.updateOne({ _id: new ObjectId(dto.jobId) }, { $push: { applicantsIds: String(dto.applicantId) } })
+        await collections.jobs?.updateOne({ _id: new ObjectId(dto.jobId) }, { $push: { applicants: { id: String(dto.applicantId), state: 'default' } } })
         return res.json({}).status(200);
     } catch (err) {
         return err;
@@ -101,7 +102,10 @@ export async function applyJob(req, res) {
 export async function resignJob(req, res) {
     const dto: ApplyForJobDto = req.body.dto;
     try {
-        await collections.jobs?.updateOne({ _id: new ObjectId(dto.jobId) }, { $pull: { applicantsIds: String(dto.applicantId) } })
+        await collections.jobs?.updateOne(
+            { _id: new ObjectId(dto.jobId) },
+            { $pull: { applicants: { id: String(dto.applicantId) } } }
+        );
         return res.json({}).status(200);
     } catch (err) {
         return err;
@@ -112,10 +116,13 @@ export async function getJobOfferApplicants(req, res) {
     const offerId = req.params.id;
     try {
         const job = await collections.jobs?.findOne({ _id: new ObjectId(offerId) });
-        const applicantsIds = job?.applicantsIds.map(id => new ObjectId(id));
-        const applicants: any = await collections.users?.find({ _id: { $in: applicantsIds } }).toArray();
-        const mappedApplicants: any = applicants.map(a => (
-            {
+        const applicantsList = job?.applicants.map(j => ({ id: new ObjectId(j.id), state: j.state }));
+        const applicantsIds = job?.applicants.map(j => new ObjectId(j.id));
+        const applicants = await collections.users?.find({ _id: { $in: applicantsIds } }).toArray();
+        const mappedApplicants = applicants?.map(a => {
+            const matchingApplicant = applicantsList?.find(applicant => String(applicant.id) === String(a._id));
+
+            return {
                 _id: a._id,
                 email: a.local.email,
                 firstName: a.local.firstName,
@@ -125,10 +132,44 @@ export async function getJobOfferApplicants(req, res) {
                 skills: a.profile.skills,
                 profileDescription: a.profile.profileDescription,
                 experience: a.profile.experience,
-                phone: a.profile.phone
-            }));
+                phone: a.profile.phone,
+                state: matchingApplicant?.state
+            };
+        });
         return res.json(mappedApplicants);
     } catch (err) {
         return err;
+    }
+}
+
+export async function editState(req, res) {
+    const dto: EditOfferStateDto = req.body;
+
+    try {
+        const job = await collections.jobs?.findOne({ _id: new ObjectId(dto.offerId) });
+
+        if (job) {
+            const applicantIndex = job.applicants.findIndex(applicant => applicant.id === dto.workerId);
+            if (applicantIndex !== -1 && states.includes(dto.state)) {
+                const state: StateType = dto.state as StateType;
+                if (states.includes(dto.state)) {
+                    job.applicants[applicantIndex].state = state;
+                }
+
+                await collections.jobs?.updateOne(
+                    { _id: new ObjectId(dto.offerId) },
+                    { $set: job }
+                );
+
+                res.status(200).json({ message: 'State updated successfully.' });
+            } else {
+                res.status(404).json({ message: 'Applicant not found in the job.' });
+            }
+        } else {
+            res.status(404).json({ message: 'Job not found.' });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error.' });
     }
 }

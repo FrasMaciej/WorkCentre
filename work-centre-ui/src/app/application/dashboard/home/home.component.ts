@@ -36,7 +36,7 @@ import { Router } from '@angular/router';
           </ng-container>
           <ng-container matColumnDef="applicants">
             <mat-header-cell *matHeaderCellDef>Applicants</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{ element.applicantsIds.length }}</mat-cell>
+            <mat-cell *matCellDef="let element">{{ element.applicants.length }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="startDate">
             <mat-header-cell *matHeaderCellDef>Start Date</mat-header-cell>
@@ -45,6 +45,10 @@ import { Router } from '@angular/router';
           <ng-container matColumnDef="endDate">
             <mat-header-cell *matHeaderCellDef>End Date</mat-header-cell>
             <mat-cell *matCellDef="let element">{{ element.dateTo | date }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef>Your status</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{ getStatus(element) }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="actions">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -55,8 +59,8 @@ import { Router } from '@angular/router';
             </mat-cell>
           </ng-container>
 
-          <mat-header-row *matHeaderRowDef="['statusIcon', 'title', 'company', 'applicants', 'startDate', 'endDate', 'actions']"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: ['statusIcon', 'title', 'company', 'applicants', 'startDate', 'endDate', 'actions']"></mat-row>
+          <mat-header-row *matHeaderRowDef="['statusIcon', 'title', 'company', 'applicants', 'startDate', 'endDate', 'status', 'actions']"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: ['statusIcon', 'title', 'company', 'applicants', 'startDate', 'endDate', 'status', 'actions']"></mat-row>
         </mat-table>
       </div>
     </div>
@@ -129,6 +133,11 @@ export class HomeComponent implements OnInit {
 
   navToDetails(id) {
     this.router.navigate(['dashboard', 'job', id])
+  }
+
+  getStatus(element: JobDto) {
+    const state = element.applicants.find(a => a.id === this.userContext.id).state;
+    return this.jobsService.mapApplicantStatus(state);
   }
 
 }

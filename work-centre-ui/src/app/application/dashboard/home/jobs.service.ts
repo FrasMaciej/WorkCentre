@@ -47,8 +47,31 @@ export class JobsService {
         return lastValueFrom(this.httpClient.get<UserDetailsDto[]>(environment.apiURL + `/job/applicants/${offerId}`));
     }
 
+    updateJobState(dto: EditOfferStateDto): Promise<UserDetailsDto[]> {
+        return lastValueFrom(this.httpClient.put<UserDetailsDto[]>(environment.apiURL + '/job/application/edit-state', dto));
+    }
+
     public setData(data: JobDto[]) {
         this.data$.next(data);
+    }
+
+    mapApplicantStatus(status) {
+        switch (status) {
+            case 'default':
+                return 'Uncategorized';
+            case 'inConsideration':
+                return 'In consideration';
+            case 'consideredPositive':
+                return 'Considered positive';
+            case 'consideredNegative':
+                return 'Considered negative';
+            case 'accepted':
+                return 'Job proposal';
+            case 'rejected':
+                return 'No job proposal';
+            default:
+                return 'Status Unknown';
+        }
     }
 
 }

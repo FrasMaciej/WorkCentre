@@ -7,8 +7,13 @@ declare global {
         details: string,
         dateFrom: Date,
         dateTo: Date,
-        applicantsIds: string[],
+        applicants: Applicant[];
         author?: string
+    }
+
+    export interface Applicant {
+        id: string;
+        state: string;
     }
 
     interface ExtendedJobDto extends JobDto {
@@ -27,5 +32,11 @@ declare global {
 
     interface GetJobApplicantsDto {
         id: string;
+    }
+
+    interface EditOfferStateDto {
+        offerId: string;
+        workerId: string;
+        state: string;
     }
 }

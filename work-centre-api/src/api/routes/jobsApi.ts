@@ -13,6 +13,7 @@ jobsApiRouter.post('/jobs/apply', jobsActions.applyJob);
 jobsApiRouter.post('/jobs/resign', jobsActions.resignJob);
 jobsApiRouter.get('/jobs/applicant/:id', jobsActions.getJobsApplied);
 jobsApiRouter.get('/job/applicants/:id', jobsActions.getJobOfferApplicants);
+jobsApiRouter.put('/job/application/edit-state', jobsActions.editState);
 
 
 export default jobsApiRouter;

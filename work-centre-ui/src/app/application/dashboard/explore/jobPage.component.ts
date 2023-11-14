@@ -115,7 +115,8 @@ export class JobPageComponent implements OnInit {
     }
 
     checkIfAlreadyApplied() {
-        if (this.jobOffer?.applicantsIds.includes(this.user.id)) {
+        const applicants: any = this.jobOffer?.applicants.map(a => a.id);
+        if (applicants.includes(this.user.id)) {
             this.alreadyApplied = true;
         } else {
             this.alreadyApplied = false;

@@ -28,6 +28,7 @@ declare global {
         profileDescription: string;
         experience: UserExperienceDto[];
         phone: number;
+        state: string;
     }
 
     interface UserDetails {

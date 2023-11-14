@@ -26,7 +26,7 @@ import { CandidatesModalComponent } from './candidatesModal.component';
             </div>
             <div class="flex items-center mb-4 col-size gap-x-2">
                 <mat-icon class="mr-2 text-xl">people</mat-icon>
-                <span class="text-lg"><strong>Applicants:</strong> {{ data.jobOffer.applicantsIds.length }}</span>
+                <span class="text-lg"><strong>Applicants:</strong> {{ data.jobOffer.applicants.length }}</span>
                 <button mat-stroked-button color="basic" type="button" (click)="openApplicantsModal()">
                     Browse Applicants
                 </button>

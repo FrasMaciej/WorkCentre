@@ -4,6 +4,15 @@ export interface JobSchema {
     dateFrom: Date;
     dateTo: Date;
     details: string;
-    applicantsIds: string[];
+    applicants: Applicant[];
     author?: string;
 }
+
+export interface Applicant {
+    id: string;
+    state: StateType;
+}
+
+export type StateType = 'default' | 'inConsideration' | 'consideredPositive' | 'consideredNegative' | 'accepted' | 'rejected';
+
+export const states = ['default', 'inConsideration', 'consideredPositive', 'consideredNegative', 'accepted', 'rejected'];
