@@ -8,23 +8,37 @@ import { Renderer2 } from '@angular/core';
 @Component({
   selector: 'app-conversation',
   template: `
-     <div class="chat-container">
-      <div class="messages" #messagesList #scrollMe>
-        <div *ngFor="let message of chat.messages" [ngClass]="{'incoming': getUserId() === message.sender, 'outgoing': getUserId() !== message.sender}" class="message">
-          {{ message.content }}
+    <div class="flex justify-center main-container">
+      <div class="chat-container">
+        <div class="messages" #messagesList #scrollMe>
+          <div *ngFor="let message of chat.messages" [ngClass]="{'incoming': getUserId() === message.sender, 'outgoing': getUserId() !== message.sender}" class="message flex flex-col">
+            <div class="flex flex-row gap-x-2 justify-items-center">
+              <div class="font-semibold">{{ getMessageAuthor(message)}}  •</div>
+              <div class="text-sm text-gray-700">{{message.timestamp | date:'medium'}}</div>
+            </div>
+            <div>{{ message.content }}</div>
+          </div>
         </div>
+        <form #formElement>
+          <input #inputElement autocomplete="off" [(ngModel)]="messageText" name="messageText" />
+          <button class="text-white" (click)="sendMessage()">Send</button>
+        </form>
       </div>
-      <form #formElement>
-        <input #inputElement autocomplete="off" [(ngModel)]="messageText" name="messageText" />
-        <button class="text-white" (click)="sendMessage()">Send</button>
-      </form>
     </div>
     `,
   styles: [`
+      .main-container {
+
+      }
+
       .chat-container {
         display: flex;
         flex-direction: column;
-        height: 70vh;
+        background: white;
+        width: 800px;
+        height: 80vh;
+        padding: 10px;
+        border-radius: 10px;
       }
       .messages {
         flex-grow: 1;
@@ -40,12 +54,11 @@ import { Renderer2 } from '@angular/core';
         color: black;
       }
       .outgoing {
-        background-color: #4CAF50;
         color: black;
         margin-bottom: 5px;
         border-radius: 5px;
         padding: 8px;
-        align-self: flex-end;
+        background: #D3E3E5;
       }
       form {
         background: #f1f1f1;
@@ -72,9 +85,10 @@ import { Renderer2 } from '@angular/core';
       }
 
       .message {
-        width: 800px;
+        width: 740px;
         word-wrap: break-word;
       }
+      
     `]
 })
 export class ConversationComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -97,6 +111,7 @@ export class ConversationComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(private conversationService: ConversationService, private user: LoggedUserService) {
     conversationService.changeEmitted$.subscribe(chat => {
       this.chat = chat;
+      console.log(this.chat);
       this.conversationService.joinConversationRoom(chat._id);
 
       this.receiverId = this.chat.members.find(m => m._id !== this.user.id)?._id;
@@ -145,5 +160,10 @@ export class ConversationComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getUserId() {
     return this.user.id;
+  }
+
+  getMessageAuthor(message) {
+    const author = this.chat.members.find(m => m._id === message.sender)
+    return author.name;
   }
 }
