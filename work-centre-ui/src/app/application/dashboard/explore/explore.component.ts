@@ -14,7 +14,7 @@ export interface Section {
 }
 
 interface Lists {
-    users: UserInfoDto[],
+    users: UserDetailsDto[],
     jobs: JobDto[],
     organizations: OrganizationDto[]
 }
@@ -46,13 +46,13 @@ interface Lists {
             <div class="line-bottom"></div>
             <mat-list>
                 <ng-container *ngIf="selectedItemType==='users'">
-                    <users-list [users]="currentList.users" />
+                    <users-list [users]="currentList.users" [searchText]="searchText"/>
                 </ng-container>
                 <ng-container *ngIf="selectedItemType==='jobs'">
-                    <jobs-list [jobs]="currentList.jobs"/>
+                    <jobs-list [jobs]="currentList.jobs" [searchText]="searchText"/>
                 </ng-container>
                 <ng-container *ngIf="selectedItemType==='organizations'">
-                    <organizations-list [organizations]="currentList.organizations"/>
+                    <organizations-list [organizations]="currentList.organizations" [searchText]="searchText"/>
                 </ng-container>
             </mat-list>
             <mat-paginator
@@ -143,7 +143,8 @@ export class ExploreComponent implements OnInit {
         private jobsService: JobsService) { }
 
     async ngOnInit() {
-        this.lists.users = await this.getUsers();
+
+        this.lists.users = await this.getUsersDetailed();
         this.lists.jobs = await this.getJobs();
         this.lists.organizations = await this.getOrganizations();
         this.currentList.users = this.lists.users.slice(0, this.pageSize);
@@ -167,8 +168,8 @@ export class ExploreComponent implements OnInit {
         this.subscriptions.unsubscribe();
     }
 
-    async getUsers() {
-        return this.usersService.getUsers();
+    async getUsersDetailed() {
+        return this.usersService.getUsersDetailed();
     }
 
     async getJobs() {

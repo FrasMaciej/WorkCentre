@@ -48,6 +48,7 @@ import { Component, Input, OnInit } from '@angular/core';
 
 export class OrganizationsListComponent implements OnInit {
     @Input() organizations: any;
+    @Input() searchText: string;
     hoveredItem: any;
 
     constructor() { }

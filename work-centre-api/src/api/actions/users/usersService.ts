@@ -13,6 +13,30 @@ export async function getUsers(req, res) {
     }
 }
 
+export async function getDetailedUsers(req, res) {
+    const users = await collections.users?.find().toArray();
+
+    try {
+        const mappedUsers = users?.map(u => {
+            return {
+                _id: u._id,
+                email: u.local.email,
+                firstName: u.local.firstName,
+                lastName: u.local.lastName,
+                headerInfo: u.profile.headerInfo,
+                company: u.profile.company,
+                skills: u.profile.skills,
+                profileDescription: u.profile.profileDescription,
+                experience: u.profile.experience,
+                phone: u.profile.phone,
+            };
+        });
+        return res.json(mappedUsers);
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 export async function getUser(req, res) {
     try {
         const userId = req.params.id;

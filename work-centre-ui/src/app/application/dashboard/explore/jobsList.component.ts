@@ -49,6 +49,7 @@ import { Router } from '@angular/router';
 
 export class JobsListComponent implements OnInit {
   @Input() jobs: any;
+  @Input() searchText: string;
   hoveredItem: any;
 
   constructor(private router: Router) { }

@@ -22,8 +22,14 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
       <div class="profile-header">
         <div>
           <h2 class="profile-name">{{user.firstName}} {{user.lastName}}</h2>
-          <p class="profile-header-info">{{userDetails?.headerInfo}}</p>
-          <p class="profile-company">{{userDetails?.company}}</p>
+          <div class="profile-header-info flex justify-items-center gap-x-2">
+            <mat-icon>edit</mat-icon>
+            <div>{{userDetails?.headerInfo}}</div>
+          </div>
+          <div class="profile-company flex justify-items-center gap-x-2">
+            <mat-icon>work</mat-icon>
+            <div>{{userDetails?.company}}</div>
+          </div>
         </div>
         <img src="assets/avatar_placeholder.jpg" alt="Avatar" class="profile-avatar">
       </div>
@@ -36,7 +42,7 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
       <div class="profile-section">
         <h3 class="section-title">Skills</h3>
         <div class="skill-list">
-          <li class="skill-item" *ngFor="let skill of userDetails?.skills">
+          <li class="skill-item gap-y-0-5" *ngFor="let skill of userDetails?.skills">
             <div class="skill-name">{{skill.name}}</div>
             <div *ngIf="skill?.description" class="skill-description">{{skill.description}}</div>
           </li>
@@ -45,16 +51,22 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
 
       <div class="profile-section">
         <h3 class="section-title">Experience</h3>
-        <div class="experience-item" *ngFor="let exp of userDetails?.experience">
-          <h4 class="experience-name">{{exp.name}}</h4>
-          <p class="experience-period">{{exp.period.from | date }} - {{exp.period.to | date}}</p>
+        <div class="experience-item gap-y-0-5" *ngFor="let exp of userDetails?.experience">
+          <div class="experience-name">{{exp.name}}</div>
+          <div class="experience-period">{{exp.period.from | date }} - {{exp.period.to | date}}</div>
         </div>
       </div>
 
       <div class="profile-section">
         <h3 class="section-title">Contact</h3>
-        <p class="contact-info" *ngIf="userDetails?.email">Email: {{userDetails.email}}</p>
-        <p class="contact-info" *ngIf="userDetails?.phone">Phone: {{userDetails.phone}}</p>
+        <div class="flex flex-items-center gap-x-2">
+          <mat-icon>email</mat-icon>
+          <div class="contact-info" *ngIf="userDetails?.phone">{{userDetails.email}}</div>
+        </div>
+        <div class="flex flex-items-center gap-x-2">
+          <mat-icon>phone</mat-icon>
+          <div class="contact-info" *ngIf="userDetails?.phone">{{userDetails.phone}}</div>
+        </div>
       </div>
     </div>
     <div *ngIf="showNotFoundUserInfo" class="not-found-section">
@@ -103,12 +115,12 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
     }
 
     .profile-header-info {
-      color: #888;
+      color: white;
       margin-bottom: 5px;
     }
 
     .profile-company {
-      color: #888;
+      color: white;
     }
 
     .profile-avatar {
@@ -132,7 +144,7 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
     }
 
     .section-content {
-      color: #888;
+      color:white;
     }
 
     .skill-list {
@@ -150,7 +162,7 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
     }
 
     .skill-description {
-      color: #888;
+      color: white;
     }
 
     .experience-item {
@@ -160,14 +172,15 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
     .experience-name {
       font-size: 18px;
       font-weight: 600;
+      color: #007bff;
     }
 
     .experience-period {
-      color: #888;
+      color: white;
     }
 
     .contact-info {
-      color: #888;
+      color: white;
       margin-bottom: 10px;
     }
 
