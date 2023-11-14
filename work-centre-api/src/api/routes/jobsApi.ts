@@ -14,6 +14,7 @@ jobsApiRouter.post('/jobs/resign', jobsActions.resignJob);
 jobsApiRouter.get('/jobs/applicant/:id', jobsActions.getJobsApplied);
 jobsApiRouter.get('/job/applicants/:id', jobsActions.getJobOfferApplicants);
 jobsApiRouter.put('/job/application/edit-state', jobsActions.editState);
+jobsApiRouter.get('/job/best-candidates', jobsActions.findBestCandidates);
 
 
 export default jobsApiRouter;

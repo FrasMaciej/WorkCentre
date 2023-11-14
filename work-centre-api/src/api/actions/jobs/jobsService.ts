@@ -2,6 +2,8 @@ import { ObjectId } from "mongodb";
 import { collections } from "../../../database/mongoConnection";
 import { StateType, states } from "../../../database/models/job/job";
 import { addNotification } from "../notifications/notificationsService";
+import { constants } from "../../../constants";
+import OpenAI from 'openai';
 
 export async function addJob(req, res) {
     const id = req.body.ownerId;
@@ -199,5 +201,58 @@ export async function editState(req, res) {
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Internal server error.' });
+    }
+}
+
+export async function findBestCandidates(req, res) {
+    const openai = new OpenAI({
+        apiKey: constants.open_ai_key
+    });
+
+    const candidates = [
+        {
+            name: 'John Doe',
+            skills: ['JavaScript', 'React', 'Node.js'],
+            experienceYears: 5,
+            education: 'Bachelor in Computer Science'
+        },
+        {
+            name: 'Jane Smith',
+            skills: ['Python', 'Django', 'SQL'],
+            experienceYears: 3,
+            education: 'Master in Software Engineering'
+        },
+    ];
+
+    // const jobDescription = `
+    //     Nasza firma poszukuje doświadczonego programisty z umiejętnościami w JavaScript, React i Node.js. 
+    //     Wymagane jest co najmniej 3 lata doświadczenia oraz wykształcenie z zakresu informatyki.
+    // `;
+
+    // const candidatesDescriptions = candidates.map(candidate => `
+    //     Kandydat ${candidate.name} posiada umiejętności w ${candidate.skills.join(', ')}. Posiada ${candidate.experienceYears} 
+    //     lat doświadczenia zawodowego oraz wykształcenie ${candidate.education}.
+    // `);
+
+    // const prompt = `${jobDescription}\n\n${candidatesDescriptions.join('\n')}`;
+
+    try {
+        const response = await openai.chat.completions.create({
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: "Hello world" }],
+        });
+
+        console.log(response);
+
+        const bestCandidateIndex = response.choices[0].index;
+        const bestCandidate = candidates[bestCandidateIndex];
+
+        res.status(200).json({
+            message: 'Najlepiej pasujący kandydat został znaleziony',
+            bestCandidate
+        });
+    } catch (error) {
+        console.error('Błąd podczas wywoływania OpenAI API:', error);
+        res.status(500).json({ error: 'Wystąpił błąd podczas przetwarzania zapytania.' });
     }
 }

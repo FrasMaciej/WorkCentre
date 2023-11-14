@@ -16,7 +16,8 @@ export const constants = {
     db_connection_string: process.env.DB_CONNECTION_STRING,
     db_name: process.env.DB_NAME,
     is_production: process.env.NODE_ENV === 'production',
-    address: process.env.API_URL
+    address: process.env.API_URL,
+    open_ai_key: process.env.OPEN_AI_KEY
 }
 
 export function readAppSettings() {
