@@ -51,6 +51,10 @@ export class JobsService {
         return lastValueFrom(this.httpClient.put<UserDetailsDto[]>(environment.apiURL + '/job/application/edit-state', dto));
     }
 
+    getBestCandidates(dto: BestCandidateMatchDto): Promise<UserDetailsDto[]> {
+        return lastValueFrom(this.httpClient.post<UserDetailsDto[]>(environment.apiURL + '/job/best-candidates', dto));
+    }
+
     public setData(data: JobDto[]) {
         this.data$.next(data);
     }

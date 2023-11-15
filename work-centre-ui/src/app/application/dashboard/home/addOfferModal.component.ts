@@ -22,7 +22,7 @@ import { MatSelect } from '@angular/material/select';
                         </div>
                         <div class="form-group">
                             <mat-form-field>
-                                <input matInput placeholder="Details" formControlName="details">
+                                <textarea matInput placeholder="Details" formControlName="details"></textarea>
                                 <mat-error *ngIf="jobOfferForm.get('details').hasError('required')">Details are required</mat-error>
                             </mat-form-field>
                         </div>

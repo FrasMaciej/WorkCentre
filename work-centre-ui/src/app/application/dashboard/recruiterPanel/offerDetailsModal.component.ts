@@ -89,7 +89,8 @@ export class OfferDetailsModalComponent implements OnInit {
             width: '600px',
             height: '700px',
             data: {
-                offerId: this.data.jobOffer._id
+                offerId: this.data.jobOffer._id,
+                jobOffer: this.data.jobOffer
             },
         });
     }

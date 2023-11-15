@@ -17,6 +17,9 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
     imports: [AngularSvgIconModule.forRoot()],
@@ -25,7 +28,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         MatFormFieldModule, MatInputModule, MatCardModule, MatListModule,
         MatSelectModule, MatPaginatorModule, MatMenuModule, MatDialogModule,
         MatDatepickerModule, MatNativeDateModule, MatTableModule, MatGridListModule,
-        NgxMatSelectSearchModule
+        NgxMatSelectSearchModule, MatProgressSpinnerModule, MatSliderModule, MatRadioModule
     ],
     declarations: [],
 })

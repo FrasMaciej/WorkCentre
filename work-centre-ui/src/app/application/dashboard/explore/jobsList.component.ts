@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
               </div>
               <div class="ml-4 cursor-pointer">
                 <div class="text-color" matListItemTitle>{{offer.name}}</div>
-                <div class="text-color" matListItemLine>{{offer.details}}</div>
+                <div class="text-color details-container" matListItemLine><div>{{offer.details}}</div></div>
               </div>
             </div>
             <div *ngIf="offer?.location" class="flex justify-items-center gap-x-1">
@@ -56,6 +56,10 @@ import { Router } from '@angular/router';
       cursor: pointer;
       width: 95%;
       height: 150px;
+    }
+
+    .details-container {
+      max-width: 380px;
     }
   `]
 })

@@ -8,12 +8,13 @@ import { CommonModule } from '@angular/common';
 import { RecruiterPanelComponent } from './recruiterPanel.component';
 import { OfferDetailsModalComponent } from './offerDetailsModal.component';
 import { CandidatesModalComponent } from './candidatesModal.component';
+import { CandidateListItemComponent } from './candidateListItem.component';
 
 
 @NgModule({
     imports: [CommonControlsModule, FormsModule, ReactiveFormsModule, CommonModule],
     exports: [],
-    declarations: [RecruiterPanelComponent, OfferDetailsModalComponent, CandidatesModalComponent],
+    declarations: [RecruiterPanelComponent, OfferDetailsModalComponent, CandidatesModalComponent, CandidateListItemComponent],
     providers: [],
 })
 export class RecruiterPanelModule { }

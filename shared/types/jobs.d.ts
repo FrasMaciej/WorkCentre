@@ -41,4 +41,9 @@ declare global {
         workerId: string;
         state: string;
     }
+
+    interface BestCandidateMatchDto {
+        offer: JobDto;
+        candidates: UserDetailsDto[];
+    }
 }
