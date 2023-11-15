@@ -205,54 +205,41 @@ export async function editState(req, res) {
 }
 
 export async function findBestCandidates(req, res) {
+    const dto: BestCandidateMatchDto = req.body;
+    const candidates = dto.candidates;
+    const offer: JobDto = dto.offer
     const openai = new OpenAI({
         apiKey: constants.open_ai_key
     });
 
-    const candidates = [
-        {
-            name: 'John Doe',
-            skills: ['JavaScript', 'React', 'Node.js'],
-            experienceYears: 5,
-            education: 'Bachelor in Computer Science'
-        },
-        {
-            name: 'Jane Smith',
-            skills: ['Python', 'Django', 'SQL'],
-            experienceYears: 3,
-            education: 'Master in Software Engineering'
-        },
-    ];
-
-    // const jobDescription = `
-    //     Nasza firma poszukuje doświadczonego programisty z umiejętnościami w JavaScript, React i Node.js. 
-    //     Wymagane jest co najmniej 3 lata doświadczenia oraz wykształcenie z zakresu informatyki.
-    // `;
-
-    // const candidatesDescriptions = candidates.map(candidate => `
-    //     Kandydat ${candidate.name} posiada umiejętności w ${candidate.skills.join(', ')}. Posiada ${candidate.experienceYears} 
-    //     lat doświadczenia zawodowego oraz wykształcenie ${candidate.education}.
-    // `);
-
-    // const prompt = `${jobDescription}\n\n${candidatesDescriptions.join('\n')}`;
-
     try {
+        const mappedOffer = { datils: offer.details, location: offer.location, name: offer.name, salary: offer.salary }
+        const mappedCandidates = candidates.map(c => ({ experience: c.experience, headerInfo: c.headerInfo, description: c.profileDescription, skills: c.skills, location: c.location }))
         const response = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: "Hello world" }],
+            messages: [
+                {
+                    role: "user",
+                    content: `Choose one applicant that fits the best for job offer. Select the candidate whose skills and experience best match the requirements specified in the offer. 
+                    Remember that one of the parameters cannot outweigh the others, you should choose a candidate whose all qualifications will be the best match to the job offer. 
+                    One outstanding parameter cannot outweigh a candidate who meets most or all of the requirements at an average or good level. For example candidate with huge number of years of experience
+                    with experience in language that is not connected with offer should not be the chosen one. For example, when in the offer, the advertiser is looking for .net developer, the developer
+                    with experience in COBOL should not be good match.
+                    So you have to play the role of an employer who is looking for the best employee. Do not include any explanations, 
+                    only provide an index (starting from 0) of best fitting candidate, so the respose should be only a number. 
+                    Job offer is: \n ${JSON.stringify(mappedOffer)}. \n Candidates are: \n ${JSON.stringify(mappedCandidates)}.`
+                },
+            ]
         });
 
-        console.log(response);
+        console.log(response.choices[0].message);
 
-        const bestCandidateIndex = response.choices[0].index;
-        const bestCandidate = candidates[bestCandidateIndex];
+        const bestMatchIndex = Number(response.choices[0].message.content);
+        const bestMatchCandidate = candidates[bestMatchIndex];
 
-        res.status(200).json({
-            message: 'Najlepiej pasujący kandydat został znaleziony',
-            bestCandidate
-        });
+        res.status(200).json(bestMatchCandidate);
     } catch (error) {
-        console.error('Błąd podczas wywoływania OpenAI API:', error);
-        res.status(500).json({ error: 'Wystąpił błąd podczas przetwarzania zapytania.' });
+        console.error('Error while executing OpenAI API:', error);
+        res.status(500).json({ error: 'An error occured while request execution.' });
     }
 }
