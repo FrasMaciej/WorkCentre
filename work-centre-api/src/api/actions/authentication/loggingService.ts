@@ -42,6 +42,14 @@ export function isLoggedIn(req, res, next) {
     }
 };
 
+export function authenticateAccess(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        res.json('No access');
+    }
+};
+
 export function isSessionActive(req, res, next) {
     return res.json({ 'isAuthenticated': req.isAuthenticated() });
 };

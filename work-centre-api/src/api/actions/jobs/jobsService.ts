@@ -232,8 +232,6 @@ export async function findBestCandidates(req, res) {
             ]
         });
 
-        console.log(response.choices[0].message);
-
         const bestMatchIndex = Number(response.choices[0].message.content);
         const bestMatchCandidate = candidates[bestMatchIndex];
 
