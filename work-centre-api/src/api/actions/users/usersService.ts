@@ -32,7 +32,7 @@ export async function getDetailedUsers(req, res) {
                 location: u.profile.location
             };
         });
-        return res.json(mappedUsers);
+        return res.status(200).json(mappedUsers);
     } catch (err) {
         console.error(err);
     }

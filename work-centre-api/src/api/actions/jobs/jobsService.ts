@@ -30,7 +30,7 @@ export async function addJob(req, res) {
 export async function getJobs(req, res) {
     const jobs = await collections.jobs?.find().toArray();
     try {
-        return res.json(jobs);
+        return res.status(200).json(jobs);
     } catch (err) {
         console.error(err);
     }

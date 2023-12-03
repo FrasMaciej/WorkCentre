@@ -22,7 +22,7 @@ export async function addOrganization(req, res) {
 export async function getOrganizations(req, res) {
     const organizations = await collections.organizations?.find().toArray();
     try {
-        return res.json(organizations);
+        return res.status(200).json(organizations);
     } catch (err) {
         console.error(err);
     }
