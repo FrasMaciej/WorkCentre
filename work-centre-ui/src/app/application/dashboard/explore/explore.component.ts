@@ -144,9 +144,9 @@ export class ExploreComponent implements OnInit {
 
     async ngOnInit() {
 
-        this.lists.users = await this.getUsersDetailed();
-        this.lists.jobs = await this.getJobs();
-        this.lists.organizations = await this.getOrganizations();
+        this.lists.users = await this.usersService.getUsersDetailed();
+        this.lists.jobs = await this.exploreService.getJobs();
+        this.lists.organizations = await this.organizationsService.getOrganizations();
         this.currentList.users = this.lists.users.slice(0, this.pageSize);
         this.currentList.jobs = this.lists.jobs.slice(0, this.pageSize);
         this.currentList.organizations = this.lists.organizations.slice(0, this.pageSize);
