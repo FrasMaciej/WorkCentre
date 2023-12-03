@@ -46,13 +46,13 @@ interface Lists {
             <div class="line-bottom"></div>
             <mat-list>
                 <ng-container *ngIf="selectedItemType==='users'">
-                    <users-list [users]="currentList.users" [searchText]="searchText"/>
+                    <users-list *ngIf="lists.users.length > 0" [users]="currentList.users" [searchText]="searchText"/>
                 </ng-container>
                 <ng-container *ngIf="selectedItemType==='jobs'">
-                    <jobs-list [jobs]="currentList.jobs" [searchText]="searchText"/>
+                    <jobs-list *ngIf="lists.jobs.length > 0" [jobs]="currentList.jobs" [searchText]="searchText"/>
                 </ng-container>
                 <ng-container *ngIf="selectedItemType==='organizations'">
-                    <organizations-list [organizations]="currentList.organizations" [searchText]="searchText"/>
+                    <organizations-list *ngIf="lists.organizations.length > 0" [organizations]="currentList.organizations" [searchText]="searchText"/>
                 </ng-container>
             </mat-list>
             <mat-paginator
@@ -143,10 +143,12 @@ export class ExploreComponent implements OnInit {
         private jobsService: JobsService) { }
 
     async ngOnInit() {
-
         this.lists.users = await this.usersService.getUsersDetailed();
+        console.log(this.lists.users);
         this.lists.jobs = await this.exploreService.getJobs();
+        console.log(this.lists.jobs);
         this.lists.organizations = await this.organizationsService.getOrganizations();
+        console.log(this.lists.organizations);
         this.currentList.users = this.lists.users.slice(0, this.pageSize);
         this.currentList.jobs = this.lists.jobs.slice(0, this.pageSize);
         this.currentList.organizations = this.lists.organizations.slice(0, this.pageSize);
@@ -166,18 +168,6 @@ export class ExploreComponent implements OnInit {
 
     ngOnDestroy() {
         this.subscriptions.unsubscribe();
-    }
-
-    async getUsersDetailed() {
-        return await this.usersService.getUsersDetailed();
-    }
-
-    async getJobs() {
-        return await this.exploreService.getJobs();
-    }
-
-    async getOrganizations() {
-        return await this.organizationsService.getOrganizations();
     }
 
     onPageChange(event: PageEvent) {
