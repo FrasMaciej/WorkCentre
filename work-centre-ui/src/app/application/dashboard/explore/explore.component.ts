@@ -169,15 +169,15 @@ export class ExploreComponent implements OnInit {
     }
 
     async getUsersDetailed() {
-        return this.usersService.getUsersDetailed();
+        return await this.usersService.getUsersDetailed();
     }
 
     async getJobs() {
-        return this.exploreService.getJobs();
+        return await this.exploreService.getJobs();
     }
 
     async getOrganizations() {
-        return this.organizationsService.getOrganizations();
+        return await this.organizationsService.getOrganizations();
     }
 
     onPageChange(event: PageEvent) {
