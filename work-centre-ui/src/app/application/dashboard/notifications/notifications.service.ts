@@ -22,11 +22,11 @@ export class NotificationsService {
     }
 
     getNotifications() {
-        return lastValueFrom(this.httpClient.get<NotificationsDto[]>(`${environment.apiURL}/notifications/${this.user.id}`));
+        return lastValueFrom(this.httpClient.get<NotificationsDto[]>(`${environment.apiURL}/notifications/${this.user.id}`, { withCredentials: true }));
     }
 
     changeNotificationStatus(dto: ChangeNotificationStatusDto) {
-        return lastValueFrom(this.httpClient.put<any>(`${environment.apiURL}/notifications/change`, dto));
+        return lastValueFrom(this.httpClient.put<any>(`${environment.apiURL}/notifications/change`, dto, { withCredentials: true }));
     }
 
 }

@@ -4,15 +4,15 @@ import { lastValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class ProfileService {
     constructor(private httpClient: HttpClient) { }
-    
+
     getUserDetails(userId: string): Promise<any> {
-        return lastValueFrom(this.httpClient.get<any>(`${environment.apiURL}/user/${userId}`));
+        return lastValueFrom(this.httpClient.get<any>(`${environment.apiURL}/user/${userId}`, { withCredentials: true }));
     }
 
     updateUserProfile(dto: UpdateUserDto) {
-        return lastValueFrom(this.httpClient.put<UpdateUserDto>(`${environment.apiURL}/user`, dto));
+        return lastValueFrom(this.httpClient.put<UpdateUserDto>(`${environment.apiURL}/user`, dto, { withCredentials: true }));
     }
 }

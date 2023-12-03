@@ -21,7 +21,6 @@ export class RecursiveFilterPipe implements PipeTransform {
                         const value = item[key];
 
                         if (typeof value === 'object') {
-                            // Recursively search in nested objects
                             if (this.filterItems([value], searchText).length > 0) {
                                 return true;
                             }

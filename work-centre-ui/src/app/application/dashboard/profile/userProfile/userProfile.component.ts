@@ -13,10 +13,6 @@ import { LoggedUserService } from 'src/app/commonServices/userContext.service';
         <mat-icon> message</mat-icon>
         Send Message
       </button>
-      <!-- <button mat-raised-button color="accent" class="action-button">
-        <mat-icon>person_add</mat-icon>
-        Send Invitation to friends
-      </button> -->
     </div>
     <div *ngIf="userFound" class="profile-container">
       <div class="profile-header">

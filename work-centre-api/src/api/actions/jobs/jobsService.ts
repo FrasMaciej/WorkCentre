@@ -77,7 +77,7 @@ export async function getJobsAuthor(req, res) {
 }
 
 export async function getJobsApplied(req, res) {
-    const userId = req.params.id;
+    const userId: string = req.params.id;
 
     try {
         if (userId) {

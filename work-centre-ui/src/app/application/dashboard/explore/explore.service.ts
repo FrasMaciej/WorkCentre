@@ -8,14 +8,14 @@ export class ExploreService {
     constructor(private httpClient: HttpClient) { }
 
     getUsers(): Promise<UserInfoDto[]> {
-        return lastValueFrom(this.httpClient.get<UserInfoDto[]>(environment.apiURL + '/users'));
+        return lastValueFrom(this.httpClient.get<UserInfoDto[]>(environment.apiURL + '/users', { withCredentials: true }));
     }
 
     getUsersDetailed(): Promise<UserDetailsDto[]> {
-        return lastValueFrom(this.httpClient.get<UserDetailsDto[]>(environment.apiURL + '/users-detailed'));
+        return lastValueFrom(this.httpClient.get<UserDetailsDto[]>(environment.apiURL + '/users-detailed', { withCredentials: true }));
     }
 
     getJobs(): Promise<JobDto[]> {
-        return lastValueFrom(this.httpClient.get<JobDto[]>(environment.apiURL + '/jobs'));
+        return lastValueFrom(this.httpClient.get<JobDto[]>(environment.apiURL + '/jobs', { withCredentials: true }));
     }
 }

@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
           </p>
         </div>
       </div>
-        
+
       <div class="bg-gray-800 text-white py-8 vh-15">
         <div class="container mx-auto text-center">
           <p class="text-lg">
@@ -50,11 +50,11 @@ import { Router } from '@angular/router';
             height: 75vh;
         }
 
-        .vh-15{ 
+        .vh-15{
             height: 15vh;
         }
 
-        .vh-5{ 
+        .vh-5{
             height: 10vh;
         }
 

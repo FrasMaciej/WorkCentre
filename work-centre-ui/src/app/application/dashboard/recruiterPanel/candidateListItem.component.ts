@@ -37,7 +37,7 @@ import { StatusModalComponent } from './statusModal.component';
                 <p>{{ candidate.company }}</p>
             </div>
             <div class="flex justify-items-center mb-2" *ngIf="candidate?.profileDescription">
-                <mat-icon class="text-gray-600 mr-2">description</mat-icon>
+                <mat-icon class="text-gray-600 mr-2 icon-width">description</mat-icon>
                 <p>{{ candidate.profileDescription }}</p>
             </div>
             <div class="flex justify-items-center mb-2" *ngIf="candidate?.location">
@@ -63,7 +63,12 @@ import { StatusModalComponent } from './statusModal.component';
                 </button>
             </div>
         </div>
-    `
+    `,
+    styles: [`
+        .icon-width {
+            width: 40px;
+        }
+    `]
 })
 
 export class CandidateListItemComponent implements OnInit {

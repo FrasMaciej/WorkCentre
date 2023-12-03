@@ -14,13 +14,18 @@ import { Router } from '@angular/router';
             </button>
         </mat-toolbar>
         <div class="flex justify-between items-center responsive">
-            <div class="ml-16 mt-24 text-6xl font-bold text-white">
-                StarJobs
+            <div class="flex flex-col gap-y-1">
+                <div class="ml-16 mt-24 text-6xl font-bold text-white">
+                    StarJobs
+                </div>
+                <div class="ml-16 mt-24 text-2xl font-bold text-white">
+                    Launch Your Career to New Heights with StartJobs: Where Opportunities Skyrocket Beyond the Stars!
+                </div>
             </div>
             <div class="mr-96 mt-24 flex flex-col gap-3 responsive2">
-                <button mat-fab extended color="primary" class="bg-black  border-white rounded-lg main-button" (click)="navigate('panel')">
+                <!-- <button mat-fab extended color="primary" class="bg-black  border-white rounded-lg main-button" (click)="navigate('panel')">
                     Browse without account
-                </button>
+                </button> -->
                 <button mat-fab extended color="primary" class="bg-white text-black main-button" (click)="navigate('about-us')">
                     About us
                 </button>

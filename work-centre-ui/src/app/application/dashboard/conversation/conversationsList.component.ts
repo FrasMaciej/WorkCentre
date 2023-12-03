@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ConversationService } from './conversation.service';
 import { LoggedUserService } from 'src/app/commonServices/userContext.service';
 

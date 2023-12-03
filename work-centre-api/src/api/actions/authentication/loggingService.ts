@@ -32,7 +32,7 @@ export async function logout(req, res: Response) {
         res.clearCookie('connect.sid');
         return res.json({});
     });
-};
+}
 
 export function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
@@ -40,7 +40,7 @@ export function isLoggedIn(req, res, next) {
     } else {
         res.json(false);
     }
-};
+}
 
 export function authenticateAccess(req, res, next) {
     if (req.isAuthenticated()) {
@@ -48,8 +48,8 @@ export function authenticateAccess(req, res, next) {
     } else {
         res.json('No access');
     }
-};
+}
 
 export function isSessionActive(req, res, next) {
     return res.json({ 'isAuthenticated': req.isAuthenticated() });
-};
+}

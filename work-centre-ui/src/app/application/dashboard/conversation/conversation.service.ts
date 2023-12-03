@@ -44,7 +44,7 @@ export class ConversationService {
   }
 
   getChats(userId: string): Promise<ConversationDto> {
-    return lastValueFrom(this.httpClient.get<ConversationDto>(environment.apiURL + '/chats/' + userId));
+    return lastValueFrom(this.httpClient.get<ConversationDto>(environment.apiURL + '/chats/' + userId, { withCredentials: true }));
   }
 
   joinConversationRoom(conversationId: string): void {

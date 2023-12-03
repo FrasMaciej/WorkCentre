@@ -12,19 +12,19 @@ export class OrganizationsService {
     constructor(private httpClient: HttpClient, private user: LoggedUserService) { }
 
     getOrganizations(): Promise<any> {
-        return lastValueFrom(this.httpClient.get<any>(environment.apiURL + '/organizations'));
+        return lastValueFrom(this.httpClient.get<any>(environment.apiURL + '/organizations', { withCredentials: true }));
     }
 
     getOrganizationsOwner(): Promise<any> {
-        return lastValueFrom(this.httpClient.get<any>(environment.apiURL + `/organizations/owner/${this.user.id}`));
+        return lastValueFrom(this.httpClient.get<any>(environment.apiURL + `/organizations/owner/${this.user.id}`, { withCredentials: true }));
     }
 
     addOrganization(organization: AddOrganizationDto): Promise<AddOrganizationDto[]> {
-        return lastValueFrom(this.httpClient.post<AddOrganizationDto[]>(environment.apiURL + '/organizations', { organization, ownerId: this.user.id }));
+        return lastValueFrom(this.httpClient.post<AddOrganizationDto[]>(environment.apiURL + '/organizations', { organization, ownerId: this.user.id }, { withCredentials: true }));
     }
 
     removeOrganization(id: string): Promise<any> {
-        return lastValueFrom(this.httpClient.delete<any>(environment.apiURL + `/organizations/${id}`));
+        return lastValueFrom(this.httpClient.delete<any>(environment.apiURL + `/organizations/${id}`, { withCredentials: true }));
     }
 
     public setData(data: OrganizationDto[]) {
